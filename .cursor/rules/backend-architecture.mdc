@@ -1,0 +1,32 @@
+---
+description: Express backend architecture for this project
+globs:
+  - "src/**/*.ts"
+  - "src/**/*.js"
+---
+
+## Folder structure
+
+- The backend follows a layered architecture with:
+  - routes/       → Express route definitions (no business logic)
+  - controllers/  → HTTP-level controllers; parse input, call services, shape responses
+  - services/     → Business logic; no Express req/res here
+  - models/       → Mongoose models and schemas
+  - validators/   → Request validation (e.g. Zod/Joi) used as middleware
+  - middleware/   → Cross-cutting concerns (auth, error handling, logging, etc.)
+
+## Rules for new endpoints
+
+- For any new feature or resource:
+  - Add a route file in routes/ and mount it in the main router.
+  - Implement controller functions in controllers/ that call the appropriate service.
+  - Implement business logic in services/, keeping them framework-agnostic where possible.
+  - Add request validators in validators/ and use them as middleware in the route.
+  - Reuse or create middleware in middleware/ for auth, error handling, etc.
+- Do not place business logic directly in route handlers.
+
+## General conventions
+
+- Use async/await and centralized error-handling middleware.
+- Keep controllers small and focused; move complex logic into services.
+- Prefer small, composable middleware functions over large monoliths.
