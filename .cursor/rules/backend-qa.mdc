@@ -1,0 +1,22 @@
+---
+description: Quality, error handling, and security conventions for backend
+globs:
+  - "src/**/*.ts"
+  - "src/**/*.js"
+---
+
+## Error handling
+
+- Use centralized error-handling middleware; controllers should `throw` or `next(err)` instead of sending ad-hoc error responses.
+- Always include helpful error messages but never leak stack traces or secrets in responses.
+
+## Validation & security
+
+- Validate all external input (body, query, params) in `validators/` before hitting services.
+- Sanitize inputs where relevant and guard against NoSQL/SQL injection.
+- Require auth middleware for any route that mutates data.
+
+## Code style
+
+- Use async/await only; avoid raw Promise chains.
+- No `any` in TypeScript; prefer precise types or `unknown` with narrowing.
