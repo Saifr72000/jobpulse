@@ -33,6 +33,7 @@
  *         - lastName
  *         - email
  *         - password
+ *         - companyId
  *       properties:
  *         firstName:
  *           type: string
@@ -48,6 +49,10 @@
  *           type: string
  *           format: password
  *           example: password123
+ *         companyId:
+ *           type: string
+ *           description: Company ID the user belongs to
+ *           example: 507f1f77bcf86cd799439011
  *
  *     Company:
  *       type: object
@@ -99,7 +104,7 @@
  *           example: 123 Business Street
  *         phone:
  *           type: string
- *           example: "+47 12345678"
+ *           example: "12345678"
  *         website:
  *           type: string
  *           example: https://www.acme.com
@@ -133,4 +138,143 @@
  *       properties:
  *         message:
  *           type: string
+ *
+ *     Product:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Product ID
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         price:
+ *           type: number
+ *         category:
+ *           type: string
+ *         sku:
+ *           type: string
+ *         inStock:
+ *           type: boolean
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *
+ *     ProductInput:
+ *       type: object
+ *       required:
+ *         - name
+ *         - price
+ *       properties:
+ *         name:
+ *           type: string
+ *           example: Premium Widget
+ *         description:
+ *           type: string
+ *           example: A high-quality widget for all your needs
+ *         price:
+ *           type: number
+ *           example: 29.99
+ *         category:
+ *           type: string
+ *           example: Electronics
+ *         sku:
+ *           type: string
+ *           example: WDG-001
+ *         inStock:
+ *           type: boolean
+ *           example: true
+ *
+ *     Order:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Order ID
+ *         company:
+ *           type: string
+ *           description: Company ID
+ *         companyName:
+ *           type: string
+ *           description: Company name (denormalized)
+ *         orgNumber:
+ *           type: number
+ *           description: Organization number (denormalized)
+ *         orderedBy:
+ *           type: string
+ *           description: User ID who placed the order
+ *         items:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/OrderItem'
+ *         totalAmount:
+ *           type: number
+ *         status:
+ *           type: string
+ *           enum: [pending, processing, shipped, delivered, cancelled]
+ *         shippingAddress:
+ *           type: string
+ *         notes:
+ *           type: string
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *
+ *     OrderItem:
+ *       type: object
+ *       properties:
+ *         product:
+ *           type: string
+ *           description: Product ID
+ *         productName:
+ *           type: string
+ *           description: Product name (denormalized)
+ *         quantity:
+ *           type: number
+ *         priceAtPurchase:
+ *           type: number
+ *           description: Price at time of purchase
+ *
+ *     OrderInput:
+ *       type: object
+ *       required:
+ *         - items
+ *       properties:
+ *         items:
+ *           type: array
+ *           items:
+ *             type: object
+ *             required:
+ *               - productId
+ *               - quantity
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 example: 507f1f77bcf86cd799439011
+ *               quantity:
+ *                 type: number
+ *                 example: 2
+ *         shippingAddress:
+ *           type: string
+ *           example: 123 Delivery Street, Oslo
+ *         notes:
+ *           type: string
+ *           example: Please deliver before noon
+ *
+ *     OrderStatusUpdate:
+ *       type: object
+ *       required:
+ *         - status
+ *       properties:
+ *         status:
+ *           type: string
+ *           enum: [pending, processing, shipped, delivered, cancelled]
+ *           example: processing
  */
