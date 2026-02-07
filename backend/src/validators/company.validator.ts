@@ -35,8 +35,8 @@ export const createCompanyValidator: RequestHandler[] = [
   body("phone")
     .optional()
     .trim()
-    .isMobilePhone("any")
-    .withMessage("Invalid phone number format"),
+    .matches(/^[0-9]{8,15}$/)
+    .withMessage("Phone number must be 8-15 digits"),
 
   body("website")
     .optional()
@@ -76,8 +76,8 @@ export const updateCompanyValidator: RequestHandler[] = [
   check("phone")
     .optional()
     .trim()
-    .isMobilePhone("any")
-    .withMessage("Invalid phone number format"),
+    .matches(/^[0-9]{8,15}$/)
+    .withMessage("Phone number must be 8-15 digits"),
 
   check("website")
     .optional()
