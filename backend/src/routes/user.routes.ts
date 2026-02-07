@@ -4,7 +4,6 @@ import {
   createUser,
   retrieveUsers,
   updateUserById,
-  /* getCurrentUser, */
 } from "../controllers/user.controller.js";
 import {
   registerUserValidator,
@@ -18,16 +17,13 @@ const router = Router();
 // Create User
 router.post("/register", registerUserValidator, requestValidator, createUser);
 
-// Get current authenticated user (must come before other routes to avoid being treated as an ID)
-/* router.get("/me", authenticateUser, getCurrentUser); */
-
-// Get user by user id
+// Get user by ID
 router.get("/:id", authenticateUser, retrieveUserById);
 
-// Update user by user id
+// Update user by ID
 router.put("/:id", updateUserValidator, requestValidator, updateUserById);
 
 // Get all users
-router.get("/", requestValidator, retrieveUsers);
+router.get("/", retrieveUsers);
 
 export default router;

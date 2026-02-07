@@ -5,12 +5,20 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import { swaggerOptions } from "./config/swagger.js";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes  from "./routes/auth.routes.js";
+import companyRoutes from "./routes/company.routes.js";
 import {authenticateUser} from "./middlewares/auth.middleware.js";
 import {requestValidator} from "./middlewares/requestValidator.middleware.js";
 
 const app = express();
+
+// Swagger docs
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //middleware
 app.use(
@@ -41,6 +49,7 @@ app.use(
 /* ROUTES */
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/companies", companyRoutes);
 //need to add ratelimit middleware afterwards for all routes
 
 const MONGO_URI =
