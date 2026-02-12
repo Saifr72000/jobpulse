@@ -6,9 +6,9 @@ const s3Client = new S3Client({
   region: process.env.AWS_REGION ?? "eu-north-1",
 });
 
-const BUCKET = process.env.S3_BUCKET_NAME;
+const BUCKET = process.env.AWS_BUCKET_NAME;
 if (!BUCKET) {
-  console.warn("S3_BUCKET_NAME is not set; media uploads will fail.");
+  console.warn("AWS_BUCKET_NAME is not set; media uploads will fail.");
 }
 
 export interface UploadMediaInput {
