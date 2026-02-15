@@ -7,7 +7,7 @@ export const swaggerOptions = {
       description: "API documentation for the bachelor project backend",
     },
     servers: [
-      { url: "http://localhost:2000", description: "Development server" },
+      { url: "http://localhost:3000", description: "Development server" },
     ],
     components: {
       securitySchemes: {

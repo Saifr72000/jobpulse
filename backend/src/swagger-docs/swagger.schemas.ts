@@ -277,4 +277,39 @@
  *           type: string
  *           enum: [pending, processing, shipped, delivered, cancelled]
  *           example: processing
+ *
+ *     Media:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Media ID
+ *         companyId:
+ *           type: string
+ *           description: Company ID that owns the media
+ *         uploadedBy:
+ *           type: string
+ *           description: User ID who uploaded the media
+ *         orderId:
+ *           type: string
+ *           description: Optional order ID associated with the media
+ *         s3Key:
+ *           type: string
+ *           description: S3 storage key
+ *         originalFilename:
+ *           type: string
+ *           description: Original filename
+ *         mimetype:
+ *           type: string
+ *           description: File MIME type
+ *           example: image/png
+ *         size:
+ *           type: number
+ *           description: File size in bytes
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
  */

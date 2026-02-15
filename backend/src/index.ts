@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 import app from "./app.js";
 
 const MONGO_URI =
-  process.env.MONGO_DB_URL ||
-  "mongodb+srv://saif_db_user:bZvQrVLdS6XQOIcb@jobpulse-cluster.fstw20s.mongodb.net/";
+  process.env.MONGO_DB_URL || "";
 
 const connectDB = async () => {
   try {
