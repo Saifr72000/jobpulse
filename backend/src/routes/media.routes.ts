@@ -5,7 +5,7 @@ import {
   getMediaByCompany,
   getMediaByOrder,
 } from "../controllers/media.controller.js";
-import { uploadSingle } from "../middlewares/upload.middleware.js";
+import { uploadMultiple } from "../middlewares/upload.middleware.js";
 import {
   uploadMediaValidator,
   mediaIdValidator,
@@ -21,7 +21,7 @@ const router = Router();
 router.post(
   "/",
   authenticateUser,
-  uploadSingle,
+  uploadMultiple,
   uploadMediaValidator,
   requestValidator,
   uploadMedia
