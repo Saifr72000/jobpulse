@@ -9,7 +9,7 @@
  * @swagger
  * /api/media:
  *   post:
- *     summary: Upload a media file
+ *     summary: Upload one or more media files (images/videos) for an order
  *     tags: [Media]
  *     security:
  *       - cookieAuth: []
@@ -20,15 +20,18 @@
  *           schema:
  *             type: object
  *             required:
- *               - file
+ *               - files
+ *               - orderId
  *             properties:
- *               file:
- *                 type: string
- *                 format: binary
- *                 description: The file to upload
+ *               files:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   format: binary
+ *                 description: One or more files to upload (max 50, 100 MB each). Use form field name "files".
  *               orderId:
  *                 type: string
- *                 description: Optional order ID to associate with the media
+ *                 description: Order ID (required). Must be an order belonging to the logged-in user. Use GET /api/orders/my-orders to list the user's orders for a dropdown.
  *     responses:
  *       201:
  *         description: Media uploaded successfully
@@ -40,13 +43,17 @@
  *                 message:
  *                   type: string
  *                 media:
- *                   $ref: '#/components/schemas/Media'
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Media'
  *       400:
- *         description: No file uploaded
+ *         description: No files uploaded or orderId missing
  *       401:
  *         description: User not authenticated
+ *       403:
+ *         description: Order does not belong to this user
  *       404:
- *         description: User or company not found
+ *         description: Order, user or company not found
  *       503:
  *         description: S3 not configured
  *       500:
