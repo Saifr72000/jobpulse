@@ -5,6 +5,7 @@ import { AppLayout } from './components/layout/AppLayout';
 import { LoginPage } from './pages/LoginPage';
 import { HomePage } from './pages/HomePage';
 import { RegisterPage } from './pages/RegisterPage';
+import { MyOrdersPage } from './pages/MyOrdersPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             }
           >
             <Route index element={<HomePage />} />
+            <Route path="my-orders" element={<MyOrdersPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
