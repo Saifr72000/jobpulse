@@ -28,7 +28,7 @@ const bottomItems = [
   { to: '/logout', label: 'Log out', icon: LogOut },
 ] as const;
 
-export function DashboardSidebar({ onLogout }: { onLogout: () => void }) {
+export function Sidebar({ onLogout }: { onLogout: () => void }) {
   const location = useLocation();
 
   return (
