@@ -1,0 +1,539 @@
+/* ── Outer layout ── */
+.od-page {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  background: #f1f4f8;
+  padding: 17px 24px;
+  gap: 24px;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.od-content {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d0d0 transparent;
+  padding-bottom: 40px;
+}
+
+.od-content::-webkit-scrollbar { width: 5px; }
+.od-content::-webkit-scrollbar-thumb { background: #d0d0d0; border-radius: 10px; }
+.od-content::-webkit-scrollbar-track { background: transparent; }
+
+/* ── Header ── */
+.od-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6px;
+  flex-shrink: 0;
+}
+
+.od-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.od-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 40px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  font-size: 13px;
+  color: #424241;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  transition: border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.od-back-btn:hover { border-color: #000; color: #000; }
+
+.od-header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.od-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.od-order-id-sub {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.od-user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 15px;
+  padding: 8px 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.od-user-avatar {
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, #6cbcf6, #ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #000;
+  flex-shrink: 0;
+}
+
+.od-user-info { display: flex; flex-direction: column; gap: 2px; }
+.od-user-name { font-size: 14px; font-weight: 500; color: #000; line-height: 1; }
+.od-user-role { font-size: 10px; color: #6b7280; line-height: 1; }
+.od-expand-arrow { width: 12px; height: 12px; object-fit: contain; margin-left: 4px; }
+
+/* ── Status tracker ── */
+.od-tracker-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  padding: 24px 40px;
+  flex-shrink: 0;
+}
+
+.od-tracker {
+  display: flex;
+  align-items: flex-start;
+}
+
+.od-tracker-item {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.od-tracker-item:last-child { flex: 0; }
+
+.od-step-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.od-step-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #e5e7eb;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.od-step-dot--done { background: #000; border-color: #000; }
+.od-step-dot--current { border-color: #000; color: #000; }
+
+.od-step-label { font-size: 12px; color: #9ca3af; white-space: nowrap; }
+.od-step-label--current { color: #000; font-weight: 500; }
+
+.od-step-line {
+  flex: 1;
+  height: 2px;
+  background: #e5e7eb;
+  margin-top: 16px; /* (34px dot / 2) - 1px */
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.od-step-line--done { background: #000; }
+
+.od-cancelled-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ── Grid ── */
+.od-grid {
+  display: grid;
+  grid-template-columns: 1fr 296px;
+  gap: 20px;
+  align-items: start;
+}
+
+.od-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.od-right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Card base ── */
+.od-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.od-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f1f4f8;
+}
+
+.od-card-head h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+}
+
+.od-card-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Campaign overview card ── */
+.od-overview-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+}
+
+.od-overview-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.od-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.od-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 40px;
+  background: #f1f4f8;
+  font-size: 13px;
+  color: #424241;
+}
+
+.od-tag--muted {
+  color: #9ca3af;
+}
+
+/* ── Section label ── */
+.od-section-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* ── Assets card ── */
+.od-assets-body {
+  gap: 20px;
+}
+
+.od-asset-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.od-asset-section--addon {
+  border-top: 1px solid #f1f4f8;
+  padding-top: 16px;
+  gap: 10px;
+}
+
+.od-addon-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.od-addon-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #424241;
+}
+
+/* File chip */
+.od-file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 8px 12px;
+  max-width: 100%;
+}
+
+.od-file-ext {
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+  padding: 3px 5px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.od-file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.od-file-name {
+  font-size: 13px;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.od-file-size {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+.od-file-dl {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.od-file-dl:hover { background: #f1f4f8; }
+
+/* Choice tag (team creates / media library etc.) */
+.od-choice-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 8px;
+  background: #f1f4f8;
+  font-size: 13px;
+  color: #6b7280;
+  border: 1px dashed #d1d5db;
+}
+
+/* URL link */
+.od-url-link {
+  font-size: 13px;
+  color: #424241;
+  text-decoration: underline;
+  text-decoration-color: #d1d5db;
+  word-break: break-all;
+}
+
+.od-url-link:hover { color: #000; text-decoration-color: #000; }
+
+/* Text block (JD content, notes, audience) */
+.od-text-block {
+  font-size: 13px;
+  color: #424241;
+  line-height: 1.65;
+  background: #fafafa;
+  border-left: 3px solid #e5e7eb;
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Screening questions list */
+.od-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-left: 20px;
+  margin: 0;
+}
+
+.od-questions-list li {
+  font-size: 13px;
+  color: #424241;
+  line-height: 1.5;
+}
+
+/* ── Brief card ── */
+.od-brief-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.od-brief-section + .od-brief-section {
+  padding-top: 16px;
+  border-top: 1px solid #f1f4f8;
+}
+
+/* ── Order summary card ── */
+.od-summary-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 0 24px 20px;
+}
+
+.od-summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #424241;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.od-summary-line:last-of-type { border-bottom: none; }
+
+.od-summary-line--channel {
+  padding-left: 12px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.od-summary-channel-name::before {
+  content: "–  ";
+  color: #d1d5db;
+}
+
+.od-summary-included {
+  font-size: 12px;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.od-summary-line--sub {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.od-summary-divider {
+  height: 1px;
+  background: #e5e7eb;
+  margin: 4px 0;
+}
+
+.od-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0 2px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000;
+  border-top: 2px solid #000;
+  margin-top: 4px;
+}
+
+/* ── Order details meta card ── */
+.od-meta-rows {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 24px 20px;
+}
+
+.od-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.od-meta-row:last-child { border-bottom: none; }
+
+.od-meta-label {
+  font-size: 13px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.od-meta-value {
+  font-size: 13px;
+  color: #000;
+  font-weight: 500;
+  text-align: right;
+}
+
+.od-meta-id {
+  font-size: 12px;
+  color: #6b7280;
+  font-weight: 400;
+  font-family: monospace;
+}
+
+/* ── Status badges ── */
+.od-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px;
+  border-radius: 40px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-pending    { background: #f1f4f8; color: #6b7280; }
+.status-processing { background: #f1f4f8; color: #6b7280; }
+.status-shipped    { background: #f1f4f8; color: #6b7280; }
+.status-delivered  { background: #f1f4f8; color: #6b7280; }
+.status-cancelled  { background: #f1f4f8; color: #6b7280; }
