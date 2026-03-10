@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_screenshot",
+      "mcp__ide__getDiagnostics",
+      "Bash(open \"https://www.figma.com/design/KfU9yRaXgJRC1zoSBRxwC3\")",
+      "mcp__figma__get_metadata",
+      "Bash(npm test:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)"
+    ]
+  }
+}

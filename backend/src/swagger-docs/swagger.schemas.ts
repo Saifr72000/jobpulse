@@ -215,7 +215,7 @@
  *           type: number
  *         status:
  *           type: string
- *           enum: [pending, processing, shipped, delivered, cancelled]
+ *           enum: [pending, in-progress, completed]
  *         shippingAddress:
  *           type: string
  *         notes:
@@ -275,8 +275,8 @@
  *       properties:
  *         status:
  *           type: string
- *           enum: [pending, processing, shipped, delivered, cancelled]
- *           example: processing
+ *           enum: [pending, in-progress, completed]
+ *           example: in-progress
  *
  *     Media:
  *       type: object

@@ -43,7 +43,7 @@ export const updateOrderStatusValidator: RequestHandler[] = [
   body("status")
     .notEmpty()
     .withMessage("Status is required")
-    .isIn(["pending", "processing", "shipped", "delivered", "cancelled"])
+    .isIn(["pending", "in-progress", "completed"])
     .withMessage("Invalid status value"),
 ];
 

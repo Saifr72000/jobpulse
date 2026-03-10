@@ -164,10 +164,10 @@ describe("Orders API", () => {
 
       const response = await request(app)
         .patch(`/api/orders/${orderId}/status`)
-        .send({ status: "processing" });
+        .send({ status: "in-progress" });
 
       expect(response.status).toBe(200);
-      expect(response.body.order.status).toBe("processing");
+      expect(response.body.order.status).toBe("in-progress");
     });
 
     it("should fail with invalid status", async () => {
