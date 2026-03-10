@@ -5,13 +5,14 @@ import {
   useEffect,
   type ReactNode,
 } from "react";
+import { AxiosError } from "axios";
+import api from "../api/axios";
 
 interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
-  role: string;
   company?: {
     id: string;
     name: string;
@@ -22,9 +23,11 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  error: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
+  clearError: () => void;
 }
 
 interface RegisterData {
@@ -32,6 +35,7 @@ interface RegisterData {
   password: string;
   firstName: string;
   lastName: string;
+  companyId: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,38 +43,18 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
-    const token = localStorage.getItem("access_token");
-    if (!token) {
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      // TODO: Replace with actual API call to verify token and get user
-      // const response = await fetch('/api/auth/me', {
-      //   headers: { Authorization: `Bearer ${token}` }
-      // });
-      // const userData = await response.json();
-      // setUser(userData);
-
-      // Placeholder: simulate authenticated user
-      setUser({
-        id: "1",
-        email: "john@example.com",
-        firstName: "John",
-        lastName: "Doe",
-        role: "customer",
-        company: { id: "1", name: "Acme Corp" },
-      });
+      const { data } = await api.get("/auth/me");
+      setUser(data);
     } catch {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("refresh_token");
+      setUser(null);
     } finally {
       setIsLoading(false);
     }
@@ -78,28 +62,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     setIsLoading(true);
+    setError(null);
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/auth/login', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ email, password }),
-      // });
-      // const { accessToken, refreshToken, user } = await response.json();
+      const { data } = await api.post("/auth/login", { email, password });
 
-      // Placeholder: simulate successful login
-      const accessToken = "placeholder_access_token";
       const userData: User = {
-        id: "1",
-        email,
-        firstName: "John",
-        lastName: "Doe",
-        role: "customer",
-        company: { id: "1", name: "Acme Corp" },
+        id: data.user.id,
+        email: data.user.email,
+        firstName: data.user.firstName,
+        lastName: data.user.lastName,
       };
 
-      localStorage.setItem("access_token", accessToken);
       setUser(userData);
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      const message = axiosError.response?.data?.message || "Login failed";
+      setError(message);
+      throw err;
     } finally {
       setIsLoading(false);
     }
@@ -107,37 +86,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (data: RegisterData) => {
     setIsLoading(true);
+    setError(null);
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch('/api/auth/register', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data),
-      // });
-      // const { accessToken, user } = await response.json();
-
-      // Placeholder: simulate successful registration
-      const accessToken = "placeholder_access_token";
-      const userData: User = {
-        id: "1",
-        email: data.email,
+      const { data: responseData } = await api.post("/users/register", {
         firstName: data.firstName,
         lastName: data.lastName,
-        role: "customer",
-      };
+        email: data.email,
+        password: data.password,
+        companyId: data.companyId,
+      });
 
-      localStorage.setItem("access_token", accessToken);
-      setUser(userData);
+      return responseData;
+    } catch (err) {
+      const axiosError = err as AxiosError<{ message: string }>;
+      const message =
+        axiosError.response?.data?.message || "Registration failed";
+      setError(message);
+      throw err;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
-    setUser(null);
+  const logout = async () => {
+    try {
+      await api.post("/auth/logout");
+    } catch {
+      // Ignore logout errors
+    } finally {
+      setUser(null);
+    }
   };
+
+  const clearError = () => setError(null);
 
   return (
     <AuthContext.Provider
@@ -145,9 +126,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         isAuthenticated: !!user,
         isLoading,
+        error,
         login,
         register,
         logout,
+        clearError,
       }}
     >
       {children}

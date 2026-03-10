@@ -2,8 +2,7 @@ import "dotenv/config"; // Must be FIRST - loads env vars before other imports
 import mongoose from "mongoose";
 import app from "./app.js";
 
-const MONGO_URI =
-  process.env.MONGO_DB_URL || "";
+const MONGO_URI = process.env.MONGODB_URI || "";
 
 const connectDB = async () => {
   try {
@@ -11,17 +10,18 @@ const connectDB = async () => {
       serverSelectionTimeoutMS: 5000,
     });
     console.log("Connected to MongoDB!");
-    console.log("MongoDB URI:", MONGO_URI);
   } catch (error) {
     console.error("MongoDB Connection Error:", error);
-    process.exit(1);
+    console.warn("Server will start without database connection. API routes will fail.");
   }
 };
 
-// Connect to the database
-await connectDB();
-
+// Start the server first, then connect to database
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Swagger docs: http://localhost:${PORT}/api-docs`);
 });
+
+// Connect to the database (non-blocking)
+connectDB();

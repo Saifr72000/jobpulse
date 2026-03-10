@@ -3,14 +3,18 @@ import { Media, type IMedia } from "../models/media.model.js";
 import { User } from "../models/user.model.js";
 import { Order } from "../models/order.model.js";
 
-const s3Client = new S3Client({ // create a s3 client
-  region: process.env.AWS_REGION ?? "eu-north-1",
-});
+let s3Client: S3Client | null = null;
 
-const BUCKET = process.env.AWS_BUCKET_NAME;
-if (!BUCKET) {
-  console.warn("AWS_BUCKET_NAME is not set; media uploads will fail.");
-}
+const getS3Client = (): S3Client => {
+  if (!s3Client) {
+    s3Client = new S3Client({
+      region: process.env.AWS_REGION ?? "eu-north-1",
+    });
+  }
+  return s3Client;
+};
+
+const BUCKET = process.env.S3_BUCKET_NAME;
 
 export interface UploadMediaInput {
   buffer: Buffer;
@@ -64,7 +68,7 @@ export const uploadMedia = async (input: UploadMediaInput): Promise<IMedia> => {
   const safeName = `${Date.now()}-${Math.random().toString(36).slice(2, 10)}${ext ? `.${ext}` : ""}`; // create a safe name for the file by adding a timestamp and a random string
   const s3Key = `media/${companyId}/${input.userId}/${safeName}`; // create a s3 key for the file by adding the company id, the user id, and the safe name
 
-  await s3Client.send( // send the file to s3
+  await getS3Client().send(
     new PutObjectCommand({
       Bucket: BUCKET,
       Key: s3Key,

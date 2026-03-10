@@ -79,3 +79,30 @@ export const logoutController = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Logout failed" });
   }
 };
+
+export const getMeController = async (req: Request, res: Response) => {
+  try {
+    const userId = (req as any).user?.userId;
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const user = await User.findById(userId).select("-password -refreshToken -otp -otpExpires");
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json({
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      company: user.company,
+      isVerified: user.isVerified,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to get user" });
+  }
+};

@@ -36,7 +36,7 @@ export function MainLayout() {
   };
 
   return (
-    <div className="flex h-full w-full gap-6 p-[17px_24px] bg-background">
+      <div className="flex h-full w-full gap-6 px-6 py-[17px] bg-background">
       <Sidebar activePage={getActivePage()} onNavigate={handleNavigate} />
       <main className="flex-1 min-w-0 min-h-0 flex flex-col gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-[#d0d0d0] scrollbar-track-transparent">
         <Outlet />

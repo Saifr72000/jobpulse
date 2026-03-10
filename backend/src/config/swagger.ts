@@ -1,13 +1,15 @@
+const PORT = process.env.PORT || 3002;
+
 export const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Bachelor Project API",
+      title: "JobPulse API",
       version: "1.0.0",
-      description: "API documentation for the bachelor project backend",
+      description: "API documentation for the JobPulse backend",
     },
     servers: [
-      { url: "http://localhost:3000", description: "Development server" },
+      { url: `http://localhost:${PORT}`, description: "Development server" },
     ],
     components: {
       securitySchemes: {

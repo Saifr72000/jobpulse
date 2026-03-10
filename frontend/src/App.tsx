@@ -1,38 +1,44 @@
-import { useState } from "react";
-import "./App.css";
-import Dashboard from "./pages/Dashboard";
-import MyOrders from "./pages/MyOrders";
-import NewOrder from "./pages/NewOrder";
-import OrderDetail from "./pages/OrderDetail";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./context";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { MainLayout } from "./layouts/MainLayout";
 
-export type Page = "dashboard" | "my-orders" | "new-order" | string;
+// Auth pages
+import LoginPage from "./pages/auth/Login";
 
-function getInitialPage(): Page {
-  const params = new URLSearchParams(window.location.search);
-  const page = params.get("page");
-  if (page === "my-orders") return "my-orders";
-  if (page === "new-order") return "new-order";
-  return "dashboard";
+// Client pages
+import Dashboard from "./pages/client/Dashboard";
+import MyOrders from "./pages/client/Orders/MyOrders";
+import NewOrder from "./pages/client/Orders/NewOrder";
+import OrderDetail from "./pages/client/Orders/OrderDetail";
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<LoginPage />} />
+
+          {/* Protected routes wrapped in MainLayout */}
+          <Route
+            element={
+              <ProtectedRoute />
+            }
+          >
+            <Route element={<MainLayout />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/orders" element={<MyOrders />} />
+              <Route path="/orders/new" element={<NewOrder />} />
+              <Route path="/orders/:orderId" element={<OrderDetail />} />
+              <Route index element={<Navigate to="/dashboard" replace />} />
+            </Route>
+          </Route>
+
+          {/* Catch-all */}
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
 }
-
-function App() {
-  const [page, setPage] = useState<Page>(getInitialPage);
-
-  const navigate = (p: Page) => setPage(p);
-
-  if (page.startsWith("order-detail:")) {
-    const orderId = page.slice("order-detail:".length);
-    return <OrderDetail orderId={orderId} onNavigate={navigate} />;
-  }
-
-  switch (page) {
-    case "my-orders":
-      return <MyOrders onNavigate={navigate} />;
-    case "new-order":
-      return <NewOrder onNavigate={navigate} />;
-    default:
-      return <Dashboard onNavigate={navigate} />;
-  }
-}
-
-export default App;

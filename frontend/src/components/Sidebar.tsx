@@ -1,7 +1,6 @@
 import "./Sidebar.css";
+import dashboardIcon from "../assets/icons/home.svg";
 
-const imgHome =
-  "https://www.figma.com/api/mcp/asset/d41ed95d-e912-4c21-9a85-af4be20ccc06";
 const imgAddShoppingCart =
   "https://www.figma.com/api/mcp/asset/f3f30aa5-8294-4a22-8197-bf1b3d2bb286";
 const imgShoppingCart =
@@ -24,7 +23,7 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { icon: imgHome, label: "Dashboard", page: "dashboard" },
+  { icon: dashboardIcon, label: "Dashboard", page: "dashboard" },
   { icon: imgAddShoppingCart, label: "New order", page: "new-order" },
   { icon: imgShoppingCart, label: "My orders", page: "my-orders" },
   { icon: imgBarChart, label: "Campaigns", page: "analytics" },
