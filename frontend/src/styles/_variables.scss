@@ -1,0 +1,57 @@
+// ─── Palette ──────────────────────────────────────────────
+$midnight: #24184d;
+$violet: #7151e6;
+$lavender: #977aff;
+$mist: #d0c3ff;
+$ash: #454548;
+$coal: #040404;
+$frost: #f1f4f8;
+$pearl: #fcfcfc;
+$white: #ffffff;
+$red: #ef4444;
+
+// ─── Semantic: Colors ─────────────────────────────────────
+$color-bg: $frost;
+$color-surface: $pearl;
+$color-white: $white;
+$color-text: $coal;
+$color-text-muted: $ash;
+$color-text-inverted: $white;
+
+$color-primary: $violet;
+$color-primary-dark: $midnight;
+$color-primary-mid: $lavender;
+$color-primary-light: $mist;
+
+// ─── Status colors ────────────────────────────────────────
+$color-success: $violet;
+$color-warning: $red;
+$color-error: $red;
+
+// ─── Shadows ──────────────────────────────────────────────
+$shadow-card: 0 0 15px rgba(0, 0, 0, 0.05);
+
+// ─── Border radius ────────────────────────────────────────
+$radius-card: 20px;
+$radius-pill: 40px;
+$radius-input: 20px;
+
+// ─── Spacing ──────────────────────────────────────────────
+$spacing-xs: 4px; // gap between nav items, small badge gaps
+$spacing-sm: 8px; // tight gaps, small internal spacing
+$spacing-md: 16px; // input padding, medium gaps
+$spacing-lg: 24px; // card padding (p-6), section gaps — most used
+$spacing-xl: 32px; // chart card padding (p-8)
+
+// ─── Layout ───────────────────────────────────────────────
+$sidebar-width: 260px;
+$content-max-width: 1728px; // app stops growing beyond this
+$layout-padding: 17px 24px; // topbar + sidebar padding
+
+// ─── Fonts ────────────────────────────────────────────────
+$font-primary: Inter, sans-serif;
+
+// ─── Transitions ──────────────────────────────────────────
+/* $transition-fast:
+$transition-base:
+ */

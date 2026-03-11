@@ -1,0 +1,113 @@
+@use "variables" as *;
+
+// ─── Scale ────────────────────────────────────────────────
+$text-xs: 10px;
+$text-sm: 12px;
+$text-base: 15px;
+$text-lg: 18px;
+$text-xl: 20px;
+$text-2xl: 24px;
+$text-3xl: 32px;
+$text-4xl: 36px;
+
+// ─── Weights ──────────────────────────────────────────────
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
+// ─── Line heights ─────────────────────────────────────────
+$leading-tight: 1.2;
+$leading-normal: 1.5;
+$leading-relaxed: 1.7;
+
+// ─── Headings ─────────────────────────────────────────────
+h1,
+.h1 {
+  font-size: $text-4xl;
+  font-weight: $font-bold;
+  line-height: $leading-tight;
+  color: $coal;
+}
+h2,
+.h2 {
+  font-size: $text-3xl;
+  font-weight: $font-bold;
+  line-height: $leading-tight;
+  color: $coal;
+}
+h3,
+.h3 {
+  font-size: $text-2xl;
+  font-weight: $font-bold;
+  line-height: $leading-tight;
+  color: $coal;
+}
+h4,
+.h4 {
+  font-size: $text-xl;
+  font-weight: $font-medium;
+  line-height: $leading-normal;
+  color: $coal;
+}
+
+// ─── Subheading ───────────────────────────────────────────
+.subheading {
+  font-size: $text-xl;
+  font-weight: $font-medium;
+  color: $ash;
+}
+
+// ─── Menu items ───────────────────────────────────────────
+.menu-active {
+  font-size: $text-base;
+  font-weight: $font-bold;
+  color: $pearl;
+}
+.menu-inactive {
+  font-size: $text-base;
+  font-weight: $font-normal;
+  color: $coal;
+}
+
+// ─── Body ─────────────────────────────────────────────────
+.body-1 {
+  font-size: $text-xl;
+  font-weight: $font-normal;
+  color: $coal;
+}
+.body-2 {
+  font-size: $text-base;
+  font-weight: $font-semibold;
+  color: $ash;
+}
+.body-3 {
+  font-size: $text-sm;
+  font-weight: $font-normal;
+  color: $coal;
+}
+.body-4 {
+  font-size: $text-xs;
+  font-weight: $font-normal;
+  color: $coal;
+}
+
+// ─── Buttons ──────────────────────────────────────────────
+.btn-label-1 {
+  font-size: $text-lg;
+  font-weight: $font-semibold;
+  color: $coal;
+}
+.btn-label-2 {
+  font-size: $text-sm;
+  font-weight: $font-normal;
+  color: $ash;
+}
+
+// ─── Utilities ────────────────────────────────────────────
+.text-muted {
+  color: $color-text-muted;
+}
+.text-small {
+  font-size: $text-sm;
+}

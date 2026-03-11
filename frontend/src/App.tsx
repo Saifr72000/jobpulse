@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { ProtectedRoute } from "./components/ProtectedRoute/ProtectedRoute";
 import { MainLayout } from "./layouts/MainLayout";
 
 // Auth pages
@@ -21,11 +21,7 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
 
           {/* Protected routes wrapped in MainLayout */}
-          <Route
-            element={
-              <ProtectedRoute />
-            }
-          >
+          <Route element={<ProtectedRoute />}>
             <Route element={<MainLayout />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/orders" element={<MyOrders />} />

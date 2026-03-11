@@ -1,0 +1,48 @@
+@use '../../styles/variables' as *;
+@use '../../styles/typography' as *;
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &__label {
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    color: $coal;
+  }
+
+  &__input {
+    width: 100%;
+    background: $frost;
+    border: 2px solid transparent;
+    border-radius: $radius-input;
+    padding: 14px $spacing-md;
+    font-size: $text-sm;
+    font-family: $font-primary;
+    color: $coal;
+    outline: none;
+    transition: border-color 0.15s ease;
+
+    &::placeholder {
+      color: $ash;
+    }
+
+    &:focus {
+      border-color: $violet;
+    }
+
+    &--error {
+      border-color: $color-error;
+
+      &:focus {
+        border-color: $color-error;
+      }
+    }
+  }
+
+  &__error {
+    font-size: $text-xs;
+    color: $color-error;
+  }
+}

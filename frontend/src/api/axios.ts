@@ -5,12 +5,17 @@ const api = axios.create({
   withCredentials: true,
 });
 
+const AUTH_SKIP_URLS = ["/auth/me", "/auth/refresh-token", "/auth/login", "/auth/logout"];
+
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const requestUrl: string = originalRequest?.url ?? "";
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const isAuthEndpoint = AUTH_SKIP_URLS.some((u) => requestUrl.includes(u));
+
+    if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       originalRequest._retry = true;
 
       try {

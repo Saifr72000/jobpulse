@@ -1,0 +1,230 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+.login {
+  display: flex;
+  flex: 1;
+  height: 100%;
+  background: $pearl;
+  overflow: hidden;
+
+  // ─── Left panel ───────────────────────────────────────────
+  &__panel {
+    position: relative;
+    width: 45%;
+    background: $midnight;
+    border-radius: $radius-pill;
+    margin: 24px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: $spacing-xl;
+    flex-shrink: 0;
+  }
+
+  &__glow {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(
+      circle,
+      rgba(113, 81, 230, 0.55) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  &__rings {
+    position: absolute;
+    top: $spacing-xl;
+    left: $spacing-xl;
+  }
+
+  &__welcome {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__welcome-title {
+    font-size: 48px;
+    font-weight: $font-bold;
+    color: $white;
+    line-height: $leading-tight;
+
+    span {
+      color: $mist;
+    }
+  }
+
+  &__tagline {
+    margin-top: $spacing-lg;
+    font-size: $text-base;
+    color: $pearl;
+    line-height: $leading-relaxed;
+  }
+
+  // ─── Right panel ──────────────────────────────────────────
+  &__form-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-xl;
+  }
+
+  &__form-inner {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__heading {
+    font-size: 48px;
+    font-weight: $font-bold;
+    color: $coal;
+    line-height: $leading-tight;
+  }
+
+  &__subtitle {
+    margin-top: $spacing-sm;
+    font-size: $text-xl;
+    font-weight: $font-normal;
+    color: $ash;
+  }
+
+  // ─── Form ─────────────────────────────────────────────────
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__label {
+    font-size: $text-xl;
+    font-weight: $font-medium;
+    color: $coal;
+  }
+
+  &__input {
+    background: $frost;
+    border: none;
+    border-radius: $radius-input;
+    padding: $spacing-md $spacing-lg;
+    font-size: $text-base;
+    font-family: $font-primary;
+    color: $coal;
+    outline: none;
+    width: 100%;
+    transition: outline 0.15s;
+
+    &::placeholder {
+      color: $ash;
+    }
+
+    &:focus {
+      outline: 2px solid $violet;
+    }
+  }
+
+  // ─── Remember / Forgot row ────────────────────────────────
+  &__options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: $text-base;
+  }
+
+  &__remember {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    color: $ash;
+    font-size: $text-base;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      border: 1px solid $ash;
+      border-radius: 5px;
+      accent-color: $violet;
+      cursor: pointer;
+    }
+  }
+
+  &__forgot {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: $font-primary;
+    font-size: $text-base;
+    color: $violet;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // ─── Submit button ────────────────────────────────────────
+  &__btn {
+    width: 100%;
+    padding: $spacing-md $spacing-lg;
+    background: $violet;
+    color: $white;
+    border: none;
+    border-radius: $radius-pill;
+    font-family: $font-primary;
+    font-size: $text-lg;
+    font-weight: $font-semibold;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    /*  &:hover {
+      background: darken($violet, 8%);
+    } */
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  // ─── Register link ────────────────────────────────────────
+  &__register {
+    text-align: center;
+    font-size: $text-base;
+    color: $ash;
+
+    a {
+      font-weight: $font-semibold;
+      color: $coal;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  // ─── Error message ────────────────────────────────────────
+  &__error {
+    font-size: $text-sm;
+    color: $red;
+    background: rgba($red, 0.08);
+    border-radius: $radius-input;
+    padding: $spacing-sm $spacing-md;
+  }
+}
