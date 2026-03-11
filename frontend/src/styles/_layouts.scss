@@ -1,0 +1,49 @@
+@use 'variables' as *;
+
+// ─── Flex ─────────────────────────────────────────────────
+.flex             { display: flex; }
+.flex-col         { display: flex; flex-direction: column; }
+.flex-center      { display: flex; align-items: center; justify-content: center; }
+.flex-between     { display: flex; align-items: center; justify-content: space-between; }
+.flex-start       { display: flex; align-items: flex-start; }
+.flex-wrap        { flex-wrap: wrap; }
+.flex-1           { flex: 1; }
+.shrink-0         { flex-shrink: 0; }
+
+// ─── Gap ──────────────────────────────────────────────────
+.gap-xs { gap: $spacing-xs; }
+.gap-sm { gap: $spacing-sm; }
+.gap-md { gap: $spacing-md; }
+.gap-lg { gap: $spacing-lg; }
+.gap-xl { gap: $spacing-xl; }
+
+// ─── Grid ─────────────────────────────────────────────────
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: $spacing-lg; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: $spacing-lg; }
+
+// ─── Page layout ──────────────────────────────────────────
+// Wraps the main content area of every page (inside MainLayout)
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  height: 100%;
+  overflow-y: auto;
+}
+
+// ─── Card ─────────────────────────────────────────────────
+// White rounded panel used throughout the app
+.card {
+  background: $color-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+}
+
+// ─── Divider ──────────────────────────────────────────────
+.divider {
+  width: 100%;
+  height: 1px;
+  background: $color-bg;
+  border: none;
+}

@@ -1,0 +1,38 @@
+@use "variables" as *;
+@use "typography" as *;
+@use "layouts" as *;
+
+// ─── Reset ────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+// ─── Base ─────────────────────────────────────────────────
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: $font-primary;
+  background-color: $color-bg;
+  color: $color-text;
+}
+
+// ─── App container ────────────────────────────────────────
+#root {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  max-width: $content-max-width;
+  margin: 0 auto;
+  width: 100%;
+}
