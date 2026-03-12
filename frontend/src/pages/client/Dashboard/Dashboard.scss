@@ -1,0 +1,235 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/typography' as *;
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d0d0 transparent;
+
+  &__stat-cards {
+    display: flex;
+    gap: $spacing-lg;
+  }
+
+  &__charts {
+    display: flex;
+    gap: $spacing-lg;
+    flex: 1;
+    min-height: 0;
+  }
+
+  &__chart-card {
+    background: $color-surface;
+    border-radius: $radius-card;
+    box-shadow: $shadow-card;
+    padding: $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+
+    &--large {
+      flex: 3;
+    }
+
+    &--medium {
+      flex: 2;
+    }
+
+    h2 {
+      font-size: $text-3xl;
+      font-weight: $font-bold;
+      color: $coal;
+    }
+
+    .subtitle {
+      font-size: $text-xl;
+      color: $color-text;
+      margin-top: 4px;
+    }
+  }
+
+  &__bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex: 1;
+    margin-top: $spacing-xl;
+    padding-top: 48px;
+
+    .bar-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+
+      .bar-container {
+        width: 100%;
+        height: 220px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+
+        .tooltip {
+          position: absolute;
+          top: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          transform: translateY(-100%);
+          padding-bottom: 4px;
+
+          span {
+            background: $color-text;
+            color: #fcfdfe;
+            font-size: $text-xs;
+            padding: 4px 10px;
+            border-radius: $radius-pill;
+            white-space: nowrap;
+          }
+
+          .dot {
+            width: 8px;
+            height: 8px;
+            background: $color-text;
+            border-radius: 50%;
+            flex-shrink: 0;
+          }
+        }
+
+        .bar {
+          width: 100%;
+          max-width: 68px;
+          background: #6cbcf6;
+          border-radius: 10px;
+          transition: opacity 0.15s;
+
+          &:hover {
+            opacity: 0.85;
+          }
+        }
+      }
+
+      .week-label {
+        font-size: $text-sm;
+        color: $color-text-muted;
+        margin-top: 10px;
+      }
+    }
+  }
+
+  &__channel-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: $color-bg;
+    border-radius: $radius-card;
+    padding: 14px 18px;
+    margin-top: 20px;
+    font-size: $text-base;
+    color: $color-text;
+
+    img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+  }
+
+  &__channel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: $spacing-lg;
+
+    .channel-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .name {
+        font-size: $text-lg;
+        color: $color-text;
+      }
+
+      .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .bar {
+          height: 15px;
+          background: #6cbcf6;
+          border-radius: $radius-card;
+          transition: width 0.3s ease-in-out;
+        }
+
+        .percent {
+          font-size: $text-xs;
+          color: $color-text;
+          flex-shrink: 0;
+        }
+      }
+    }
+  }
+
+  &__cta-banner {
+    background: $color-surface;
+    border-radius: $radius-card;
+    box-shadow: $shadow-card;
+    padding: 20px $spacing-xl;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $spacing-lg;
+
+    .text {
+      h3 {
+        font-size: $text-xl;
+        font-weight: $font-bold;
+        color: $coal;
+      }
+
+      p {
+        font-size: $text-base;
+        color: $coal;
+        margin-top: 4px;
+      }
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: $coal;
+      color: $color-text-inverted;
+      border-radius: $radius-pill;
+      padding: 13px 28px;
+      font-size: $text-lg;
+      font-weight: $font-bold;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      border: 0;
+
+      &:hover {
+        background: #333;
+      }
+
+      img {
+        width: 15px;
+        height: 15px;
+        object-fit: contain;
+        filter: invert(1);
+      }
+    }
+  }
+}

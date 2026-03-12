@@ -1,25 +1,74 @@
-@use 'variables' as *;
+@use "variables" as *;
+@use "typography" as *;
+
+// ─── Page header ──────────────────────────────────────────
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  margin-top: $spacing-lg;
+}
 
 // ─── Flex ─────────────────────────────────────────────────
-.flex             { display: flex; }
-.flex-col         { display: flex; flex-direction: column; }
-.flex-center      { display: flex; align-items: center; justify-content: center; }
-.flex-between     { display: flex; align-items: center; justify-content: space-between; }
-.flex-start       { display: flex; align-items: flex-start; }
-.flex-wrap        { flex-wrap: wrap; }
-.flex-1           { flex: 1; }
-.shrink-0         { flex-shrink: 0; }
+.flex {
+  display: flex;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.flex-start {
+  display: flex;
+  align-items: flex-start;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-1 {
+  flex: 1;
+}
+.shrink-0 {
+  flex-shrink: 0;
+}
 
 // ─── Gap ──────────────────────────────────────────────────
-.gap-xs { gap: $spacing-xs; }
-.gap-sm { gap: $spacing-sm; }
-.gap-md { gap: $spacing-md; }
-.gap-lg { gap: $spacing-lg; }
-.gap-xl { gap: $spacing-xl; }
+.gap-xs {
+  gap: $spacing-xs;
+}
+.gap-sm {
+  gap: $spacing-sm;
+}
+.gap-md {
+  gap: $spacing-md;
+}
+.gap-lg {
+  gap: $spacing-lg;
+}
+.gap-xl {
+  gap: $spacing-xl;
+}
 
 // ─── Grid ─────────────────────────────────────────────────
-.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: $spacing-lg; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: $spacing-lg; }
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-lg;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-lg;
+}
 
 // ─── Page layout ──────────────────────────────────────────
 // Wraps the main content area of every page (inside MainLayout)
