@@ -1,12 +1,15 @@
+@use "../../styles/variables" as *;
+@use "../../styles/typography" as *;
+
 .sidebar {
-  width: 260px;
-  min-width: 260px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  background: $color-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
   display: flex;
   flex-direction: column;
-  padding: 24px 15px;
+  padding: $spacing-lg 15px;
   height: calc(100vh - 34px);
   position: sticky;
   top: 17px;
@@ -14,11 +17,11 @@
 }
 
 .sidebar-logo {
-  font-size: 32px;
-  font-weight: bold;
-  color: #000;
+  font-size: $text-3xl;
+  font-weight: $font-bold;
+  color: $coal;
   padding: 0 4px 28px;
-  font-family: Helvetica, sans-serif;
+  font-family: $font-primary;
 }
 
 .sidebar-nav {
@@ -26,16 +29,16 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: $spacing-xs;
 }
 
 .sidebar-bottom {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding-top: 16px;
-  border-top: 1px solid #f1f4f8;
+  gap: $spacing-xs;
+  padding-top: $spacing-md;
+  border-top: 1px solid $color-bg;
 }
 
 .sidebar-nav-item {
@@ -43,26 +46,23 @@
   align-items: center;
   gap: 12px;
   padding: 12px 15px;
-  border-radius: 40px;
+  border-radius: $radius-pill;
   cursor: pointer;
+  color: $color-text;
+  font-size: $text-base;
+  font-weight: $font-normal;
+  font-family: $font-primary;
   transition: background 0.15s;
-}
 
-.sidebar-nav-item:hover:not(.active) {
-  background: #f1f4f8;
-}
+  &:hover:not(.active) {
+    background: $color-bg;
+  }
 
-.sidebar-nav-item.active {
-  background: #000;
-}
-
-.sidebar-nav-item.active .nav-label {
-  color: white;
-  font-weight: bold;
-}
-
-.sidebar-nav-item.active .nav-icon-wrap img {
-  filter: invert(1);
+  &.active {
+    background: $coal;
+    color: $color-text-inverted;
+    font-weight: $font-bold;
+  }
 }
 
 .nav-icon-wrap {
@@ -74,15 +74,8 @@
   flex-shrink: 0;
 }
 
-.nav-icon-wrap img {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-}
-
 .nav-label {
-  font-size: 15px;
-  color: #424241;
-  font-family: Helvetica, sans-serif;
+  font-size: $text-base;
+  font-family: $font-primary;
   white-space: nowrap;
 }

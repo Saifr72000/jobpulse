@@ -1,33 +1,38 @@
 import "./Sidebar.scss";
-import dashboardIcon from "../../assets/icons/home.svg";
-import newCampaignIcon from "../../assets/icons/cart.svg";
-import myOrdersIcon from "../../assets/icons/box.svg";
-import campaignsIcon from "../../assets/icons/bar-chart.svg";
-import candidatesIcon from "../../assets/icons/media.svg";
-import mediaLibraryIcon from "../../assets/icons/users.svg";
-import usersIcon from "../../assets/icons/settings.svg";
-import settingsIcon from "../../assets/icons/cog.svg";
-import logoutIcon from "../../assets/icons/logout.svg";
+import Icon from "../Icon/Icon";
+import type { FunctionComponent, SVGProps } from "react";
+
+import DashboardIcon from "../../assets/icons/home.svg?react";
+import NewOrderIcon from "../../assets/icons/cart.svg?react";
+import MyOrdersIcon from "../../assets/icons/box.svg?react";
+import CampaignsIcon from "../../assets/icons/bar-chart.svg?react";
+import CandidatesIcon from "../../assets/icons/media.svg?react";
+import MediaLibraryIcon from "../../assets/icons/users.svg?react";
+import UsersIcon from "../../assets/icons/settings.svg?react";
+import SettingsIcon from "../../assets/icons/cog.svg?react";
+import LogoutIcon from "../../assets/icons/logout.svg?react";
+
+type SvgComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
 
 interface NavItem {
-  icon: string;
+  Icon: SvgComponent;
   label: string;
   page: string;
 }
 
 const navItems: NavItem[] = [
-  { icon: dashboardIcon, label: "Dashboard", page: "dashboard" },
-  { icon: newCampaignIcon, label: "New order", page: "new-order" },
-  { icon: myOrdersIcon, label: "My orders", page: "my-orders" },
-  { icon: campaignsIcon, label: "Campaigns", page: "analytics" },
-  { icon: candidatesIcon, label: "Candidates", page: "analytics" },
-  { icon: mediaLibraryIcon, label: "Media library", page: "media-library" },
-  { icon: usersIcon, label: "Users", page: "users" },
+  { Icon: DashboardIcon, label: "Dashboard", page: "dashboard" },
+  { Icon: NewOrderIcon, label: "New order", page: "new-order" },
+  { Icon: MyOrdersIcon, label: "My orders", page: "my-orders" },
+  { Icon: CampaignsIcon, label: "Campaigns", page: "analytics" },
+  { Icon: CandidatesIcon, label: "Candidates", page: "analytics" },
+  { Icon: MediaLibraryIcon, label: "Media library", page: "media-library" },
+  { Icon: UsersIcon, label: "Users", page: "users" },
 ];
 
 const bottomItems: NavItem[] = [
-  { icon: settingsIcon, label: "Settings", page: "settings" },
-  { icon: logoutIcon, label: "Log out", page: "logout" },
+  { Icon: SettingsIcon, label: "Settings", page: "settings" },
+  { Icon: LogoutIcon, label: "Log out", page: "logout" },
 ];
 
 interface SidebarProps {
@@ -41,29 +46,32 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
       <div className="sidebar-logo">JobPulse</div>
 
       <ul className="sidebar-nav">
-        {navItems.map((item) => (
-          <li
-            key={item.page}
-            className={`sidebar-nav-item${activePage === item.page ? " active" : ""}`}
-            onClick={() => onNavigate(item.page)}
-          >
-            <span className="nav-icon-wrap">
-              <img src={item.icon} alt="" />
-            </span>
-            <span className="nav-label">{item.label}</span>
-          </li>
-        ))}
+        {navItems.map((item) => {
+          const isActive = activePage === item.page;
+          return (
+            <li
+              key={item.label}
+              className={`sidebar-nav-item${isActive ? " active" : ""}`}
+              onClick={() => onNavigate(item.page)}
+            >
+              <span className="nav-icon-wrap">
+                <Icon svg={item.Icon} size={20} />
+              </span>
+              <span className="nav-label">{item.label}</span>
+            </li>
+          );
+        })}
       </ul>
 
       <ul className="sidebar-bottom">
         {bottomItems.map((item) => (
           <li
-            key={item.page}
+            key={item.label}
             className="sidebar-nav-item"
             onClick={() => onNavigate(item.page)}
           >
             <span className="nav-icon-wrap">
-              <img src={item.icon} alt="" />
+              <Icon svg={item.Icon} size={20} />
             </span>
             <span className="nav-label">{item.label}</span>
           </li>

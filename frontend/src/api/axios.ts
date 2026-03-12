@@ -19,9 +19,12 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
+        console.log('[Axios Interceptor] Access token expired, attempting refresh...');
         await api.post("/auth/refresh-token");
+        console.log('[Axios Interceptor] Token refreshed successfully, retrying original request');
         return api(originalRequest);
-      } catch {
+      } catch (refreshError) {
+        console.error('[Axios Interceptor] Token refresh failed:', refreshError);
         window.location.href = "/login";
       }
     }
