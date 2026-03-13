@@ -11,8 +11,10 @@ export function MainLayout() {
   const getActivePage = () => {
     const path = location.pathname;
     if (path === "/" || path === "/dashboard") return "dashboard";
-    if (path === "/orders/new") return "new-order";
-    if (path.startsWith("/orders")) return "my-orders";
+    if (path === "/orders/new") return "new-campaign";
+    if (path.startsWith("/orders")) return "campaigns";
+    if (path === "/media-library") return "media-library";
+    if (path === "/settings") return "settings";
     return path.slice(1);
   };
 
@@ -25,12 +27,10 @@ export function MainLayout() {
 
     const routes: Record<string, string> = {
       dashboard: "/dashboard",
-      "new-order": "/orders/new",
-      "my-orders": "/orders",
-      settings: "/settings",
-      users: "/users",
-      analytics: "/analytics",
+      "new-campaign": "/orders/new",
+      campaigns: "/orders",
       "media-library": "/media-library",
+      settings: "/settings",
     };
 
     navigate(routes[page] || `/${page}`);

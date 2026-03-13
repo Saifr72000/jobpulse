@@ -11,7 +11,7 @@ A B2B recruitment operations platform for agencies managing recruitment campaign
 
 ## Core Modules
 
-### Recruitment Ordering
+### Campaign Ordering
 
 Clients create orders using predefined packages, custom orders, or duplicates of previous ones. Orders include platform selection, add-on services, and material uploads. A smart form adapts fields based on selections. Orders go through a review/feedback loop before fulfillment.
 

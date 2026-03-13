@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/typography' as *;
+@use "../../styles/variables" as *;
+@use "../../styles/typography" as *;
 
 .stats-card {
   background: $color-surface;
@@ -60,8 +60,8 @@
     border: 0;
     cursor: pointer;
 
-    &:hover {
+    /*  &:hover {
       background: darken($frost, 3%);
-    }
+    } */
   }
 }
