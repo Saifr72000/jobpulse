@@ -1,6 +1,9 @@
 @use "../../styles/variables" as *;
 @use "../../styles/typography" as *;
 
+$sidebar-collapsed-width: 62px;
+$sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
 .sidebar {
   width: $sidebar-width;
   min-width: $sidebar-width;
@@ -14,14 +17,77 @@
   position: sticky;
   top: 17px;
   align-self: flex-start;
+  overflow: hidden;
+  transition: width $sidebar-transition, min-width $sidebar-transition;
+
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+    min-width: $sidebar-collapsed-width;
+
+    .sidebar-header {
+      justify-content: center;
+    }
+
+    .sidebar-logo {
+      opacity: 0;
+      max-width: 0;
+      padding: 0;
+      pointer-events: none;
+    }
+
+    .sidebar-nav-item {
+      width: fit-content;
+      margin: 0 auto;
+      padding: 8px;
+      gap: 0;
+    }
+
+    .nav-label {
+      opacity: 0;
+      max-width: 0;
+      overflow: hidden;
+    }
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 28px;
+  gap: $spacing-sm;
+  flex-shrink: 0;
 }
 
 .sidebar-logo {
   font-size: $text-3xl;
   font-weight: $font-bold;
   color: $coal;
-  padding: 0 4px 28px;
+  padding: 0 4px;
   font-family: $font-primary;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 200px;
+  opacity: 1;
+  transition: opacity $sidebar-transition, max-width $sidebar-transition, margin $sidebar-transition;
+}
+
+.sidebar-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-sm;
+  border-radius: $radius-pill;
+  color: $color-text;
+  transition: background 0.15s, margin $sidebar-transition;
+
+  &:hover {
+    background: $color-bg;
+  }
 }
 
 .sidebar-nav {
@@ -52,7 +118,7 @@
   font-size: $text-base;
   font-weight: $font-normal;
   font-family: $font-primary;
-  transition: background 0.15s;
+  transition: background 0.15s, padding $sidebar-transition, gap $sidebar-transition, width $sidebar-transition, margin $sidebar-transition;
 
   &:hover:not(.active) {
     background: $color-bg;
@@ -78,4 +144,8 @@
   font-size: $text-base;
   font-family: $font-primary;
   white-space: nowrap;
+  overflow: hidden;
+  max-width: 200px;
+  opacity: 1;
+  transition: opacity $sidebar-transition, max-width $sidebar-transition;
 }
