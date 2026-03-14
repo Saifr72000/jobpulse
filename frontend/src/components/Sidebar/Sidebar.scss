@@ -60,12 +60,9 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-logo {
-  font-size: $text-3xl;
-  font-weight: $font-bold;
-  color: $coal;
+  height: 32px;
+  width: auto;
   padding: 0 4px;
-  font-family: $font-primary;
-  white-space: nowrap;
   overflow: hidden;
   max-width: 200px;
   opacity: 1;

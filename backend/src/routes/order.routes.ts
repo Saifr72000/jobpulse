@@ -18,10 +18,10 @@ import { authenticateUser } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// Create order (requires auth - user must be logged in)
+// Create campaign order (requires auth)
 router.post("/", authenticateUser, createOrderValidator, requestValidator, createOrder);
 
-// Get my orders (logged in user's orders)
+// Get my orders — company-scoped, paginated (requires auth)
 router.get("/my-orders", authenticateUser, getMyOrders);
 
 // Get all orders (admin)

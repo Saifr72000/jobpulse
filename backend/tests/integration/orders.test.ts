@@ -1,83 +1,264 @@
 import request from "supertest";
 import app from "../../src/app.js";
-import { createTestProduct, createTestProducts } from "../helpers/testData.helper.js";
 import { createAuthenticatedUser, unauthenticatedRequest } from "../helpers/auth.helper.js";
+
+// Minimal valid campaign order payload
+const validCampaignOrder = {
+  orderType: "custom",
+  channels: ["linkedin", "facebook"],
+  addons: [],
+  campaignName: "Summer 2026 Hiring",
+  assets: {
+    imageOption: "upload",
+  },
+  targetAudience: "Software engineers with 3+ years experience in Oslo",
+  additionalNotes: "Focus on backend roles",
+  paymentMethod: "invoice",
+  totalAmount: 5000,
+};
+
+// Valid package order payload
+const validPackageOrder = {
+  orderType: "package",
+  package: "basic",
+  channels: ["linkedin", "facebook", "google"],
+  addons: [],
+  campaignName: "Q3 Recruitment Drive",
+  assets: {
+    imageOption: "media-library",
+  },
+  targetAudience: "Marketing professionals in Bergen",
+  paymentMethod: "card-payment",
+  totalAmount: 12000,
+};
 
 describe("Orders API", () => {
   describe("POST /api/orders", () => {
-    it("should create an order when authenticated", async () => {
-      // Setup: Create authenticated user (with cookies) and products
+    it("should create a custom order when authenticated", async () => {
       const { agent, company } = await createAuthenticatedUser();
-      const products = await createTestProducts(2);
 
-      const orderData = {
-        items: [
-          { productId: products[0]._id.toString(), quantity: 2 },
-          { productId: products[1]._id.toString(), quantity: 1 },
-        ],
-        shippingAddress: "123 Test Street, Oslo",
-        notes: "Please deliver quickly",
-      };
-
-      const response = await agent.post("/api/orders").send(orderData);
+      const response = await agent.post("/api/orders").send(validCampaignOrder);
 
       expect(response.status).toBe(201);
-      expect(response.body.message).toBe("Order created successfully");
-      expect(response.body.order.companyName).toBe(company.name);
-      expect(response.body.order.orgNumber).toBe(company.orgNumber);
-      expect(response.body.order.items).toHaveLength(2);
-      expect(response.body.order.status).toBe("pending");
-      // Product 1: 10 * 2 = 20, Product 2: 20 * 1 = 20, Total = 40
-      expect(response.body.order.totalAmount).toBe(40);
+      expect(response.body.campaignName).toBe("Summer 2026 Hiring");
+      expect(response.body.orderType).toBe("custom");
+      expect(response.body.channels).toEqual(["linkedin", "facebook"]);
+      expect(response.body.status).toBe("pending");
+      expect(response.body.companyName).toBe(company.name);
+      expect(response.body.orgNumber).toBe(company.orgNumber);
+      expect(response.body.totalAmount).toBe(5000);
+    });
+
+    it("should create a package order when authenticated", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send(validPackageOrder);
+
+      expect(response.status).toBe(201);
+      expect(response.body.orderType).toBe("package");
+      expect(response.body.package).toBe("basic");
+      expect(response.body.channels).toHaveLength(3);
+      expect(response.body.status).toBe("pending");
+    });
+
+    it("should fail when package channel limit is exceeded", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send({
+        ...validPackageOrder,
+        package: "basic", // limit 3
+        channels: ["linkedin", "facebook", "google", "snapchat"], // 4 channels — exceeds limit
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain("maximum of");
     });
 
     it("should fail without authentication", async () => {
-      const products = await createTestProducts(1);
-
       const response = await unauthenticatedRequest()
         .post("/api/orders")
-        .send({
-          items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-        });
+        .send(validCampaignOrder);
 
       expect(response.status).toBe(401);
     });
 
-    it("should fail with empty items array", async () => {
+    it("should fail when campaignName is missing", async () => {
       const { agent } = await createAuthenticatedUser();
 
-      const response = await agent.post("/api/orders").send({ items: [] });
+      const { campaignName, ...withoutName } = validCampaignOrder;
+
+      const response = await agent.post("/api/orders").send(withoutName);
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
     });
 
-    it("should fail with invalid product ID", async () => {
+    it("should fail when channels is empty", async () => {
       const { agent } = await createAuthenticatedUser();
 
       const response = await agent.post("/api/orders").send({
-        items: [{ productId: "507f1f77bcf86cd799439011", quantity: 1 }],
+        ...validCampaignOrder,
+        channels: [],
       });
 
-      expect(response.status).toBe(404);
-      expect(response.body.error).toContain("not found");
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should fail when channels is missing", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const { channels, ...withoutChannels } = validCampaignOrder;
+
+      const response = await agent.post("/api/orders").send(withoutChannels);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should fail when orderType is missing", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const { orderType, ...withoutOrderType } = validCampaignOrder;
+
+      const response = await agent.post("/api/orders").send(withoutOrderType);
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should fail when package orderType is used without specifying package", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send({
+        ...validPackageOrder,
+        package: undefined,
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should require leadAdDescription when lead-ads addon is selected", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send({
+        ...validCampaignOrder,
+        addons: ["lead-ads"],
+        assets: {
+          imageOption: "upload",
+          // leadAdDescription intentionally missing
+        },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should succeed when lead-ads addon is selected with valid leadAdDescription", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send({
+        ...validCampaignOrder,
+        addons: ["lead-ads"],
+        assets: {
+          imageOption: "upload",
+          leadAdDescription: "team-create",
+        },
+      });
+
+      expect(response.status).toBe(201);
+      expect(response.body.addons).toContain("lead-ads");
+    });
+
+    it("should require videoMaterials when video-campaign addon is selected", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send({
+        ...validCampaignOrder,
+        addons: ["video-campaign"],
+        assets: {
+          imageOption: "upload",
+          // videoMaterials intentionally missing
+        },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should require linkedinJobDescription and linkedinScreeningQuestions when linkedin-job-posting addon is selected", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      const response = await agent.post("/api/orders").send({
+        ...validCampaignOrder,
+        addons: ["linkedin-job-posting"],
+        assets: {
+          imageOption: "upload",
+          // linkedinJobDescription and linkedinScreeningQuestions intentionally missing
+        },
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
     });
   });
 
   describe("GET /api/orders/my-orders", () => {
-    it("should return user's orders", async () => {
+    it("should return paginated orders for authenticated user", async () => {
       const { agent } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
 
-      // Create an order first
+      // Create two orders
+      await agent.post("/api/orders").send(validCampaignOrder);
       await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
+        ...validCampaignOrder,
+        campaignName: "Second Campaign",
       });
 
       const response = await agent.get("/api/orders/my-orders");
 
       expect(response.status).toBe(200);
-      expect(response.body).toHaveLength(1);
+      expect(response.body.orders).toHaveLength(2);
+      expect(response.body.total).toBe(2);
+      expect(response.body.page).toBe(1);
+      expect(response.body.limit).toBe(20);
+    });
+
+    it("should return only that company's orders, not other companies'", async () => {
+      const { agent: agent1 } = await createAuthenticatedUser();
+      const { agent: agent2 } = await createAuthenticatedUser({
+        email: "otheruser@test.com",
+      });
+
+      // agent1 creates an order
+      await agent1.post("/api/orders").send(validCampaignOrder);
+
+      // agent2 should see 0 orders
+      const response = await agent2.get("/api/orders/my-orders");
+
+      expect(response.status).toBe(200);
+      expect(response.body.orders).toHaveLength(0);
+      expect(response.body.total).toBe(0);
+    });
+
+    it("should respect page and limit query params", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      // Create 3 orders
+      for (let i = 1; i <= 3; i++) {
+        await agent.post("/api/orders").send({
+          ...validCampaignOrder,
+          campaignName: `Campaign ${i}`,
+        });
+      }
+
+      const response = await agent.get("/api/orders/my-orders?page=1&limit=2");
+
+      expect(response.status).toBe(200);
+      expect(response.body.orders).toHaveLength(2);
+      expect(response.body.total).toBe(3);
+      expect(response.body.page).toBe(1);
+      expect(response.body.limit).toBe(2);
     });
 
     it("should fail without authentication", async () => {
@@ -87,58 +268,19 @@ describe("Orders API", () => {
     });
   });
 
-  describe("GET /api/orders", () => {
-    it("should return all orders", async () => {
-      const { agent } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
-
-      // Create an order
-      await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-      });
-
-      const response = await request(app).get("/api/orders");
-
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveLength(1);
-    });
-  });
-
-  describe("GET /api/orders/company/:companyId", () => {
-    it("should return orders by company", async () => {
-      const { agent, company } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
-
-      // Create an order
-      await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-      });
-
-      const response = await request(app).get(`/api/orders/company/${company._id}`);
-
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveLength(1);
-      expect(response.body[0].companyName).toBe(company.name);
-    });
-  });
-
   describe("GET /api/orders/:id", () => {
     it("should return order by ID", async () => {
       const { agent, company } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
 
-      // Create an order
-      const createResponse = await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-      });
-
-      const orderId = createResponse.body.order._id;
+      const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
+      const orderId = createResponse.body._id;
 
       const response = await request(app).get(`/api/orders/${orderId}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(orderId);
       expect(response.body.companyName).toBe(company.name);
+      expect(response.body.campaignName).toBe("Summer 2026 Hiring");
     });
 
     it("should return 404 for non-existent order", async () => {
@@ -153,14 +295,9 @@ describe("Orders API", () => {
   describe("PATCH /api/orders/:id/status", () => {
     it("should update order status", async () => {
       const { agent } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
 
-      // Create an order
-      const createResponse = await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-      });
-
-      const orderId = createResponse.body.order._id;
+      const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
+      const orderId = createResponse.body._id;
 
       const response = await request(app)
         .patch(`/api/orders/${orderId}/status`)
@@ -172,13 +309,9 @@ describe("Orders API", () => {
 
     it("should fail with invalid status", async () => {
       const { agent } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
 
-      const createResponse = await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-      });
-
-      const orderId = createResponse.body.order._id;
+      const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
+      const orderId = createResponse.body._id;
 
       const response = await request(app)
         .patch(`/api/orders/${orderId}/status`)
@@ -191,14 +324,9 @@ describe("Orders API", () => {
   describe("DELETE /api/orders/:id", () => {
     it("should delete an order", async () => {
       const { agent } = await createAuthenticatedUser();
-      const products = await createTestProducts(1);
 
-      // Create an order
-      const createResponse = await agent.post("/api/orders").send({
-        items: [{ productId: products[0]._id.toString(), quantity: 1 }],
-      });
-
-      const orderId = createResponse.body.order._id;
+      const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
+      const orderId = createResponse.body._id;
 
       const response = await request(app).delete(`/api/orders/${orderId}`);
 
@@ -208,6 +336,20 @@ describe("Orders API", () => {
       // Verify deletion
       const getResponse = await request(app).get(`/api/orders/${orderId}`);
       expect(getResponse.status).toBe(404);
+    });
+  });
+
+  describe("GET /api/orders", () => {
+    it("should return all orders", async () => {
+      const { agent } = await createAuthenticatedUser();
+
+      await agent.post("/api/orders").send(validCampaignOrder);
+
+      const response = await request(app).get("/api/orders");
+
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(true);
+      expect(response.body.length).toBeGreaterThanOrEqual(1);
     });
   });
 });

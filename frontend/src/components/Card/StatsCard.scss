@@ -12,8 +12,8 @@
   min-width: 0;
 
   &__icon-box {
-    width: 55px;
-    height: 55px;
+    width: 45px;
+    height: 45px;
     border-radius: 10px;
     background: $frost;
     display: flex;
@@ -24,7 +24,7 @@
   }
 
   &__label {
-    font-size: $text-xl;
+    font-size: $text-base;
     font-weight: $font-normal;
     color: $color-text;
     margin-top: 20px;
@@ -39,7 +39,7 @@
   }
 
   &__value {
-    font-size: 40px;
+    font-size: $text-2xl;
     font-weight: $font-bold;
     color: $coal;
     line-height: 1.1;

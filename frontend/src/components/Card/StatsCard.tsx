@@ -12,11 +12,16 @@ interface StatsCardProps {
   onClick?: () => void;
 }
 
-export default function StatsCard({ icon, label, value, onClick }: StatsCardProps) {
+export default function StatsCard({
+  icon,
+  label,
+  value,
+  onClick,
+}: StatsCardProps) {
   return (
     <div className="stats-card">
       <div className="stats-card__icon-box">
-        <Icon svg={icon} size={24} />
+        <Icon svg={icon} size={20} />
       </div>
       <p className="stats-card__label">{label}</p>
       <div className="stats-card__footer">
@@ -26,7 +31,7 @@ export default function StatsCard({ icon, label, value, onClick }: StatsCardProp
           onClick={onClick}
           aria-label={`View ${label}`}
         >
-          <Icon svg={ArrowUpRightIcon} size={16} />
+          <Icon svg={ArrowUpRightIcon} size={20} />
         </button>
       </div>
     </div>

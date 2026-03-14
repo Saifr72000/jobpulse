@@ -1,0 +1,771 @@
+@use "sass:color";
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+// ─── Page layout ─────────────────────────────────────────────
+.new-order {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+  padding-bottom: $spacing-xl;
+}
+
+// ─── Progress bar ─────────────────────────────────────────────
+.progress-bar {
+  position: relative;
+  /* padding-top: 28px; */
+
+  &__track {
+    height: 11px;
+    background: #d9d9d9;
+    border-radius: $radius-pill;
+    overflow: hidden;
+  }
+
+  &__fill {
+    height: 100%;
+    background: $violet;
+    border-radius: $radius-pill;
+    transition: width 0.3s ease;
+  }
+
+  &__label {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    background: $ash;
+    color: $white;
+    font-size: 12px;
+    font-weight: $font-medium;
+    padding: 3px 10px;
+    border-radius: $radius-pill;
+    white-space: nowrap;
+    transition: left 0.3s ease;
+  }
+}
+
+// ─── Card base ────────────────────────────────────────────────
+.order-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+}
+
+// ─── Step 1 ───────────────────────────────────────────────────
+.step1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-lg;
+
+  &__continue {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+}
+
+// Channel row (Step 1 custom plan)
+.channel-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: $spacing-md $spacing-md;
+  background: $frost;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color.adjust($frost, $lightness: -3%);
+  }
+
+  &--checked {
+    background: $frost;
+  }
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+
+  &__text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    display: block;
+  }
+
+  &__desc {
+    font-size: 15px;
+    font-weight: $font-normal;
+    color: $coal;
+    display: block;
+  }
+
+  &__check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #5f5f5e;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+
+    &--checked {
+      background: $coal;
+      border-color: $coal;
+      color: $white;
+    }
+  }
+}
+
+// Package option (Step 1)
+.package-option {
+  position: relative;
+  padding: $spacing-md;
+  background: $frost;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: outline 0.15s;
+
+  &--selected {
+    outline: 2px solid $coal;
+    outline-offset: -2px;
+  }
+
+  &__popular {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: $violet;
+    color: $white;
+    font-size: 13px;
+    font-weight: $font-normal;
+    padding: 2px 14px;
+    border-radius: $radius-pill;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+    background: $violet;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      color: $white;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    flex: 1;
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+
+    &--selected {
+      background: $coal;
+      border-color: $coal;
+    }
+  }
+
+  &__features {
+    margin-top: $spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    list-style: none;
+    padding: 0;
+  }
+
+  &__feature {
+    font-size: 15px;
+    color: $coal;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: "✓";
+      font-weight: $font-bold;
+      color: $coal;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ─── Step 2 ───────────────────────────────────────────────────
+.step2 {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: $spacing-lg;
+  align-items: start;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+}
+
+.channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.channel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.addon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.addon-card {
+  background: $frost;
+  border-radius: 14px;
+  padding: $spacing-md;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: outline 0.15s;
+
+  &--checked {
+    outline: 2px solid $coal;
+    outline-offset: -2px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__icon-wrap {
+    width: 28px;
+    height: 28px;
+    background: $violet;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      color: $white;
+    }
+  }
+
+  &__check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #5f5f5e;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+
+    &--checked {
+      background: $coal;
+      border-color: $coal;
+      color: $white;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+  }
+
+  &__desc {
+    font-size: 15px;
+    color: $coal;
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  &__price {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    text-align: right;
+    margin-top: auto;
+  }
+}
+
+// ─── Order summary sidebar ─────────────────────────────────────
+.order-summary {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+  position: sticky;
+  top: $spacing-lg;
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0 0 4px;
+  }
+
+  &__plan-label {
+    font-size: 15px;
+    font-weight: $font-normal;
+    color: $ash;
+    margin: 0 0 $spacing-md;
+  }
+
+  &__section-label {
+    font-size: 15px;
+    font-weight: $font-semibold;
+    color: $ash;
+    margin: 0 0 4px;
+  }
+
+  &__divider {
+    border: none;
+    border-top: 1px solid rgba($ash, 0.2);
+    margin: $spacing-sm 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    color: $ash;
+    gap: $spacing-sm;
+    margin-bottom: 2px;
+
+    &--total {
+      font-size: 15px;
+      font-weight: $font-semibold;
+      color: $ash;
+    }
+  }
+
+  &__channel-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: $ash;
+
+    .channel-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__addon-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: $ash;
+
+    .addon-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      background: $violet;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ─── Step 3 ───────────────────────────────────────────────────
+.step3 {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px $spacing-md;
+  background: $frost;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color.adjust($frost, $lightness: -3%);
+  }
+
+  &--selected {
+    outline: 2px solid $coal;
+    outline-offset: -2px;
+  }
+
+  &__dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--selected {
+      border-color: $coal;
+
+      &::after {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: $coal;
+      }
+    }
+  }
+
+  &__label {
+    font-size: 15px;
+    font-weight: $font-normal;
+    color: $coal;
+  }
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.form-question {
+  font-size: 20px;
+  font-weight: $font-medium;
+  color: $coal;
+  margin: $spacing-md 0 0;
+}
+
+.form-input {
+  width: 100%;
+  background: $frost;
+  border: none;
+  border-radius: $radius-input;
+  padding: 14px $spacing-md;
+  font-size: 15px;
+  font-family: $font-primary;
+  color: $coal;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+  margin-top: $spacing-sm;
+
+  &::placeholder {
+    color: #636363;
+  }
+
+  &:focus {
+    outline: 2px solid $violet;
+    outline-offset: -2px;
+  }
+}
+
+// ─── Step 4 ───────────────────────────────────────────────────
+.step4 {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: $spacing-lg;
+  align-items: start;
+}
+
+.payment-card {
+  background: $frost;
+  border-radius: 14px;
+  padding: $spacing-md;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  position: relative;
+  transition: outline 0.15s;
+
+  &--selected {
+    outline: 2px solid $violet;
+    outline-offset: -2px;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $ash;
+    margin-top: 2px;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 15px;
+    color: $ash;
+    margin: 2px 0 0;
+  }
+
+  &__balance-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 1px solid $ash;
+    border-radius: $radius-pill;
+    padding: 8px $spacing-md;
+    font-size: 15px;
+    color: $ash;
+    margin-top: 8px;
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+
+    &--selected {
+      border-color: $coal;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $coal;
+      }
+    }
+  }
+}
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+// ─── Navigation buttons ────────────────────────────────────────
+.step-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: $spacing-sm;
+
+  &__back {
+    background: $white;
+    color: $ash;
+    border: 1px solid rgba($ash, 0.3);
+    border-radius: $radius-pill;
+    padding: 13px 28px;
+    font-size: 18px;
+    font-weight: $font-bold;
+    font-family: $font-primary;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s;
+
+    &:hover {
+      background: $frost;
+    }
+  }
+
+  &__continue {
+    background: $midnight;
+    color: $white;
+    border: none;
+    border-radius: $radius-pill;
+    padding: 13px 28px;
+    font-size: 18px;
+    font-weight: $font-bold;
+    font-family: $font-primary;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s;
+
+    &:hover {
+      background: color.adjust($midnight, $lightness: 8%);
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// ─── Success modal ─────────────────────────────────────────────
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-modal {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-xl $spacing-xl;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  position: relative;
+  text-align: center;
+
+  &__close {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: $ash;
+    border-radius: 50%;
+    transition: background 0.15s;
+
+    &:hover {
+      background: $frost;
+    }
+  }
+
+  &__icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $violet;
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0;
+  }
+
+  &__body {
+    font-size: 20px;
+    font-weight: $font-normal;
+    color: $ash;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__btn {
+    background: $midnight;
+    color: $white;
+    border: none;
+    border-radius: $radius-pill;
+    padding: 13px $spacing-xl;
+    font-size: 18px;
+    font-weight: $font-bold;
+    font-family: $font-primary;
+    cursor: pointer;
+    width: 100%;
+    margin-top: $spacing-sm;
+    transition: background 0.15s;
+
+    &:hover {
+      background: color.adjust($midnight, $lightness: 8%);
+    }
+  }
+}
