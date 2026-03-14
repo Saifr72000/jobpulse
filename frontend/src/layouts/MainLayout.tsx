@@ -12,6 +12,7 @@ export function MainLayout() {
     const path = location.pathname;
     if (path === "/" || path === "/dashboard") return "dashboard";
     if (path === "/orders/new") return "new-campaign";
+    if (path.startsWith("/campaigns")) return "campaigns";
     if (path.startsWith("/orders")) return "campaigns";
     if (path === "/media-library") return "media-library";
     if (path === "/settings") return "settings";
@@ -28,7 +29,7 @@ export function MainLayout() {
     const routes: Record<string, string> = {
       dashboard: "/dashboard",
       "new-campaign": "/orders/new",
-      campaigns: "/orders",
+      campaigns: "/campaigns",
       "media-library": "/media-library",
       settings: "/settings",
     };

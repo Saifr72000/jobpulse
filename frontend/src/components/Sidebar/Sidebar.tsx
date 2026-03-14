@@ -11,6 +11,7 @@ import SettingsIcon from "../../assets/icons/cog.svg?react";
 import LogoutIcon from "../../assets/icons/logout.svg?react";
 import LayoutLeftIcon from "../../assets/icons/layout-left.svg?react";
 import LayoutRightIcon from "../../assets/icons/layout-right.svg?react";
+import jobPulseLogo from "../../assets/logos/jobpulse_logo.png";
 
 type SvgComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
 
@@ -43,7 +44,7 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
   return (
     <nav className={`sidebar${isCollapsed ? " collapsed" : ""}`}>
       <div className="sidebar-header">
-        <span className="sidebar-logo">JobPulse</span>
+        <img src={jobPulseLogo} alt="JobPulse" className="sidebar-logo" />
         <button
           className="sidebar-toggle"
           onClick={() => setIsCollapsed((prev) => !prev)}

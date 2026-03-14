@@ -10,7 +10,8 @@
       "Bash(npm test:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run build:*)",
-      "mcp__figma__whoami"
+      "mcp__figma__whoami",
+      "Bash(find /Users/saifrana/01.NTNU/jobpulse/backend/src -type f -name \"*.ts\" 2>/dev/null | sort)"
     ]
   }
 }

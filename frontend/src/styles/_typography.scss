@@ -25,7 +25,7 @@ $leading-relaxed: 1.7;
 h1,
 .h1 {
   font-size: $text-4xl;
-  font-weight: $font-bold;
+  font-weight: $font-medium;
   line-height: $leading-tight;
   color: $coal;
 }
@@ -39,7 +39,7 @@ h2,
 h3,
 .h3 {
   font-size: $text-2xl;
-  font-weight: $font-bold;
+  font-weight: $font-medium;
   line-height: $leading-tight;
   color: $coal;
 }
@@ -53,8 +53,8 @@ h4,
 
 // ─── Subheading ───────────────────────────────────────────
 .subheading {
-  font-size: $text-xl;
-  font-weight: $font-medium;
+  font-size: $text-lg;
+  font-weight: $font-normal;
   color: $ash;
 }
 

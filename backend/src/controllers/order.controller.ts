@@ -16,7 +16,6 @@ export const createOrder = async (
   next: NextFunction
 ) => {
   try {
-    const { items, shippingAddress, notes } = req.body;
     const userId = req.user?.userId;
 
     if (!userId) {
@@ -24,21 +23,57 @@ export const createOrder = async (
       return;
     }
 
-    const order = await orderService.createOrder(
-      userId,
-      items,
-      shippingAddress,
-      notes
-    );
+    const {
+      orderType,
+      package: packagePlan,
+      channels,
+      addons,
+      campaignName,
+      assets,
+      targetAudience,
+      additionalNotes,
+      paymentMethod,
+      totalAmount,
+    } = req.body;
+
+    const order = await orderService.createOrder(userId, {
+      orderType,
+      package: packagePlan,
+      channels,
+      addons,
+      campaignName,
+      assets,
+      targetAudience,
+      additionalNotes,
+      paymentMethod,
+      totalAmount,
+    });
 
     res.status(201).json({
-      message: "Order created successfully",
-      order,
+      _id: order._id,
+      campaignName: order.campaignName,
+      orderType: order.orderType,
+      package: order.package,
+      channels: order.channels,
+      addons: order.addons,
+      assets: order.assets,
+      targetAudience: order.targetAudience,
+      additionalNotes: order.additionalNotes,
+      paymentMethod: order.paymentMethod,
+      totalAmount: order.totalAmount,
+      status: order.status,
+      companyName: order.companyName,
+      orgNumber: order.orgNumber,
+      createdAt: order.createdAt,
     });
   } catch (error) {
     if (error instanceof Error) {
       if (error.message.includes("not found")) {
         res.status(404).json({ error: error.message });
+        return;
+      }
+      if (error.message.includes("maximum of")) {
+        res.status(400).json({ error: error.message });
         return;
       }
     }
@@ -66,20 +101,6 @@ export const getOrderById = async (
   }
 };
 
-export const getOrdersByCompany = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { companyId } = req.params;
-    const orders = await orderService.getOrdersByCompany(companyId);
-    res.status(200).json(orders);
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const getMyOrders = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -93,7 +114,24 @@ export const getMyOrders = async (
       return;
     }
 
-    const orders = await orderService.getOrdersByUser(userId);
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 20;
+
+    const result = await orderService.getMyOrders(userId, page, limit);
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getOrdersByCompany = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { companyId } = req.params;
+    const orders = await orderService.getOrdersByCompany(companyId);
     res.status(200).json(orders);
   } catch (error) {
     next(error);

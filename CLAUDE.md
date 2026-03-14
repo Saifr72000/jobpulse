@@ -118,13 +118,34 @@ bachelor/
 - Name components with PascalCase, hooks with `use` prefix
 - No hardcoded secrets — use `.env` files
 
+#### SCSS Rules (strictly enforced)
+
+- **Never hardcode values** — no raw hex colors, pixel sizes, font sizes, weights, or line heights
+- Use `$variables` tokens only: `$violet`, `$coal`, `$frost`, `$pearl`, `$midnight`, `$mist`, `$ash`, `$red`, `$white`, `$color-bg`, `$color-surface`, `$color-text`, `$color-text-muted`, `$color-text-inverted`, `$color-primary`
+- Use `$text-xs/sm/base/lg/xl/2xl/3xl/4xl` for font sizes (from `_typography.scss`)
+- Use `$font-normal/medium/semibold/bold` for font weights
+- Use `$leading-tight/normal/relaxed` for line heights
+- Use `$spacing-xs/sm/md/lg/xl` for all spacing/gaps/padding
+- Use `$radius-card`, `$radius-pill`, `$radius-input` for border radii
+- Use `$shadow-card` for box shadows
+- **Do not redefine global typography** — `h1–h4` and `.h1–.h4`, `.body-1–.body-4`, `.subheading`, `.btn-label-1–.btn-label-2`, `.text-muted`, `.text-small` are already defined globally in `frontend/src/styles/_typography.scss`. Use the correct HTML tag or utility class instead of rewriting font styles locally.
+- Always import with `@use "../../../styles/variables" as *;` and `@use "../../../styles/typography" as *;`
+- **No Tailwind** — this project uses SCSS only
+
+#### Icons
+
+- Use only SVG files from `frontend/src/assets/icons/` via the `Icon` component (`components/Icon/Icon.tsx`)
+- Do not import image assets from Figma URLs or external sources
+- Do not create inline SVG logos for third-party platforms — add proper SVG files to the icons folder instead
+
 ### Figma to Code
 
 When building UI from a Figma URL:
-- Use the Figma MCP tool to get design context
-- Implement using React + Tailwind CSS
-- Map design tokens to Tailwind classes
+- Use the Figma MCP tool (`mcp__figma__get_design_context`) to get design context — the file key is in `docs/product.md`
+- Implement using React + SCSS (no Tailwind)
+- Map Figma design tokens to SCSS `$variables` — never hardcode values
 - Adapt to existing project components — don't generate from scratch
+- Check `frontend/src/components/` for reusable components before building new ones
 
 ### General
 

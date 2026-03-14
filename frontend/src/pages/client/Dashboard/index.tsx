@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import StatsCard from "../../../components/Card/StatsCard";
 import "./Dashboard.scss";
-
 import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import UsersIcon from "../../../assets/icons/users.svg?react";
 import CardIcon from "../../../assets/icons/card.svg?react";
@@ -36,34 +35,22 @@ export default function Dashboard() {
     <div className="dashboard">
       {/* Header */}
       <div className="page-header">
-        <h1>Dashboard</h1>
+        <h2>Dashboard</h2>
         <p className="subheading">View your data across all active campaigns</p>
       </div>
 
       {/* Stat Cards */}
       <div className="dashboard__stat-cards">
-        <StatsCard
-          icon={BarChartIcon}
-          label="Active campaigns"
-          value="3"
-        />
-        <StatsCard
-          icon={UsersIcon}
-          label="Applications received"
-          value="25"
-        />
-        <StatsCard
-          icon={CardIcon}
-          label="Ad spend"
-          value="150 000 NOK"
-        />
+        <StatsCard icon={BarChartIcon} label="Active campaigns" value="3" />
+        <StatsCard icon={UsersIcon} label="Applications received" value="25" />
+        <StatsCard icon={CardIcon} label="Ad spend" value="150 000 NOK" />
       </div>
 
       {/* Charts Section */}
       <div className="dashboard__charts">
         {/* Bar Chart */}
         <div className="dashboard__chart-card dashboard__chart-card--large">
-          <h2>Total views per week</h2>
+          {/* <h2>Total views per week</h2>
           <p className="subtitle">All campaigns</p>
           <div className="dashboard__bar-chart">
             {weeklyData.map((d) => (
@@ -80,11 +67,11 @@ export default function Dashboard() {
                 <span className="week-label">{d.week}</span>
               </div>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Channel Performance */}
-        <div className="dashboard__chart-card dashboard__chart-card--medium">
+        {/* <div className="dashboard__chart-card dashboard__chart-card--medium">
           <h2>Channel performance</h2>
           <div className="dashboard__channel-banner">
             <img src={imgTrophy} alt="" />
@@ -101,7 +88,7 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Campaign Banner */}
