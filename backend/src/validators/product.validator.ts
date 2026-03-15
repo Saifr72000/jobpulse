@@ -3,19 +3,19 @@ import type { RequestHandler } from "express";
 
 // For validating product creation
 export const createProductValidator: RequestHandler[] = [
-  body("name")
+  body("title")
     .trim()
     .notEmpty()
-    .withMessage("Product name is required")
+    .withMessage("Product title is required")
     .isLength({ min: 2, max: 100 })
-    .withMessage("Product name must be between 2 and 100 characters")
+    .withMessage("Product title must be between 2 and 100 characters")
     .escape(),
 
   body("description")
     .optional()
     .trim()
-    .isLength({ max: 500 })
-    .withMessage("Description must not exceed 500 characters")
+    .isLength({ max: 1000 })
+    .withMessage("Description must not exceed 1000 characters")
     .escape(),
 
   body("price")
@@ -24,39 +24,38 @@ export const createProductValidator: RequestHandler[] = [
     .isFloat({ min: 0 })
     .withMessage("Price must be a positive number"),
 
-  body("category")
+  body("type")
+    .notEmpty()
+    .withMessage("Product type is required")
+    .isIn(["package", "service"])
+    .withMessage("Product type must be either 'package' or 'service'"),
+
+  body("logo")
     .optional()
     .trim()
-    .isLength({ min: 2, max: 50 })
-    .withMessage("Category must be between 2 and 50 characters")
-    .escape(),
+    .isURL()
+    .withMessage("Logo must be a valid URL"),
 
-  body("sku")
-    .optional()
-    .trim()
-    .isLength({ min: 2, max: 50 })
-    .withMessage("SKU must be between 2 and 50 characters"),
-
-  body("inStock")
+  body("isActive")
     .optional()
     .isBoolean()
-    .withMessage("inStock must be a boolean"),
+    .withMessage("isActive must be a boolean"),
 ];
 
 // For validating product updates
 export const updateProductValidator: RequestHandler[] = [
-  check("name")
+  check("title")
     .optional()
     .trim()
     .isLength({ min: 2, max: 100 })
-    .withMessage("Product name must be between 2 and 100 characters")
+    .withMessage("Product title must be between 2 and 100 characters")
     .escape(),
 
   check("description")
     .optional()
     .trim()
-    .isLength({ max: 500 })
-    .withMessage("Description must not exceed 500 characters")
+    .isLength({ max: 1000 })
+    .withMessage("Description must not exceed 1000 characters")
     .escape(),
 
   check("price")
@@ -64,21 +63,19 @@ export const updateProductValidator: RequestHandler[] = [
     .isFloat({ min: 0 })
     .withMessage("Price must be a positive number"),
 
-  check("category")
+  check("type")
+    .optional()
+    .isIn(["package", "service"])
+    .withMessage("Product type must be either 'package' or 'service'"),
+
+  check("logo")
     .optional()
     .trim()
-    .isLength({ min: 2, max: 50 })
-    .withMessage("Category must be between 2 and 50 characters")
-    .escape(),
+    .isURL()
+    .withMessage("Logo must be a valid URL"),
 
-  check("sku")
-    .optional()
-    .trim()
-    .isLength({ min: 2, max: 50 })
-    .withMessage("SKU must be between 2 and 50 characters"),
-
-  check("inStock")
+  check("isActive")
     .optional()
     .isBoolean()
-    .withMessage("inStock must be a boolean"),
+    .withMessage("isActive must be a boolean"),
 ];
