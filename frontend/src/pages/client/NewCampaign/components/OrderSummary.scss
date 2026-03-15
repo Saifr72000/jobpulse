@@ -1,0 +1,93 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.order-summary {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+  position: sticky;
+  top: $spacing-lg;
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0 0 4px;
+  }
+
+  &__plan-label {
+    font-size: 15px;
+    font-weight: $font-normal;
+    color: $ash;
+    margin: 0 0 $spacing-md;
+  }
+
+  &__section-label {
+    font-size: 15px;
+    font-weight: $font-semibold;
+    color: $ash;
+    margin: 0 0 4px;
+  }
+
+  &__divider {
+    border: none;
+    border-top: 1px solid rgba($ash, 0.2);
+    margin: $spacing-sm 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    color: $ash;
+    gap: $spacing-sm;
+    margin-bottom: 2px;
+
+    &--total {
+      font-size: 15px;
+      font-weight: $font-semibold;
+      color: $ash;
+    }
+  }
+
+  &__channel-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: $ash;
+
+    .channel-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+  }
+
+  &__channel-logo {
+    width: 13px;
+    height: 13px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  &__addon-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: $ash;
+
+    .addon-dot {
+      width: 13px;
+      height: 13px;
+      border-radius: 3px;
+      background: $violet;
+      flex-shrink: 0;
+    }
+  }
+}

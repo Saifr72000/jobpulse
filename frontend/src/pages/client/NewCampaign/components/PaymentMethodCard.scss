@@ -1,0 +1,87 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.payment-card {
+  background: $frost;
+  border-radius: 14px;
+  padding: $spacing-md;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-md;
+  position: relative;
+  transition: outline 0.15s;
+
+  &--selected {
+    outline: 2px solid $violet;
+    outline-offset: -2px;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $ash;
+    margin-top: 2px;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 15px;
+    color: $ash;
+    margin: 2px 0 0;
+  }
+
+  &__balance-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: transparent;
+    border: 1px solid $ash;
+    border-radius: $radius-pill;
+    padding: 8px $spacing-md;
+    font-size: 15px;
+    color: $ash;
+    margin-top: 8px;
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+    margin-top: 2px;
+    position: relative;
+
+    &--selected {
+      border-color: $coal;
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $coal;
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.step2 {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: $spacing-lg;
+  align-items: start;
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+}
+
+.channel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.addon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-md;
+  margin-top: $spacing-md;
+}
+
+.order-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0 0 4px;
+  }
+
+  &__subtitle {
+    margin: 0;
+  }
+}

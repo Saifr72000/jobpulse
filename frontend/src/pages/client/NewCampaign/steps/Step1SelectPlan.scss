@@ -1,0 +1,38 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.step1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-lg;
+
+  &__package-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 16px;
+  }
+}
+
+.channel-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.order-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+
+  h3 {
+    margin-bottom: $spacing-sm;
+  }
+
+  .subheading {
+    margin-bottom: $spacing-md;
+  }
+}

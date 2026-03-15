@@ -9,7 +9,14 @@ interface ChannelRowProps {
   onClick: () => void;
 }
 
-export function ChannelRow({ logo, name, description, checked, disabled = false, onClick }: ChannelRowProps) {
+export function ChannelRow({
+  logo,
+  name,
+  description,
+  checked,
+  disabled = false,
+  onClick,
+}: ChannelRowProps) {
   return (
     <div
       className={`channel-row${checked ? " channel-row--checked" : ""}${disabled ? " channel-row--disabled" : ""}`}
@@ -22,7 +29,9 @@ export function ChannelRow({ logo, name, description, checked, disabled = false,
         <span className="channel-row__name body-2">{name}</span>
         <span className="channel-row__desc body-3">{description}</span>
       </span>
-      <span className={`channel-row__check${checked ? " channel-row__check--checked" : ""}`} />
+      <span
+        className={`channel-row__check${checked ? " channel-row__check--checked" : ""}`}
+      />
     </div>
   );
 }
