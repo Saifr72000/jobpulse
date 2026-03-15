@@ -4,7 +4,7 @@
 
 .step2 {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: $spacing-lg;
   align-items: start;
 
@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     gap: $spacing-lg;
+    min-width: 0;
   }
 }
 
@@ -34,13 +35,8 @@
   border-radius: $radius-card;
   box-shadow: $shadow-card;
   padding: $spacing-lg;
-
-  &__title {
-    font-size: 32px;
-    font-weight: $font-bold;
-    color: $coal;
-    margin: 0 0 4px;
-  }
+  min-width: 0;
+  max-width: 100%;
 
   &__subtitle {
     margin: 0;

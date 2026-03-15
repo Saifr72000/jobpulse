@@ -1,6 +1,12 @@
 import type { FormState, Product, Channel, Package, Addon } from "../types";
 import { LOGO_MAP } from "../constants";
-import { calculatePackagePrice, calculateChannelCost, calculateAddonsCost, calculateSubtotal, calculateVat } from "../utils";
+import {
+  calculatePackagePrice,
+  calculateChannelCost,
+  calculateAddonsCost,
+  calculateSubtotal,
+  calculateVat,
+} from "../utils";
 import "./OrderSummary.scss";
 
 interface OrderSummaryProps {
@@ -11,13 +17,25 @@ interface OrderSummaryProps {
   addons: Product[];
 }
 
-export function OrderSummary({ form, showVat, channels, packages, addons }: OrderSummaryProps) {
-  const pkg = packages.find((p) => p.title.toLowerCase().includes(form.selectedPackage || ""));
+export function OrderSummary({
+  form,
+  showVat,
+  channels,
+  packages,
+  addons,
+}: OrderSummaryProps) {
+  const pkg = packages.find((p) =>
+    p.title.toLowerCase().includes(form.selectedPackage || ""),
+  );
   const selChannels = channels.filter((c) =>
-    form.selectedChannels.some(sc => c.title.toLowerCase() === sc.toLowerCase())
+    form.selectedChannels.some(
+      (sc) => c.title.toLowerCase() === sc.toLowerCase(),
+    ),
   );
   const selAddons = addons.filter((a) =>
-    form.selectedAddons.some(sa => a.title.toLowerCase().includes(sa.toLowerCase()))
+    form.selectedAddons.some((sa) =>
+      a.title.toLowerCase().includes(sa.toLowerCase()),
+    ),
   );
 
   const subtotal = calculateSubtotal(form, channels, packages, addons);
@@ -25,7 +43,7 @@ export function OrderSummary({ form, showVat, channels, packages, addons }: Orde
 
   return (
     <aside className="order-summary">
-      <h3 className="order-summary__title">Order summary</h3>
+      <h4>Order summary</h4>
       <p className="order-summary__plan-label">
         {pkg ? pkg.title : "Custom plan"}
       </p>

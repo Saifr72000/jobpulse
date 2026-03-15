@@ -13,10 +13,10 @@
   position: relative;
   transition: outline 0.15s;
 
-  &--checked {
+  /*  &--checked {
     outline: 2px solid $coal;
     outline-offset: -2px;
-  }
+  } */
 
   &__header {
     display: flex;
@@ -64,14 +64,14 @@
   }
 
   &__desc {
-    font-size: 15px;
-    color: $coal;
+    font-size: $text-base;
+    color: $ash;
     flex: 1;
     line-height: 1.4;
   }
 
   &__price {
-    font-size: 20px;
+    font-size: $text-xl;
     font-weight: $font-medium;
     color: $coal;
     text-align: right;

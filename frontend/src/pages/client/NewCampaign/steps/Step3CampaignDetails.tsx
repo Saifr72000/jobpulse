@@ -1,4 +1,11 @@
-import type { FormState, ImageOption, LeadAdDesc, VideoMaterials, LinkedinJobDesc, LinkedinScreening } from "../types";
+import type {
+  FormState,
+  ImageOption,
+  LeadAdDesc,
+  VideoMaterials,
+  LinkedinJobDesc,
+  LinkedinScreening,
+} from "../types";
 import { RadioOption } from "../components/RadioOption";
 import "./Step3CampaignDetails.scss";
 
@@ -11,38 +18,37 @@ export function Step3CampaignDetails({
   form,
   onFormChange,
 }: Step3CampaignDetailsProps) {
-  const hasLeadAds = form.selectedAddons.some(a => a.toLowerCase().includes("lead"));
-  const hasVideo = form.selectedAddons.some(a => a.toLowerCase().includes("video"));
-  const hasLinkedinPosting = form.selectedAddons.some(a => a.toLowerCase().includes("linkedin"));
+  const hasLeadAds = form.selectedAddons.some((a) =>
+    a.toLowerCase().includes("lead"),
+  );
+  const hasVideo = form.selectedAddons.some((a) =>
+    a.toLowerCase().includes("video"),
+  );
+  const hasLinkedinPosting = form.selectedAddons.some((a) =>
+    a.toLowerCase().includes("linkedin"),
+  );
 
   return (
     <div className="step3">
       <div className="order-card">
-        <h2 className="order-card__title">Campaign name</h2>
-        <p className="subheading order-card__subtitle">
-          Give your campaign a memorable name
-        </p>
+        <h4>Campaign name</h4>
+        <p className="body-2">Give your campaign a memorable name</p>
         <input
           className="form-input"
           type="text"
           placeholder="E.g., Summer 2026 hiring campaign"
           value={form.campaignName}
-          onChange={(e) =>
-            onFormChange({ campaignName: e.target.value })
-          }
+          onChange={(e) => onFormChange({ campaignName: e.target.value })}
         />
       </div>
 
       <div className="order-card">
-        <h2 className="order-card__title">Assets</h2>
-        <p className="subheading order-card__subtitle">
-          Help us gather the key information and materials needed to launch
-          your campaign
+        <h4>Assets</h4>
+        <p className="body-2">
+          Help us gather the key information and materials needed to launch your
+          campaign
         </p>
 
-        <p className="form-question">
-          Do you want to upload a campaign image?
-        </p>
         <div className="radio-group">
           {[
             { value: "upload", label: "Upload image" },
@@ -62,7 +68,7 @@ export function Step3CampaignDetails({
 
         {hasLeadAds && (
           <>
-            <p className="form-question">
+            <p className="body-2">
               Do you have a job description for the Lead Ad?
             </p>
             <div className="radio-group">
@@ -88,7 +94,7 @@ export function Step3CampaignDetails({
 
         {hasVideo && (
           <>
-            <p className="form-question">
+            <p className="body-2">
               How would you like us to source materials for your video?
             </p>
             <div className="radio-group">
@@ -96,8 +102,7 @@ export function Step3CampaignDetails({
                 { value: "upload", label: "Upload your own materials" },
                 {
                   value: "media-library",
-                  label:
-                    "Let our team select materials from our media library",
+                  label: "Let our team select materials from our media library",
                 },
                 { value: "combine", label: "Combine both" },
               ].map((opt) => (
@@ -106,7 +111,9 @@ export function Step3CampaignDetails({
                   label={opt.label}
                   selected={form.videoMaterials === opt.value}
                   onClick={() =>
-                    onFormChange({ videoMaterials: opt.value as VideoMaterials })
+                    onFormChange({
+                      videoMaterials: opt.value as VideoMaterials,
+                    })
                   }
                 />
               ))}
@@ -116,7 +123,7 @@ export function Step3CampaignDetails({
 
         {hasLinkedinPosting && (
           <>
-            <p className="form-question">
+            <p className="body-2">
               Do you have a job description for the LinkedIn job posting?
             </p>
             <div className="radio-group">
@@ -132,15 +139,16 @@ export function Step3CampaignDetails({
                   label={opt.label}
                   selected={form.linkedinJobDesc === opt.value}
                   onClick={() =>
-                    onFormChange({ linkedinJobDesc: opt.value as LinkedinJobDesc })
+                    onFormChange({
+                      linkedinJobDesc: opt.value as LinkedinJobDesc,
+                    })
                   }
                 />
               ))}
             </div>
 
-            <p className="form-question">
-              Do you have any screening questions for the LinkedIn job
-              posting?
+            <p className="body-2">
+              Do you have any screening questions for the LinkedIn job posting?
             </p>
             <div className="radio-group">
               {[
@@ -158,7 +166,9 @@ export function Step3CampaignDetails({
                   label={opt.label}
                   selected={form.linkedinScreening === opt.value}
                   onClick={() =>
-                    onFormChange({ linkedinScreening: opt.value as LinkedinScreening })
+                    onFormChange({
+                      linkedinScreening: opt.value as LinkedinScreening,
+                    })
                   }
                 />
               ))}
@@ -168,8 +178,8 @@ export function Step3CampaignDetails({
       </div>
 
       <div className="order-card">
-        <h2 className="order-card__title">Target audience</h2>
-        <p className="subheading order-card__subtitle">
+        <h4>Target audience</h4>
+        <p className="body-2">
           Describe who you want to reach with this campaign. Be as specific as
           possible about skills, experience level, location and any other
           relevant criteria
@@ -179,25 +189,19 @@ export function Step3CampaignDetails({
           rows={6}
           placeholder="E.g., We are looking for qualified child welfare professionals with experience in case management and follow-up work with children and families..."
           value={form.targetAudience}
-          onChange={(e) =>
-            onFormChange({ targetAudience: e.target.value })
-          }
+          onChange={(e) => onFormChange({ targetAudience: e.target.value })}
         />
       </div>
 
       <div className="order-card">
-        <h2 className="order-card__title">Additional notes</h2>
-        <p className="subheading order-card__subtitle">
-          Anything else we should know?
-        </p>
+        <h4>Additional notes</h4>
+        <p className="body-2">Anything else we should know?</p>
         <textarea
           className="form-input"
           rows={4}
           placeholder="E.g., Key selling points, specific messaging you'd like included, deadlines or any other context that would help us create better campaigns..."
           value={form.additionalNotes}
-          onChange={(e) =>
-            onFormChange({ additionalNotes: e.target.value })
-          }
+          onChange={(e) => onFormChange({ additionalNotes: e.target.value })}
         />
       </div>
     </div>

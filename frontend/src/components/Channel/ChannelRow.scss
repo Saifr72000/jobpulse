@@ -5,15 +5,11 @@
   display: flex;
   align-items: center;
   gap: $spacing-md;
-  padding: 14px $spacing-md;
+  padding: 10px $spacing-md;
   background: $color-bg;
   border-radius: $radius-input;
   cursor: pointer;
   transition: background 0.15s;
-
-  /* &:hover:not(&--checked):not(&--disabled) {
-    background: darken($frost, 3%);
-  } */
 
   &--disabled {
     opacity: 0.4;
@@ -30,8 +26,8 @@
   }
 
   &__logo {
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
   }
 
@@ -42,13 +38,6 @@
     flex: 1;
   }
 
-  &__name {
-    color: $color-text;
-  }
-
-  &__desc {
-    color: $color-text-muted;
-  }
   &__check {
     width: 18px;
     height: 18px;
@@ -67,13 +56,13 @@
       &::after {
         content: "";
         position: absolute;
-        left: 5px;
-        top: 2px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) rotate(45deg);
         width: 4px;
         height: 8px;
         border: solid $white;
         border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
       }
     }
   }

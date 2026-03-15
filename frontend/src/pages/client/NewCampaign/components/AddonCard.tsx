@@ -22,8 +22,8 @@ export function AddonCard({ addon, checked, icon, onClick }: AddonCardProps) {
           {checked && "✓"}
         </span>
       </div>
-      <p className="addon-card__name">{addon.title}</p>
-      <p className="addon-card__desc">{addon.description}</p>
+      <p className="addon-card__name body-2">{addon.title}</p>
+      <p className="body-2">{addon.description}</p>
       <p className="addon-card__price">
         {addon.price.toLocaleString("nb-NO")} kr
       </p>

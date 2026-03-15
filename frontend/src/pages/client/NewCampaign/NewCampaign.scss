@@ -7,6 +7,8 @@
   flex-direction: column;
   gap: $spacing-lg;
   padding-bottom: $spacing-xl;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .progress-bar {

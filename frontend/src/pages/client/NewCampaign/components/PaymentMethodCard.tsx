@@ -27,8 +27,8 @@ export function PaymentMethodCard({
     >
       <div className="payment-card__icon">{icon}</div>
       <div className="payment-card__content">
-        <p className="payment-card__name">{label}</p>
-        <p className="payment-card__desc">{description}</p>
+        <p className="">{label}</p>
+        {description && <p className="payment-card__desc">{description}</p>}
         {extra}
       </div>
       <span
