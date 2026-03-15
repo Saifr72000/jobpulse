@@ -27,8 +27,8 @@ export const createProductValidator: RequestHandler[] = [
   body("type")
     .notEmpty()
     .withMessage("Product type is required")
-    .isIn(["package", "service"])
-    .withMessage("Product type must be either 'package' or 'service'"),
+    .isIn(["package", "service", "addon"])
+    .withMessage("Product type must be 'package', 'service', or 'addon'"),
 
   body("logo")
     .optional()
@@ -65,8 +65,8 @@ export const updateProductValidator: RequestHandler[] = [
 
   check("type")
     .optional()
-    .isIn(["package", "service"])
-    .withMessage("Product type must be either 'package' or 'service'"),
+    .isIn(["package", "service", "addon"])
+    .withMessage("Product type must be 'package', 'service', or 'addon'"),
 
   check("logo")
     .optional()

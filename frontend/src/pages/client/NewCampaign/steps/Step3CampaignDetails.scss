@@ -1,0 +1,65 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.step3 {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-sm;
+}
+
+.form-question {
+  font-size: 20px;
+  font-weight: $font-medium;
+  color: $coal;
+  margin: $spacing-md 0 0;
+}
+
+.form-input {
+  width: 100%;
+  background: $frost;
+  border: none;
+  border-radius: $radius-input;
+  padding: 14px $spacing-md;
+  font-size: 15px;
+  font-family: $font-primary;
+  color: $coal;
+  outline: none;
+  resize: none;
+  box-sizing: border-box;
+  margin-top: $spacing-sm;
+
+  &::placeholder {
+    color: #636363;
+  }
+
+  &:focus {
+    outline: 2px solid $violet;
+    outline-offset: -2px;
+  }
+}
+
+.order-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0 0 4px;
+  }
+
+  &__subtitle {
+    margin: 0;
+  }
+}

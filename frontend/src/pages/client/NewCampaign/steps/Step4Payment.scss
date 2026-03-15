@@ -1,0 +1,31 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.step4 {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: $spacing-lg;
+  align-items: start;
+}
+
+.payment-methods {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  margin-top: $spacing-md;
+}
+
+.order-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0 0 4px;
+  }
+}

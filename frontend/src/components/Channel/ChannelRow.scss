@@ -35,21 +35,20 @@
     object-fit: contain;
   }
 
-  /*  &__text {
+  &__text {
     display: flex;
     flex-direction: column;
     gap: 2px;
     flex: 1;
-  } */
+  }
 
-  /*   &__name {
+  &__name {
     color: $color-text;
-  } */
+  }
 
-  /*  &__desc {
+  &__desc {
     color: $color-text-muted;
   }
- */
   &__check {
     width: 18px;
     height: 18px;

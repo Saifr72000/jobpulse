@@ -1,0 +1,94 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.package-option {
+  position: relative;
+  padding: $spacing-md;
+  background: $frost;
+  border-radius: 14px;
+  cursor: pointer;
+
+  &__popular {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: $violet;
+    color: $white;
+    font-size: 13px;
+    font-weight: $font-normal;
+    padding: 2px 14px;
+    border-radius: $radius-pill;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__icon {
+    width: 28px;
+    height: 28px;
+    background: $violet;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      color: $white;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    flex: 1;
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+
+    &--selected {
+      background: $coal;
+      border-color: $coal;
+    }
+  }
+
+  &__features {
+    margin-top: $spacing-sm;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    list-style: none;
+    padding: 0;
+  }
+
+  &__feature {
+    font-size: 15px;
+    color: $coal;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    &::before {
+      content: "✓";
+      font-weight: $font-bold;
+      color: $coal;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+  }
+}

@@ -83,6 +83,33 @@ const PACKAGES = [
   },
 ];
 
+const ADDONS = [
+  {
+    title: "Lead Ads",
+    description:
+      "Collect applications directly in the ad. No landing page needed",
+    price: 2500,
+    type: "addon" as const,
+    logo: "/logos/addon-lead-ads.png",
+  },
+  {
+    title: "Video Campaign",
+    description:
+      "Engage candidates with dynamic video content across platforms",
+    price: 3800,
+    type: "addon" as const,
+    logo: "/logos/addon-video.png",
+  },
+  {
+    title: "LinkedIn Job Posting",
+    description:
+      "Official job listing on LinkedIn's job board with applicant tracking",
+    price: 4200,
+    type: "addon" as const,
+    logo: "/logos/addon-linkedin-job.png",
+  },
+];
+
 async function seedProducts() {
   try {
     const mongoUri = process.env.MONGODB_URI;
@@ -113,10 +140,18 @@ async function seedProducts() {
       console.log(`✓ Created package: ${product.title} (${product.price} kr)`);
     }
 
-    console.log("\n Seeding completed successfully!");
-    console.log(`Total products: ${CHANNELS.length + PACKAGES.length}`);
+    // Insert addons
+    console.log("\nInserting addons...");
+    for (const addon of ADDONS) {
+      const product = await Product.create(addon);
+      console.log(`✓ Created addon: ${product.title} (${product.price} kr)`);
+    }
+
+    console.log("\n✅ Seeding completed successfully!");
+    console.log(`Total products: ${CHANNELS.length + PACKAGES.length + ADDONS.length}`);
     console.log(`- Channels: ${CHANNELS.length}`);
     console.log(`- Packages: ${PACKAGES.length}`);
+    console.log(`- Addons: ${ADDONS.length}`);
 
     await mongoose.disconnect();
     console.log("\nDisconnected from MongoDB");

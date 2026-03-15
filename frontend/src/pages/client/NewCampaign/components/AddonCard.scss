@@ -1,0 +1,80 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.addon-card {
+  background: $frost;
+  border-radius: 14px;
+  padding: $spacing-md;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  transition: outline 0.15s;
+
+  &--checked {
+    outline: 2px solid $coal;
+    outline-offset: -2px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  &__icon-wrap {
+    width: 28px;
+    height: 28px;
+    background: $violet;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg {
+      color: $white;
+    }
+  }
+
+  &__check {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #5f5f5e;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+
+    &--checked {
+      background: $coal;
+      border-color: $coal;
+      color: $white;
+    }
+  }
+
+  &__name {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+  }
+
+  &__desc {
+    font-size: 15px;
+    color: $coal;
+    flex: 1;
+    line-height: 1.4;
+  }
+
+  &__price {
+    font-size: 20px;
+    font-weight: $font-medium;
+    color: $coal;
+    text-align: right;
+    margin-top: auto;
+  }
+}

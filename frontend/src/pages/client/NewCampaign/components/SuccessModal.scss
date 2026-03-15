@@ -1,0 +1,93 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.success-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-modal {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-xl $spacing-xl;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: $spacing-md;
+  position: relative;
+  text-align: center;
+
+  &__close {
+    position: absolute;
+    top: $spacing-md;
+    right: $spacing-md;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: $ash;
+    border-radius: 50%;
+    transition: background 0.15s;
+
+    &:hover {
+      background: $frost;
+    }
+  }
+
+  &__icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $violet;
+  }
+
+  &__title {
+    font-size: 32px;
+    font-weight: $font-bold;
+    color: $coal;
+    margin: 0;
+  }
+
+  &__body {
+    font-size: 20px;
+    font-weight: $font-normal;
+    color: $ash;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  &__btn {
+    background: $midnight;
+    color: $white;
+    border: none;
+    border-radius: $radius-pill;
+    padding: 13px $spacing-xl;
+    font-size: 18px;
+    font-weight: $font-bold;
+    font-family: $font-primary;
+    cursor: pointer;
+    width: 100%;
+    margin-top: $spacing-sm;
+    transition: background 0.15s;
+
+    &:hover {
+      background: color.adjust($midnight, $lightness: 8%);
+    }
+  }
+}

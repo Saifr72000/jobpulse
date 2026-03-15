@@ -1,0 +1,62 @@
+export type Step = 1 | 2 | 3 | 4;
+export type PlanType = "custom" | "package" | null;
+export type PackageId = "basic" | "medium" | "deluxe" | null;
+export type PaymentMethod = "value-card" | "card-payment" | "invoice";
+
+export type ImageOption = "upload" | "media-library" | "team-suggest" | "";
+export type LeadAdDesc = "team-create" | "own" | "";
+export type VideoMaterials = "upload" | "media-library" | "combine" | "";
+export type LinkedinJobDesc = "team-create" | "own" | "";
+export type LinkedinScreening = "team-create" | "own" | "";
+
+export interface FormState {
+  planType: PlanType;
+  selectedPackage: PackageId;
+  selectedChannels: string[];
+  selectedAddons: string[];
+  campaignName: string;
+  imageOption: ImageOption;
+  leadAdDesc: LeadAdDesc;
+  videoMaterials: VideoMaterials;
+  linkedinJobDesc: LinkedinJobDesc;
+  linkedinScreening: LinkedinScreening;
+  targetAudience: string;
+  additionalNotes: string;
+  paymentMethod: PaymentMethod;
+}
+
+export interface Product {
+  _id: string;
+  title: string;
+  description?: string;
+  price: number;
+  type: "package" | "service" | "addon";
+  logo?: string;
+  isActive: boolean;
+}
+
+export interface Channel {
+  _id: string;
+  title: string;
+  description?: string;
+  price: number;
+  logo?: string;
+}
+
+export interface Package {
+  _id: string;
+  title: string;
+  description?: string;
+  price: number;
+  logo?: string;
+  channelLimit?: number;
+  features?: string[];
+}
+
+export interface Addon {
+  _id: string;
+  title: string;
+  description?: string;
+  price: number;
+  logo?: string;
+}

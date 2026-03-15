@@ -42,6 +42,22 @@ describe("Products API", () => {
       expect(response.body.product.type).toBe("package");
     });
 
+    it("should create an addon product", async () => {
+      const productData = {
+        title: "Lead Ads",
+        price: 2500,
+        type: "addon",
+        description: "Collect applications directly in the ad",
+      };
+
+      const response = await request(app)
+        .post("/api/products")
+        .send(productData);
+
+      expect(response.status).toBe(201);
+      expect(response.body.product.type).toBe("addon");
+    });
+
     it("should fail when title is missing", async () => {
       const response = await request(app)
         .post("/api/products")
@@ -137,6 +153,18 @@ describe("Products API", () => {
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
       expect(response.body[0].type).toBe("service");
+    });
+
+    it("should return only addons", async () => {
+      await createTestProduct({ title: "Service 1", type: "service" });
+      await createTestProduct({ title: "Addon 1", type: "addon" as "package" | "service" | "addon" });
+      await createTestProduct({ title: "Addon 2", type: "addon" as "package" | "service" | "addon" });
+
+      const response = await request(app).get("/api/products/type/addon");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(2);
+      expect(response.body[0].type).toBe("addon");
     });
 
     it("should return 400 for invalid type", async () => {

@@ -24,7 +24,7 @@ export interface TestProduct {
   _id: mongoose.Types.ObjectId;
   title: string;
   price: number;
-  type: "package" | "service";
+  type: "package" | "service" | "addon";
 }
 
 /**
@@ -86,12 +86,12 @@ export const createTestUser = async (
  * Create a test product
  */
 export const createTestProduct = async (
-  overrides: Partial<TestProduct & { description?: string; logo?: string }> = {}
+  overrides: Partial<{ title: string; price: number; type: "package" | "service" | "addon"; description?: string; logo?: string }> = {}
 ): Promise<TestProduct> => {
   const productData = {
     title: "Test Product",
     price: 29.99,
-    type: "service" as const,
+    type: "service" as "package" | "service" | "addon",
     description: "A test product",
     isActive: true,
     ...overrides,

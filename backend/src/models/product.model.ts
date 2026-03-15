@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export type ProductType = "package" | "service";
+export type ProductType = "package" | "service" | "addon";
 
 export interface IProduct extends Document {
   _id: mongoose.Types.ObjectId;
@@ -33,7 +33,7 @@ const productSchema = new Schema<IProduct>(
     type: {
       type: String,
       required: true,
-      enum: ["package", "service"],
+      enum: ["package", "service", "addon"],
     },
     logo: {
       type: String,

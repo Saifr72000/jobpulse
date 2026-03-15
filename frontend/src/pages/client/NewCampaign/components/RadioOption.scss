@@ -1,0 +1,52 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px $spacing-md;
+  background: $frost;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color.adjust($frost, $lightness: -3%);
+  }
+
+  &--selected {
+    outline: 2px solid $coal;
+    outline-offset: -2px;
+  }
+
+  &__dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &--selected {
+      border-color: $coal;
+
+      &::after {
+        content: "";
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: $coal;
+      }
+    }
+  }
+
+  &__label {
+    flex: 1;
+    font-size: 14px;
+    color: $coal;
+  }
+}

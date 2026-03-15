@@ -35,7 +35,7 @@ export const getProductById = async (
 ) => {
   try {
     const { id } = req.params;
-    const product = await productService.getProductById(id);
+    const product = await productService.getProductById(id as string);
 
     if (!product) {
       res.status(404).json({ error: "Product not found" });
@@ -70,8 +70,8 @@ export const getProductsByType = async (
   try {
     const { type } = req.params;
     
-    if (type !== "package" && type !== "service") {
-      res.status(400).json({ error: "Invalid product type. Must be 'package' or 'service'" });
+    if (type !== "package" && type !== "service" && type !== "addon") {
+      res.status(400).json({ error: "Invalid product type. Must be 'package', 'service', or 'addon'" });
       return;
     }
 
@@ -91,7 +91,7 @@ export const updateProduct = async (
     const { id } = req.params;
     const updateData = req.body;
 
-    const product = await productService.updateProduct(id, updateData);
+    const product = await productService.updateProduct(id as string, updateData);
 
     if (!product) {
       res.status(404).json({ error: "Product not found" });
@@ -114,7 +114,7 @@ export const deleteProduct = async (
 ) => {
   try {
     const { id } = req.params;
-    const product = await productService.deleteProduct(id);
+    const product = await productService.deleteProduct(id as string);
 
     if (!product) {
       res.status(404).json({ error: "Product not found" });
