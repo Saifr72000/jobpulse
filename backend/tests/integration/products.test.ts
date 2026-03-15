@@ -1,3 +1,4 @@
+import { describe, it, expect } from "@jest/globals";
 import request from "supertest";
 import app from "../../src/app.js";
 import { createTestProduct, createTestProducts } from "../helpers/testData.helper.js";
@@ -6,11 +7,11 @@ describe("Products API", () => {
   describe("POST /api/products", () => {
     it("should create a new product", async () => {
       const productData = {
-        name: "New Widget",
+        title: "LinkedIn Campaign",
         price: 49.99,
-        description: "A brand new widget",
-        category: "Electronics",
-        sku: "WDG-NEW-001",
+        type: "service",
+        description: "Professional network targeting",
+        logo: "https://example.com/linkedin-logo.png",
       };
 
       const response = await request(app)
@@ -19,15 +20,50 @@ describe("Products API", () => {
 
       expect(response.status).toBe(201);
       expect(response.body.message).toBe("Product created successfully");
-      expect(response.body.product.name).toBe(productData.name);
+      expect(response.body.product.title).toBe(productData.title);
       expect(response.body.product.price).toBe(productData.price);
+      expect(response.body.product.type).toBe(productData.type);
       expect(response.body.product._id).toBeDefined();
     });
 
-    it("should fail when name is missing", async () => {
+    it("should create a package product", async () => {
+      const productData = {
+        title: "Basic Package",
+        price: 8000,
+        type: "package",
+        description: "Up to 3 channels with analytics",
+      };
+
       const response = await request(app)
         .post("/api/products")
-        .send({ price: 29.99 });
+        .send(productData);
+
+      expect(response.status).toBe(201);
+      expect(response.body.product.type).toBe("package");
+    });
+
+    it("should fail when title is missing", async () => {
+      const response = await request(app)
+        .post("/api/products")
+        .send({ price: 29.99, type: "service" });
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should fail when type is missing", async () => {
+      const response = await request(app)
+        .post("/api/products")
+        .send({ title: "Test Product", price: 29.99 });
+
+      expect(response.status).toBe(400);
+      expect(response.body.errors).toBeDefined();
+    });
+
+    it("should fail when type is invalid", async () => {
+      const response = await request(app)
+        .post("/api/products")
+        .send({ title: "Test Product", price: 29.99, type: "invalid" });
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
@@ -36,7 +72,7 @@ describe("Products API", () => {
     it("should fail when price is negative", async () => {
       const response = await request(app)
         .post("/api/products")
-        .send({ name: "Bad Product", price: -10 });
+        .send({ title: "Bad Product", price: -10, type: "service" });
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
@@ -51,7 +87,7 @@ describe("Products API", () => {
       expect(response.body).toEqual([]);
     });
 
-    it("should return all in-stock products", async () => {
+    it("should return all active products", async () => {
       // Create test products
       await createTestProducts(3);
 
@@ -59,18 +95,66 @@ describe("Products API", () => {
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(3);
-      expect(response.body[0].name).toBe("Product 1");
+      // Products are sorted by createdAt descending (newest first)
+      expect(response.body[0].title).toBe("Product 3");
+      expect(response.body[1].title).toBe("Product 2");
+      expect(response.body[2].title).toBe("Product 1");
+    });
+
+    it("should filter products by type", async () => {
+      await createTestProduct({ title: "Service 1", type: "service" });
+      await createTestProduct({ title: "Package 1", type: "package" });
+      await createTestProduct({ title: "Service 2", type: "service" });
+
+      const response = await request(app).get("/api/products?type=service");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(2);
+      expect(response.body[0].type).toBe("service");
+      expect(response.body[1].type).toBe("service");
+    });
+  });
+
+  describe("GET /api/products/type/:type", () => {
+    it("should return only packages", async () => {
+      await createTestProduct({ title: "Service 1", type: "service" });
+      await createTestProduct({ title: "Package 1", type: "package" });
+      await createTestProduct({ title: "Package 2", type: "package" });
+
+      const response = await request(app).get("/api/products/type/package");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(2);
+      expect(response.body[0].type).toBe("package");
+    });
+
+    it("should return only services", async () => {
+      await createTestProduct({ title: "Service 1", type: "service" });
+      await createTestProduct({ title: "Package 1", type: "package" });
+
+      const response = await request(app).get("/api/products/type/service");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(1);
+      expect(response.body[0].type).toBe("service");
+    });
+
+    it("should return 400 for invalid type", async () => {
+      const response = await request(app).get("/api/products/type/invalid");
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain("Invalid product type");
     });
   });
 
   describe("GET /api/products/:id", () => {
     it("should return a product by ID", async () => {
-      const product = await createTestProduct({ name: "Specific Product" });
+      const product = await createTestProduct({ title: "Specific Product" });
 
       const response = await request(app).get(`/api/products/${product._id}`);
 
       expect(response.status).toBe(200);
-      expect(response.body.name).toBe("Specific Product");
+      expect(response.body.title).toBe("Specific Product");
     });
 
     it("should return 404 for non-existent product", async () => {
@@ -85,14 +169,14 @@ describe("Products API", () => {
 
   describe("PUT /api/products/:id", () => {
     it("should update a product", async () => {
-      const product = await createTestProduct({ name: "Old Name", price: 10 });
+      const product = await createTestProduct({ title: "Old Name", price: 10 });
 
       const response = await request(app)
         .put(`/api/products/${product._id}`)
-        .send({ name: "New Name", price: 20 });
+        .send({ title: "New Name", price: 20 });
 
       expect(response.status).toBe(200);
-      expect(response.body.product.name).toBe("New Name");
+      expect(response.body.product.title).toBe("New Name");
       expect(response.body.product.price).toBe(20);
     });
 
@@ -101,7 +185,7 @@ describe("Products API", () => {
 
       const response = await request(app)
         .put(`/api/products/${fakeId}`)
-        .send({ name: "Updated" });
+        .send({ title: "Updated" });
 
       expect(response.status).toBe(404);
     });

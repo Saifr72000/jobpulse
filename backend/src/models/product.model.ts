@@ -1,44 +1,53 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export type ProductType = "package" | "service";
+
 export interface IProduct extends Document {
   _id: mongoose.Types.ObjectId;
-  name: string;
+  title: string;
   description?: string;
   price: number;
-  category?: string;
-  sku?: string;
-  inStock: boolean;
+  type: ProductType;
+  logo?: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const productSchema = new Schema<IProduct>(
   {
-    name: {
+    title: {
       type: String,
       required: true,
+      trim: true,
     },
     description: {
       type: String,
+      trim: true,
     },
     price: {
       type: Number,
       required: true,
+      min: 0,
     },
-    category: {
+    type: {
       type: String,
+      required: true,
+      enum: ["package", "service"],
     },
-    sku: {
+    logo: {
       type: String,
-      unique: true,
-      sparse: true, // Allows multiple nulls
+      trim: true,
     },
-    inStock: {
+    isActive: {
       type: Boolean,
       default: true,
     },
   },
   { timestamps: true }
 );
+
+// Index for filtering by type
+productSchema.index({ type: 1, isActive: 1 });
 
 export const Product = mongoose.model<IProduct>("Product", productSchema);

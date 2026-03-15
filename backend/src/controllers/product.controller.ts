@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import * as productService from "../services/product.service.js";
+import type { ProductType } from "../models/product.model.js";
 
 export const createProduct = async (
   req: Request,
@@ -7,15 +8,15 @@ export const createProduct = async (
   next: NextFunction
 ) => {
   try {
-    const { name, price, description, category, sku, inStock } = req.body;
+    const { title, price, type, description, logo, isActive } = req.body;
 
     const product = await productService.createProduct(
-      name,
+      title,
       price,
+      type,
       description,
-      category,
-      sku,
-      inStock
+      logo,
+      isActive
     );
 
     res.status(201).json({
@@ -53,7 +54,28 @@ export const getAllProducts = async (
   next: NextFunction
 ) => {
   try {
-    const products = await productService.getAllProducts();
+    const type = req.query.type as ProductType | undefined;
+    const products = await productService.getAllProducts(type);
+    res.status(200).json(products);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getProductsByType = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { type } = req.params;
+    
+    if (type !== "package" && type !== "service") {
+      res.status(400).json({ error: "Invalid product type. Must be 'package' or 'service'" });
+      return;
+    }
+
+    const products = await productService.getProductsByType(type as ProductType);
     res.status(200).json(products);
   } catch (error) {
     next(error);

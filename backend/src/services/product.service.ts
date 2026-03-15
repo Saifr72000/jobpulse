@@ -1,20 +1,20 @@
-import { Product, type IProduct } from "../models/product.model.js";
+import { Product, type IProduct, type ProductType } from "../models/product.model.js";
 
 export const createProduct = async (
-  name: string,
+  title: string,
   price: number,
+  type: ProductType,
   description?: string,
-  category?: string,
-  sku?: string,
-  inStock?: boolean
+  logo?: string,
+  isActive?: boolean
 ): Promise<IProduct> => {
   const newProduct = new Product({
-    name,
+    title,
     price,
+    type,
     description,
-    category,
-    sku,
-    inStock: inStock ?? true,
+    logo,
+    isActive: isActive ?? true,
   });
 
   await newProduct.save();
@@ -25,12 +25,24 @@ export const getProductById = async (productId: string): Promise<IProduct | null
   return await Product.findById(productId);
 };
 
-export const getAllProducts = async (): Promise<IProduct[]> => {
-  return await Product.find({ inStock: true });
+export const getAllProducts = async (type?: ProductType): Promise<IProduct[]> => {
+  const filter: Record<string, unknown> = { isActive: true };
+  if (type) {
+    filter.type = type;
+  }
+  return await Product.find(filter).sort({ createdAt: -1 });
 };
 
-export const getAllProductsAdmin = async (): Promise<IProduct[]> => {
-  return await Product.find();
+export const getAllProductsAdmin = async (type?: ProductType): Promise<IProduct[]> => {
+  const filter: Record<string, unknown> = {};
+  if (type) {
+    filter.type = type;
+  }
+  return await Product.find(filter).sort({ createdAt: -1 });
+};
+
+export const getProductsByType = async (type: ProductType): Promise<IProduct[]> => {
+  return await Product.find({ type, isActive: true }).sort({ createdAt: -1 });
 };
 
 export const updateProduct = async (

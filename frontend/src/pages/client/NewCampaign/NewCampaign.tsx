@@ -12,6 +12,9 @@ import snapchatLogo from "../../../assets/logos/snapchat.png";
 import instagramLogo from "../../../assets/logos/instagram.png";
 import xLogo from "../../../assets/logos/x.png";
 import youtubeLogo from "../../../assets/logos/youtube.png";
+import BoxIcon from "../../../assets/icons/box.svg?react";
+import StarIcon from "../../../assets/icons/star.svg?react";
+import DiamondIcon from "../../../assets/icons/diamond.svg?react";
 
 // ─── Types ──────────────────────────────────────────────────────
 type Step = 1 | 2 | 3 | 4;
@@ -160,65 +163,10 @@ const CHANNEL_PRICES: Record<string, number> = {
   x: 8900,
 };
 
-// Small package SVG icons
-function IconBox() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-      <rect
-        x="0.5"
-        y="0.5"
-        width="14"
-        height="14"
-        rx="2"
-        stroke="white"
-        strokeWidth="1.2"
-        fill="none"
-      />
-      <rect x="3" y="3" width="4" height="4" rx="1" fill="white" />
-      <rect
-        x="8"
-        y="3"
-        width="4"
-        height="4"
-        rx="1"
-        fill="rgba(255,255,255,0.4)"
-      />
-      <rect
-        x="3"
-        y="8"
-        width="4"
-        height="4"
-        rx="1"
-        fill="rgba(255,255,255,0.4)"
-      />
-    </svg>
-  );
-}
-function IconStar() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-      <path
-        d="M7.5 1.5l1.5 4 4.2.3-3.2 2.8.9 4.1L7.5 10.3l-3.4 2.4.9-4.1L1.8 5.8l4.2-.3z"
-        fill="white"
-      />
-    </svg>
-  );
-}
-function IconCrown() {
-  return (
-    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-      <path
-        d="M1.5 11.5h12v1.5h-12zM1.5 10l2.5-5.5 3.5 3.5 3.5-5.5 2.5 7.5H1.5z"
-        fill="white"
-      />
-    </svg>
-  );
-}
-
 const PACKAGE_ICONS: Record<string, React.ReactNode> = {
-  basic: <IconBox />,
-  medium: <IconStar />,
-  deluxe: <IconCrown />,
+  basic: <BoxIcon />,
+  medium: <StarIcon />,
+  deluxe: <DiamondIcon />,
 };
 
 const STEP_META: Record<Step, { title: string; subtitle: string }> = {

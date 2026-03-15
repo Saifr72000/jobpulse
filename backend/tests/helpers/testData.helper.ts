@@ -22,8 +22,9 @@ export interface TestUser {
 
 export interface TestProduct {
   _id: mongoose.Types.ObjectId;
-  name: string;
+  title: string;
   price: number;
+  type: "package" | "service";
 }
 
 /**
@@ -85,21 +86,23 @@ export const createTestUser = async (
  * Create a test product
  */
 export const createTestProduct = async (
-  overrides: Partial<TestProduct & { description?: string; category?: string; sku?: string }> = {}
+  overrides: Partial<TestProduct & { description?: string; logo?: string }> = {}
 ): Promise<TestProduct> => {
   const productData = {
-    name: "Test Product",
+    title: "Test Product",
     price: 29.99,
+    type: "service" as const,
     description: "A test product",
-    inStock: true,
+    isActive: true,
     ...overrides,
   };
 
   const product = await Product.create(productData);
   return {
     _id: product._id,
-    name: product.name,
+    title: product.title,
     price: product.price,
+    type: product.type,
   };
 };
 
@@ -110,9 +113,9 @@ export const createTestProducts = async (count: number = 3): Promise<TestProduct
   const products: TestProduct[] = [];
   for (let i = 1; i <= count; i++) {
     const product = await createTestProduct({
-      name: `Product ${i}`,
+      title: `Product ${i}`,
       price: 10 * i,
-      sku: `SKU-${i}`,
+      type: i % 2 === 0 ? "package" : "service",
     });
     products.push(product);
   }
