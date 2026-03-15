@@ -60,10 +60,22 @@
     border-radius: 50%;
     border: 2px solid #5f5f5e;
     flex-shrink: 0;
+    position: relative;
 
     &--selected {
-      background: $coal;
       border-color: $coal;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $coal;
+      }
     }
   }
 

@@ -26,11 +26,12 @@
     align-items: center;
     justify-content: center;
     color: $ash;
-    margin-top: 2px;
+    margin-top: 1px;
   }
 
   &__content {
     flex: 1;
+    min-width: 0;
   }
 
   &__name {
@@ -38,6 +39,7 @@
     font-weight: $font-medium;
     color: $coal;
     margin: 0;
+    line-height: 1.2;
   }
 
   &__desc {
@@ -65,8 +67,8 @@
     border-radius: 50%;
     border: 2px solid #5f5f5e;
     flex-shrink: 0;
-    margin-top: 2px;
     position: relative;
+    margin-top: 2px;
 
     &--selected {
       border-color: $coal;

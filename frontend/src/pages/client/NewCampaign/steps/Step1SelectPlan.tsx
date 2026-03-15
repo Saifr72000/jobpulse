@@ -73,8 +73,8 @@ export function Step1SelectPlan({
       <div className="step1">
         <div className="order-card">
           <h4>Custom made plan</h4>
-          <p className="subheading">
-            Choose your prefered channels for your campaign:
+          <p className="body-2">
+            Choose your prefered channels for your campaign
           </p>
           <div className="channel-list">
             {channels.map((ch) => (
@@ -95,8 +95,8 @@ export function Step1SelectPlan({
 
         <div className="order-card">
           <h4>Package plan</h4>
-          <p className="subheading">
-            Reach more candidates with bundled channel packages:
+          <p className="body-2">
+            Reach more candidates with bundled channel packages
           </p>
           <div className="step1__package-list">
             {packages.map((pkg) => {

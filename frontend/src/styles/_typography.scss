@@ -67,11 +67,13 @@ h4,
 }
 .body-2 {
   font-size: $text-base;
-  font-weight: $font-semibold;
+  font-weight: $font-normal;
   color: $ash;
+  /* margin-top: $spacing-xs; */
 }
 .body-3 {
   font-size: $text-sm;
+  margin-top: $spacing-xs;
   font-weight: $font-normal;
   color: $coal;
 }

@@ -4,7 +4,7 @@
 
 .step4 {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: minmax(0, 1fr) 360px;
   gap: $spacing-lg;
   align-items: start;
 }
@@ -21,6 +21,8 @@
   border-radius: $radius-card;
   box-shadow: $shadow-card;
   padding: $spacing-lg;
+  min-width: 0;
+  max-width: 100%;
 
   &__title {
     font-size: 32px;

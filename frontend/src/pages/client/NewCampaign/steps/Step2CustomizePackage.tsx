@@ -22,7 +22,9 @@ export function Step2CustomizePackage({
   addonIcons,
   onFormChange,
 }: Step2CustomizePackageProps) {
-  const pkg = packages.find((p) => p.title.toLowerCase().includes(form.selectedPackage || ""));
+  const pkg = packages.find((p) =>
+    p.title.toLowerCase().includes(form.selectedPackage || ""),
+  );
   const pkgMetadata = pkg ? PACKAGE_METADATA[pkg.title] : null;
 
   const toggleChannel = (channelTitle: string) => {
@@ -37,8 +39,12 @@ export function Step2CustomizePackage({
   const toggleAddon = (addonTitle: string) => {
     const addonTitleLower = addonTitle.toLowerCase();
     onFormChange({
-      selectedAddons: form.selectedAddons.some(a => a.toLowerCase().includes(addonTitleLower))
-        ? form.selectedAddons.filter((a) => !a.toLowerCase().includes(addonTitleLower))
+      selectedAddons: form.selectedAddons.some((a) =>
+        a.toLowerCase().includes(addonTitleLower),
+      )
+        ? form.selectedAddons.filter(
+            (a) => !a.toLowerCase().includes(addonTitleLower),
+          )
         : [...form.selectedAddons, addonTitle],
     });
   };
@@ -56,13 +62,15 @@ export function Step2CustomizePackage({
     <div className="step2">
       <div className="step2__main">
         <div className="order-card">
-          <h2 className="order-card__title">Select channels</h2>
-          <p className="subheading order-card__subtitle">
+          <h4>Select channels</h4>
+          <p className="subheading">
             Choose your preferred channels for your campaign
           </p>
           <div className="channel-grid">
             {channels.map((ch) => {
-              const checked = form.selectedChannels.includes(ch.title.toLowerCase());
+              const checked = form.selectedChannels.includes(
+                ch.title.toLowerCase(),
+              );
               const atLimit =
                 form.planType === "package" &&
                 !!pkgMetadata &&
@@ -84,19 +92,22 @@ export function Step2CustomizePackage({
           {pkgMetadata && (
             <p style={{ fontSize: "13px", color: "#636363", marginTop: "8px" }}>
               Select up to {pkgMetadata.channelLimit} channels (
-              {form.selectedChannels.length}/{pkgMetadata.channelLimit} selected)
+              {form.selectedChannels.length}/{pkgMetadata.channelLimit}{" "}
+              selected)
             </p>
           )}
         </div>
 
         <div className="order-card">
-          <h2 className="order-card__title">Campaign add-ons</h2>
-          <p className="subheading order-card__subtitle">
+          <h4>Campaign add-ons</h4>
+          <p className="subheading">
             Boost your campaigns with optional add ons to increase your reach
           </p>
           <div className="addon-grid">
             {addons.map((addon) => {
-              const checked = form.selectedAddons.some(a => a.toLowerCase().includes(addon.title.toLowerCase()));
+              const checked = form.selectedAddons.some((a) =>
+                a.toLowerCase().includes(addon.title.toLowerCase()),
+              );
               return (
                 <AddonCard
                   key={addon._id}

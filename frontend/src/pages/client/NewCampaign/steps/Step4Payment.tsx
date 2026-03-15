@@ -31,7 +31,7 @@ export function Step4Payment({
   return (
     <div className="step4">
       <div className="order-card">
-        <h2 className="order-card__title">Payment method</h2>
+        <h4>Payment method</h4>
         <div className="payment-methods">
           {paymentMethodsConfig.map((pm) => (
             <PaymentMethodCard
