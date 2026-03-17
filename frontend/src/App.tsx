@@ -11,6 +11,7 @@ import Dashboard from "./pages/client/Dashboard";
 import MyOrders from "./pages/client/Campaigns/MyCampaigns";
 import NewCampaign from "./pages/client/NewCampaign/NewCampaign";
 import OrderDetail from "./pages/client/Orders/OrderDetail";
+import SettingsPage from "./pages/client/Settings/Settings";
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
               <Route path="/orders/new" element={<NewCampaign />} />
               <Route path="/orders/:orderId" element={<OrderDetail />} />
               <Route path="/campaigns/:orderId" element={<OrderDetail />} />
+              <Route path="/settings" element={<SettingsPage />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>
           </Route>

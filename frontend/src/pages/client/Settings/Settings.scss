@@ -1,0 +1,450 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+// ─── Page Layout ──────────────────────────────────────────────
+
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  &__tabs {
+    display: flex;
+    gap: $spacing-xs;
+    background: $color-surface;
+    padding: $spacing-xs;
+    border-radius: $radius-pill;
+    width: fit-content;
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $radius-pill;
+    border: none;
+    background: transparent;
+    color: $color-text;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+
+    &--active {
+      background: $midnight;
+      color: $white;
+    }
+
+    &:hover:not(&--active) {
+      background: darken($frost, 4%);
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+  }
+
+  &__placeholder {
+    text-align: center;
+    padding: $spacing-xl;
+  }
+}
+
+// ─── Shared Section Card ───────────────────────────────────────
+
+.settings-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-xl;
+
+  &--danger {
+    border: 1.5px solid $red;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: $spacing-lg;
+  }
+
+  &__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__title-danger {
+    color: $red;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: $spacing-lg;
+  }
+}
+
+// ─── Shared Form Grid ──────────────────────────────────────────
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+
+  &__full {
+    grid-column: 1 / -1;
+  }
+
+  &__divider {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    padding-top: $spacing-lg;
+    border-top: 1px solid $color-bg;
+  }
+}
+
+// ─── Profile Avatar ────────────────────────────────────────────
+
+.profile-avatar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+
+  &__circle {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: $mist;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+// ─── Users List ────────────────────────────────────────────────
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    background: $color-bg;
+    border-radius: $radius-input;
+    padding: $spacing-md;
+  }
+
+  &__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: $mist;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+  }
+}
+
+// ─── Value Cards Grid ──────────────────────────────────────────
+
+.value-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+}
+
+.value-card {
+  background: $color-surface;
+  border-radius: $radius-card;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    flex: 1;
+  }
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+// ─── Active Value Card ─────────────────────────────────────────
+
+.active-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $color-bg;
+  border-radius: $radius-input;
+  padding: $spacing-md $spacing-lg;
+  margin-top: $spacing-md;
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__balance {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: $spacing-xs;
+  }
+
+  &__amount {
+    color: $violet;
+  }
+}
+
+// ─── Framework Agreement ──────────────────────────────────────
+
+.framework-agreement {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  &__rows {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__row {
+    display: flex;
+    gap: $spacing-lg;
+
+    span:first-child {
+      width: 160px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// ─── Buy Value Card Modal ──────────────────────────────────────
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+}
+
+.modal {
+  background: $white;
+  border-radius: $radius-card;
+  padding: $spacing-xl;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $spacing-md;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-text-muted;
+    padding: 0;
+    flex-shrink: 0;
+    transition: color 0.15s;
+
+    &:hover {
+      color: $color-text;
+    }
+  }
+
+  &__summary {
+    background: $color-bg;
+    border-radius: $radius-input;
+    padding: $spacing-md;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__payment {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__card-form {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+  }
+
+  &__card-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+  }
+}
+
+// ─── Payment Option (radio card) ──────────────────────────────
+
+.payment-option {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  background: $color-bg;
+  border-radius: $radius-input;
+  padding: $spacing-md;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: border-color 0.15s;
+
+  &--active {
+    border-color: $midnight;
+  }
+
+  &__radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid $ash;
+    flex-shrink: 0;
+    transition: border-color 0.15s, background 0.15s;
+
+    .payment-option--active & {
+      border-color: $midnight;
+      background: $midnight;
+      box-shadow: inset 0 0 0 3px $white;
+    }
+  }
+}
+
+// ─── Order Summary Rows ───────────────────────────────────────
+
+.summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-divider {
+  border: none;
+  border-top: 1px solid $ash;
+  margin: $spacing-xs 0;
+  opacity: 0.2;
+}
+
+// ─── Shared Buttons ────────────────────────────────────────────
+
+.btn-primary {
+  background: $midnight;
+  color: $white;
+  border: none;
+  border-radius: $radius-pill;
+  padding: $spacing-sm $spacing-lg;
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-danger-outline {
+  background: transparent;
+  color: $red;
+  border: 1.5px solid $red;
+  border-radius: $radius-pill;
+  padding: $spacing-sm $spacing-lg;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: rgba($red, 0.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-violet {
+  background: $violet;
+  color: $white;
+  border: none;
+  border-radius: $radius-pill;
+  padding: $spacing-sm $spacing-md;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  width: 100%;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.btn-midnight {
+  background: $midnight;
+  color: $white;
+  border: none;
+  border-radius: $radius-pill;
+  padding: $spacing-md $spacing-lg;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  width: 100%;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
