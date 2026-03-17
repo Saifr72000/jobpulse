@@ -171,7 +171,12 @@ export default function NewCampaign() {
       </div>
 
       <div className="progress-bar">
-        <span className="progress-bar__label" style={{ left: `${progress}%` }}>
+        <span 
+          className="progress-bar__label" 
+          style={{ 
+            left: `clamp(40px, ${progress}%, calc(100% - 40px))` 
+          }}
+        >
           Step {step}
         </span>
         <div className="progress-bar__track">

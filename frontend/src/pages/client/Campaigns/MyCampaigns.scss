@@ -13,23 +13,6 @@
     align-items: flex-start;
     justify-content: space-between;
     gap: $spacing-md;
-
-    .header-text {
-      h1 {
-        font-size: 32px;
-        font-weight: $font-bold;
-        color: $coal;
-        margin: 0;
-        line-height: 1.2;
-      }
-
-      p {
-        font-size: 20px;
-        font-weight: $font-normal;
-        color: $ash;
-        margin: 4px 0 0;
-      }
-    }
   }
 
   &__new-btn {
@@ -67,12 +50,6 @@
     gap: $spacing-md;
     padding: 0 $spacing-md $spacing-md;
     border-bottom: 1px solid rgba($ash, 0.15);
-
-    span {
-      font-size: 20px;
-      font-weight: $font-medium;
-      color: $coal;
-    }
   }
 
   // ─── Table row ─────────────────────────────────────────
@@ -94,17 +71,6 @@
 
     &:last-child {
       margin-bottom: 0;
-    }
-  }
-
-  &__campaign-name {
-    font-size: 20px;
-    font-weight: $font-semibold;
-    color: $coal;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
     }
   }
 
@@ -139,7 +105,6 @@
   &__empty {
     padding: $spacing-xl;
     text-align: center;
-    font-size: 20px;
     color: $ash;
   }
 
