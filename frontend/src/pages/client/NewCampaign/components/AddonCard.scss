@@ -27,7 +27,8 @@
   &__icon-wrap {
     width: 28px;
     height: 28px;
-    background: $violet;
+    background: transparent;
+    border: 1.5px solid $violet;
     border-radius: 4px;
     display: flex;
     align-items: center;
@@ -35,7 +36,7 @@
     flex-shrink: 0;
 
     svg {
-      color: $white;
+      color: $violet;
     }
   }
 

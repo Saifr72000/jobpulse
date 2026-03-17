@@ -70,12 +70,9 @@ export default function MyOrders() {
     <div className="campaigns-page">
       {/* Header */}
       <div className="campaigns-page__header">
-        <div className="header-text">
-          <h1>Campaigns</h1>
-          <p>
-            Access campaign details, provide feedback, and monitor campaign
-            performance and candidates
-          </p>
+        <div className="page-header">
+          <h2>Campaigns</h2>
+          <p className="body-2">Access campaign details</p>
         </div>
         <button
           className="campaigns-page__new-btn"
