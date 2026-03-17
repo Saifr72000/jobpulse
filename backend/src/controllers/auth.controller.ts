@@ -88,7 +88,10 @@ export const getMeController = async (req: Request, res: Response) => {
       return;
     }
 
-    const user = await User.findById(userId).select("-password -refreshToken -otp -otpExpires");
+    const user = await User.findById(userId)
+      .select("-password -refreshToken -otp -otpExpires")
+      .populate("company", "name _id");
+    
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -99,7 +102,10 @@ export const getMeController = async (req: Request, res: Response) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      company: user.company,
+      company: user.company ? {
+        id: (user.company as any)._id,
+        name: (user.company as any).name,
+      } : null,
       isVerified: user.isVerified,
     });
   } catch (error) {

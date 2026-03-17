@@ -5,6 +5,7 @@ import {
   getUserById,
   getUsersByCompany,
   updateUser,
+  changeUserPassword,
 } from "../services/user.service.js";
 import { User } from "../models/user.model.js";
 
@@ -63,8 +64,8 @@ export const updateUserById = async (
 ): Promise<void> => {
   try {
     const { id } = req.params;
-    const { firstName, lastName, password } = req.body;
-    const updatedUser = await updateUser(id as string, { firstName, lastName, password });
+    const { firstName, lastName } = req.body;
+    const updatedUser = await updateUser(id as string, { firstName, lastName });
     if (!updatedUser) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -75,6 +76,63 @@ export const updateUserById = async (
       .json({ message: "User updated successfully", user: updatedUser });
   } catch (error) {
     res.status(500).json({ message: "Failed to update user", error });
+  }
+};
+
+// Update current authenticated user
+export const updateCurrentUser = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = (req as any).user?.userId;
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const { firstName, lastName } = req.body;
+    const updatedUser = await updateUser(userId, { firstName, lastName });
+
+    if (!updatedUser) {
+      res.status(404).json({ message: "User not found" });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating current user:", error);
+    res.status(500).json({ message: "Failed to update profile" });
+  }
+};
+
+// Change password for current user
+export const changePassword = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = (req as any).user?.userId;
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const { currentPassword, newPassword } = req.body;
+
+    await changeUserPassword(userId, currentPassword, newPassword);
+
+    res.status(200).json({ message: "Password changed successfully" });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Current password is incorrect") {
+      res.status(400).json({ message: error.message });
+      return;
+    }
+    console.error("Error changing password:", error);
+    res.status(500).json({ message: "Failed to change password" });
   }
 };
 

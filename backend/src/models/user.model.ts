@@ -11,8 +11,8 @@ export interface IUser extends Document {
   isVerified: boolean;
   company: mongoose.Types.ObjectId;
   refreshToken?: string;
-  createdAt: Date; // Include for type safety
-  updatedAt: Date; // Include for type safety
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const userSchema = new Schema<IUser>({

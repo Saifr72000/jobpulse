@@ -5,7 +5,6 @@ export const createCompany = async (
   orgNumber: number,
   email: string,
   address?: string,
-  phone?: string,
   website?: string
 ) => {
   // Check if company with same orgNumber or email already exists
@@ -22,7 +21,6 @@ export const createCompany = async (
     orgNumber,
     email,
     address,
-    phone,
     website,
   });
 

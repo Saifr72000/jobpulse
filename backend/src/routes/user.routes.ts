@@ -4,10 +4,14 @@ import {
   createUser,
   retrieveUsers,
   updateUserById,
+  updateCurrentUser,
+  changePassword,
 } from "../controllers/user.controller.js";
 import {
   registerUserValidator,
   updateUserValidator,
+  updateCurrentUserValidator,
+  changePasswordValidator,
 } from "../validators/user.validator.js";
 import { requestValidator } from "../middlewares/requestValidator.middleware.js";
 import { authenticateUser } from "../middlewares/auth.middleware.js";
@@ -16,6 +20,12 @@ const router = Router();
 
 // Create User
 router.post("/register", registerUserValidator, requestValidator, createUser);
+
+// Update current user
+router.put("/me", authenticateUser, updateCurrentUserValidator, requestValidator, updateCurrentUser);
+
+// Change password for current user
+router.put("/me/password", authenticateUser, changePasswordValidator, requestValidator, changePassword);
 
 // Get user by ID
 router.get("/:id", authenticateUser, retrieveUserById);

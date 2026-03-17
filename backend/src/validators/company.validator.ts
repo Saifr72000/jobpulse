@@ -32,12 +32,6 @@ export const createCompanyValidator: RequestHandler[] = [
     .withMessage("Address must be at least 5 characters")
     .escape(),
 
-  body("phone")
-    .optional()
-    .trim()
-    .matches(/^[0-9]{8,15}$/)
-    .withMessage("Phone number must be 8-15 digits"),
-
   body("website")
     .optional()
     .trim()
@@ -73,15 +67,38 @@ export const updateCompanyValidator: RequestHandler[] = [
     .withMessage("Address must be at least 5 characters")
     .escape(),
 
-  check("phone")
-    .optional()
-    .trim()
-    .matches(/^[0-9]{8,15}$/)
-    .withMessage("Phone number must be 8-15 digits"),
-
   check("website")
     .optional()
     .trim()
     .isURL()
     .withMessage("Invalid website URL format"),
+];
+
+// For validating adding user to company
+export const addUserToCompanyValidator: RequestHandler[] = [
+  body("firstName")
+    .trim()
+    .notEmpty()
+    .withMessage("First name is required")
+    .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/)
+    .withMessage("First name can only contain letters, spaces, hyphens, and apostrophes")
+    .isLength({ min: 1, max: 50 })
+    .withMessage("First name must be between 1 and 50 characters"),
+
+  body("lastName")
+    .trim()
+    .notEmpty()
+    .withMessage("Last name is required")
+    .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/)
+    .withMessage("Last name can only contain letters, spaces, hyphens, and apostrophes")
+    .isLength({ min: 1, max: 50 })
+    .withMessage("Last name must be between 1 and 50 characters"),
+
+  body("email")
+    .trim()
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format")
+    .normalizeEmail(),
 ];
