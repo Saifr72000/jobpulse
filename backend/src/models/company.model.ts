@@ -5,7 +5,6 @@ export interface ICompany extends Document {
     name: string;
     orgNumber: number;
     address?: string;
-    phone?: string;
     email: string;
     website?: string;
     createdAt: Date;
@@ -22,9 +21,6 @@ const companySchema = new Schema<ICompany>({
         required: true,
       },
       address: {
-        type: String,
-      },
-      phone: {
         type: String,
       },
       email: {

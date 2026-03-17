@@ -63,27 +63,89 @@ export const getUsersByCompany = async (
 
 export const updateUser = async (
   userId: string,
-  updates: Partial<Pick<IUser, "firstName" | "lastName" | "password">>
+  updates: Partial<Pick<IUser, "firstName" | "lastName">>
 ): Promise<IUser | null> => {
   try {
-    const { firstName, lastName, password } = updates;
+    const { firstName, lastName } = updates;
 
     const updateData: Partial<IUser> = {};
 
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
 
-    if (password) {
-      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-      updateData.password = hashedPassword;
-    }
-
-    const updateUser = await User.findByIdAndUpdate(userId, updateData, {
+    const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
       new: true,
       runValidators: true,
     }).select("-password -refreshToken");
-    return updateUser;
+    return updatedUser;
   } catch (error) {
     throw new Error("Failed to update user");
   }
+};
+
+export const changeUserPassword = async (
+  userId: string,
+  currentPassword: string,
+  newPassword: string
+): Promise<boolean> => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    // Verify current password
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isPasswordValid) {
+      throw new Error("Current password is incorrect");
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+    // Update password
+    await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+    return true;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const createUserForCompany = async (
+  companyId: string,
+  firstName: string,
+  lastName: string,
+  email: string
+): Promise<IUser> => {
+  // Check if user already exists
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new Error("User with this email already exists");
+  }
+
+  // Verify company exists
+  const company = await Company.findById(companyId);
+  if (!company) {
+    throw new Error("Company not found");
+  }
+
+  // Generate temporary password
+  const tempPassword = Math.random().toString(36).slice(-10) + "Aa1!";
+  const hashedPassword = await bcrypt.hash(tempPassword, SALT_ROUNDS);
+
+  const newUser = new User({
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+    company: companyId,
+    isVerified: false,
+  });
+
+  await newUser.save();
+
+  // TODO: Send invitation email with temporary password
+
+  return newUser;
 };

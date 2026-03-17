@@ -7,7 +7,6 @@ interface ProfileForm {
   firstName: string;
   lastName: string;
   email: string;
-  phone: string;
 }
 
 interface PasswordForm {
@@ -19,7 +18,6 @@ interface PasswordForm {
 interface CompanyForm {
   name: string;
   orgNumber: string;
-  phone: string;
   website: string;
   address: string;
 }
@@ -31,7 +29,6 @@ export function ProfileTab() {
     firstName: user?.firstName ?? "",
     lastName: user?.lastName ?? "",
     email: user?.email ?? "",
-    phone: "",
   });
 
   const [passwords, setPasswords] = useState<PasswordForm>({
@@ -43,7 +40,6 @@ export function ProfileTab() {
   const [company, setCompany] = useState<CompanyForm>({
     name: user?.company?.name ?? "",
     orgNumber: "",
-    phone: "",
     website: "",
     address: "",
   });
@@ -59,7 +55,6 @@ export function ProfileTab() {
           setCompany({
             name: data.name ?? "",
             orgNumber: data.orgNumber ?? "",
-            phone: data.phone ?? "",
             website: data.website ?? "",
             address: data.address ?? "",
           });
@@ -70,15 +65,55 @@ export function ProfileTab() {
 
   const initials = `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
 
-  const handleSaveProfile = async () => {
+  const handleSaveChanges = async () => {
     setSavingProfile(true);
+    
     try {
+      // Always update profile
       await api.put("/users/me", {
         firstName: profile.firstName,
         lastName: profile.lastName,
-        phone: profile.phone,
       });
-    } catch {
+
+      // If user filled in password fields, update password too
+      const hasPasswordFields = passwords.currentPassword || passwords.newPassword || passwords.confirmPassword;
+      
+      if (hasPasswordFields) {
+        // Validate passwords match
+        if (passwords.newPassword !== passwords.confirmPassword) {
+          console.error("Passwords do not match");
+          // TODO: show error toast
+          setSavingProfile(false);
+          return;
+        }
+
+        // Validate all password fields are filled
+        if (!passwords.currentPassword || !passwords.newPassword || !passwords.confirmPassword) {
+          console.error("Please fill in all password fields");
+          // TODO: show error toast
+          setSavingProfile(false);
+          return;
+        }
+
+        await api.put("/users/me/password", {
+          currentPassword: passwords.currentPassword,
+          newPassword: passwords.newPassword,
+          confirmPassword: passwords.confirmPassword,
+        });
+
+        // Clear password fields on success
+        setPasswords({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+      }
+
+      // TODO: show success toast
+      console.log("Changes saved successfully");
+    } catch (error: any) {
+      console.error("Failed to save changes:", error);
+      console.error("Error details:", error.response?.data);
       // TODO: show error toast
     } finally {
       setSavingProfile(false);
@@ -134,12 +169,6 @@ export function ProfileTab() {
               value={profile.email}
               disabled
             />
-            <InputField
-              label="Phone number"
-              type="tel"
-              value={profile.phone}
-              onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-            />
           </div>
 
           <div className="settings-form__divider">
@@ -178,7 +207,7 @@ export function ProfileTab() {
         </div>
 
         <div className="settings-card__actions">
-          <button className="btn-primary" onClick={handleSaveProfile} disabled={savingProfile}>
+          <button className="btn-primary" onClick={handleSaveChanges} disabled={savingProfile}>
             {savingProfile ? "Saving..." : "Save changes"}
           </button>
         </div>
@@ -199,19 +228,13 @@ export function ProfileTab() {
               label="Company name"
               type="text"
               value={company.name}
-              onChange={(e) => setCompany({ ...company, name: e.target.value })}
+              disabled
             />
             <InputField
               label="Organization number"
               type="text"
               value={company.orgNumber}
-              onChange={(e) => setCompany({ ...company, orgNumber: e.target.value })}
-            />
-            <InputField
-              label="Phone number"
-              type="tel"
-              value={company.phone}
-              onChange={(e) => setCompany({ ...company, phone: e.target.value })}
+              disabled
             />
             <InputField
               label="Website"

@@ -64,16 +64,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setError(null);
     try {
-      const { data } = await api.post("/auth/login", { email, password });
-
-      const userData: User = {
-        id: data.user.id,
-        email: data.user.email,
-        firstName: data.user.firstName,
-        lastName: data.user.lastName,
-      };
-
-      setUser(userData);
+      await api.post("/auth/login", { email, password });
+      // Fetch full user data with populated company
+      await checkAuth();
     } catch (err) {
       const axiosError = err as AxiosError<{ message: string }>;
       const message = axiosError.response?.data?.message || "Login failed";
