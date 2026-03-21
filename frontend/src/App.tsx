@@ -5,6 +5,7 @@ import { MainLayout } from "./layouts/MainLayout";
 
 // Auth pages
 import LoginPage from "./pages/auth/Login";
+import SetPasswordPage from "./pages/auth/SetPassword/SetPassword";
 
 // Client pages
 import Dashboard from "./pages/client/Dashboard";
@@ -20,6 +21,7 @@ export default function App() {
         <Routes>
           {/* Public routes */}
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/set-password" element={<SetPasswordPage />} />
 
           {/* Protected routes wrapped in MainLayout */}
           <Route element={<ProtectedRoute />}>
@@ -27,7 +29,7 @@ export default function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               {/* Campaigns listing — accessible at both /campaigns and /orders */}
               <Route path="/campaigns" element={<MyOrders />} />
-              <Route path="/orders" element={<MyOrders />} />
+              {/* <Route path="/orders" element={<MyOrders />} /> */}
               <Route path="/orders/new" element={<NewCampaign />} />
               <Route path="/orders/:orderId" element={<OrderDetail />} />
               <Route path="/campaigns/:orderId" element={<OrderDetail />} />

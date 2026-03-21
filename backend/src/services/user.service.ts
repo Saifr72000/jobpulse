@@ -13,7 +13,7 @@ export const registerUser = async (
   lastName: string,
   email: string,
   password: string,
-  companyId: string
+  companyId: string,
 ) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -37,7 +37,6 @@ export const registerUser = async (
 
   await newUser.save(); // Saves user to db
 
-
   // Ensure no sensitive information is returned in the API response.
   return {
     firstName: newUser.firstName,
@@ -56,14 +55,14 @@ export const getUserById = async (userId: string): Promise<IUser | null> => {
 };
 
 export const getUsersByCompany = async (
-  companyId: string
+  companyId: string,
 ): Promise<IUser[]> => {
   return await User.find({ company: companyId }).select("-password");
 };
 
 export const updateUser = async (
   userId: string,
-  updates: Partial<Pick<IUser, "firstName" | "lastName">>
+  updates: Partial<Pick<IUser, "firstName" | "lastName">>,
 ): Promise<IUser | null> => {
   try {
     const { firstName, lastName } = updates;
@@ -86,7 +85,7 @@ export const updateUser = async (
 export const changeUserPassword = async (
   userId: string,
   currentPassword: string,
-  newPassword: string
+  newPassword: string,
 ): Promise<boolean> => {
   try {
     const user = await User.findById(userId);
@@ -94,8 +93,16 @@ export const changeUserPassword = async (
       throw new Error("User not found");
     }
 
+    // Check if user has a password set
+    if (!user.password) {
+      throw new Error("User account is not activated yet");
+    }
+
     // Verify current password
-    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      user.password,
+    );
     if (!isPasswordValid) {
       throw new Error("Current password is incorrect");
     }
@@ -116,8 +123,12 @@ export const createUserForCompany = async (
   companyId: string,
   firstName: string,
   lastName: string,
-  email: string
+  email: string,
 ): Promise<IUser> => {
+  // Dynamic import to avoid circular dependency
+  const { generateInviteToken } = await import("../utils/token.util.js");
+  const { sendInvitationEmail } = await import("./email.service.js");
+
   // Check if user already exists
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -130,22 +141,60 @@ export const createUserForCompany = async (
     throw new Error("Company not found");
   }
 
-  // Generate temporary password
-  const tempPassword = Math.random().toString(36).slice(-10) + "Aa1!";
-  const hashedPassword = await bcrypt.hash(tempPassword, SALT_ROUNDS);
+  // Generate secure invite token
+  const inviteToken = generateInviteToken();
+  const inviteTokenExpires = new Date(Date.now() + 48 * 60 * 60 * 1000); // 48 hours from now
 
   const newUser = new User({
     firstName,
     lastName,
     email,
-    password: hashedPassword,
     company: companyId,
     isVerified: false,
+    inviteToken,
+    inviteTokenExpires,
   });
 
   await newUser.save();
 
-  // TODO: Send invitation email with temporary password
+  // Send invitation email with magic link
+  try {
+    await sendInvitationEmail(email, firstName, inviteToken, company.name);
+  } catch (error) {
+    console.error("Failed to send invitation email:", error);
+    // Don't throw error - user is created, email can be resent later
+  }
 
   return newUser;
+};
+
+/**
+ * Set password for user using invitation token
+ * Validates token and activates user account
+ */
+export const setPasswordWithToken = async (
+  token: string,
+  newPassword: string,
+): Promise<void> => {
+  // Find user by invite token
+  const user = await User.findOne({ inviteToken: token });
+
+  if (!user) {
+    throw new Error("Invalid or expired invitation token");
+  }
+
+  // Check if token has expired
+  if (!user.inviteTokenExpires || user.inviteTokenExpires < new Date()) {
+    throw new Error("Invitation token has expired");
+  }
+
+  // Hash the new password
+  const hashedPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+
+  // Update user: set password, clear token, activate account
+  await User.findByIdAndUpdate(user._id, {
+    password: hashedPassword,
+    $unset: { inviteToken: "", inviteTokenExpires: "" },
+    isVerified: true,
+  });
 };

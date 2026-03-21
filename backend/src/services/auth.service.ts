@@ -1,19 +1,22 @@
 import type { Response } from "express";
 import bcrypt from "bcrypt";
 import { User } from "../models/user.model.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt.util.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/jwt.util.js";
 
 export const loginUser = async (
   email: string,
   password: string,
-  res: Response
+  res: Response,
 ) => {
   const user = await User.findOne({ email });
 
   if (!user) return null;
 
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) return null;
+  const isPasswordValid = await bcrypt.compare(password, user.password || "");
+  if (!isPasswordValid || !user.password) return null;
 
   const accessToken = generateAccessToken(user._id.toString());
   const refreshToken = generateRefreshToken(user._id.toString());
@@ -48,4 +51,3 @@ export const loginUser = async (
     },
   };
 };
-

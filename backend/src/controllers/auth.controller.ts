@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express-serve-static-core"
 import { User } from "../models/user.model.js";
 import { loginUser } from "../services/auth.service.js";
 import { generateAccessToken, verifyRefreshToken } from "../utils/jwt.util.js";
+import { setPasswordWithToken } from "../services/user.service.js";
 
 interface LoginRequestBody {
   email: string;
@@ -110,5 +111,37 @@ export const getMeController = async (req: Request, res: Response) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to get user" });
+  }
+};
+
+/**
+ * Set password using invitation token
+ * Called when user clicks magic link and sets their password
+ */
+export const setPasswordController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const { token, newPassword } = req.body;
+
+    await setPasswordWithToken(token, newPassword);
+
+    res.status(200).json({
+      message: "Password set successfully. You can now log in.",
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.message.includes("Invalid or expired")) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
+      if (error.message.includes("expired")) {
+        res.status(400).json({ message: error.message });
+        return;
+      }
+    }
+    console.error("Error setting password:", error);
+    res.status(500).json({ message: "Failed to set password" });
   }
 };
