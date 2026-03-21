@@ -5,9 +5,27 @@ import "./Login.scss";
 
 const RingsDecoration = () => (
   <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
-    <circle cx="25" cy="25" r="24" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-    <circle cx="25" cy="25" r="16" stroke="rgba(255,255,255,0.25)" strokeWidth="1" />
-    <circle cx="25" cy="25" r="8"  stroke="rgba(255,255,255,0.4)"  strokeWidth="1" />
+    <circle
+      cx="25"
+      cy="25"
+      r="24"
+      stroke="rgba(255,255,255,0.15)"
+      strokeWidth="1"
+    />
+    <circle
+      cx="25"
+      cy="25"
+      r="16"
+      stroke="rgba(255,255,255,0.25)"
+      strokeWidth="1"
+    />
+    <circle
+      cx="25"
+      cy="25"
+      r="8"
+      stroke="rgba(255,255,255,0.4)"
+      strokeWidth="1"
+    />
   </svg>
 );
 
@@ -44,7 +62,7 @@ export default function LoginPage() {
         <div className="login__welcome">
           <h1 className="login__welcome-title">
             Welcome to <br />
-            <span>JobPulz</span>
+            <span>JobPulse</span>
           </h1>
           <p className="login__tagline">
             Your campaign recruitment simplified. <br />

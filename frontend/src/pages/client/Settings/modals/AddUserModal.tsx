@@ -29,10 +29,12 @@ export function AddUserModal({ companyId, onClose, onSuccess }: AddUserModalProp
 
     try {
       await api.post(`/companies/${companyId}/users`, formData);
+      // Show success message briefly before closing
+      alert(`Invitation sent to ${formData.email}! They will receive an email to set their password.`);
       onSuccess();
       onClose();
     } catch (err: any) {
-      const message = err.response?.data?.error || err.response?.data?.message || "Failed to add user";
+      const message = err.response?.data?.error || err.response?.data?.message || "Failed to send invitation";
       setError(message);
     } finally {
       setLoading(false);
@@ -44,9 +46,9 @@ export function AddUserModal({ companyId, onClose, onSuccess }: AddUserModalProp
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal__header">
           <div>
-            <h3>Add user</h3>
+            <h3>Invite User</h3>
             <p className="body-3 text-muted">
-              Invite a new user to join your company
+              Send an invitation email to add a new user to your company
             </p>
           </div>
           <button className="modal__close h4" onClick={onClose} aria-label="Close">
@@ -89,7 +91,7 @@ export function AddUserModal({ companyId, onClose, onSuccess }: AddUserModalProp
           onClick={handleSubmit}
           disabled={loading || !formData.firstName || !formData.lastName || !formData.email}
         >
-          {loading ? "Adding user..." : "Add user"}
+          {loading ? "Sending invitation..." : "Send Invitation"}
         </button>
       </div>
     </div>

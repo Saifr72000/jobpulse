@@ -44,9 +44,11 @@ export function UsersTab() {
 
   const handleConfirmRemove = async () => {
     if (!user?.company?.id || !userToRemove) return;
-    
+
     try {
-      await api.delete(`/companies/${user.company.id}/users/${userToRemove.id}`);
+      await api.delete(
+        `/companies/${user.company.id}/users/${userToRemove.id}`,
+      );
       setUsers((prev) => prev.filter((u) => u.id !== userToRemove.id));
       setUserToRemove(null);
       // TODO: show success toast
@@ -73,43 +75,45 @@ export function UsersTab() {
         <div className="settings-card__header">
           <div className="settings-card__title-group">
             <h4>Users access</h4>
-            <p className="body-3 text-muted">Manage who has access to your company account</p>
+            <p className="body-3 text-muted">
+              Manage who has access to your company account
+            </p>
           </div>
           <button className="btn-primary" onClick={() => setShowAddModal(true)}>
             + Add user
           </button>
         </div>
 
-      {loading ? (
-        <p className="body-3 text-muted">Loading...</p>
-      ) : (
-        <div className="users-list">
-          {users.length === 0 && (
-            <p className="body-3 text-muted">No users found.</p>
-          )}
-          {users.map((u) => (
-            <div key={u.id} className="users-list__row">
-              <div className="users-list__avatar">
-                <span className="body-3">{getInitials(u)}</span>
+        {loading ? (
+          <p className="body-3 text-muted">Loading...</p>
+        ) : (
+          <div className="users-list">
+            {users.length === 0 && (
+              <p className="body-3 text-muted">No users found.</p>
+            )}
+            {users.map((u) => (
+              <div key={u.id} className="users-list__row">
+                <div className="users-list__avatar">
+                  <span className="body-3">{getInitials(u)}</span>
+                </div>
+                <div className="users-list__info">
+                  <span className="body-2">
+                    {u.firstName} {u.lastName}
+                  </span>
+                  <span className="body-3 text-muted">{u.email}</span>
+                </div>
+                {u.id !== user?.id && (
+                  <button
+                    className="btn-danger-outline"
+                    onClick={() => handleRemoveClick(u)}
+                  >
+                    Remove user
+                  </button>
+                )}
               </div>
-              <div className="users-list__info">
-                <span className="body-2">
-                  {u.firstName} {u.lastName}
-                </span>
-                <span className="body-3 text-muted">{u.email}</span>
-              </div>
-              {u.id !== user?.id && (
-                <button
-                  className="btn-danger-outline"
-                  onClick={() => handleRemoveClick(u)}
-                >
-                  Remove user
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
       </div>
 
       {showAddModal && user?.company?.id && (
@@ -127,10 +131,15 @@ export function UsersTab() {
               <div>
                 <h3>Remove user</h3>
                 <p className="body-3 text-muted">
-                  Are you sure you want to remove {userToRemove.firstName} {userToRemove.lastName}?
+                  Are you sure you want to remove {userToRemove.firstName}{" "}
+                  {userToRemove.lastName}?
                 </p>
               </div>
-              <button className="modal__close h4" onClick={handleCancelRemove} aria-label="Close">
+              <button
+                className="modal__close h4"
+                onClick={handleCancelRemove}
+                aria-label="Close"
+              >
                 ×
               </button>
             </div>
@@ -138,7 +147,10 @@ export function UsersTab() {
               <button className="btn-primary" onClick={handleCancelRemove}>
                 Cancel
               </button>
-              <button className="btn-danger-outline" onClick={handleConfirmRemove}>
+              <button
+                className="btn-danger-outline"
+                onClick={handleConfirmRemove}
+              >
                 Remove user
               </button>
             </div>

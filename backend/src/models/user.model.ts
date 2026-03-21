@@ -5,12 +5,14 @@ export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   otp: string;
   otpExpires: Date;
   isVerified: boolean;
   company: mongoose.Types.ObjectId;
   refreshToken?: string;
+  inviteToken?: string;
+  inviteTokenExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -31,7 +33,7 @@ const userSchema = new Schema<IUser>({
       },
       password: {
         type: String,
-        required: true,
+        required: false,
       },
       refreshToken: {
         type: String,
@@ -49,6 +51,12 @@ const userSchema = new Schema<IUser>({
             ref: "Company",
             required: true,
         },
+      inviteToken: {
+        type: String,
+      },
+      inviteTokenExpires: {
+        type: Date,
+      },
     }, { timestamps: true });
 
 export const User = mongoose.model<IUser>("User", userSchema);

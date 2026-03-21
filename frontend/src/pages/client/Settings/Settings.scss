@@ -27,7 +27,9 @@
     background: transparent;
     color: $color-text;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+    transition:
+      background 0.15s,
+      color 0.15s;
     white-space: nowrap;
 
     &--active {
@@ -348,7 +350,9 @@
     border-radius: 50%;
     border: 1.5px solid $ash;
     flex-shrink: 0;
-    transition: border-color 0.15s, background 0.15s;
+    transition:
+      border-color 0.15s,
+      background 0.15s;
 
     .payment-option--active & {
       border-color: $midnight;
