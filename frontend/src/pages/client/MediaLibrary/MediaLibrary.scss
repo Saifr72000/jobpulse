@@ -96,6 +96,94 @@
   }
 }
 
+// ─── Empty / Error States ──────────────────────────────────────
+
+.media-library__empty,
+.media-library__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: $spacing-sm;
+  padding: $spacing-xl 0;
+  width: 100%;
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: $color-bg;
+    border-radius: $radius-card;
+    margin-bottom: $spacing-xs;
+  }
+}
+
+// ─── Drag & Drop Overlay ───────────────────────────────────────
+
+.media-library__drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba($midnight, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Hidden and non-interactive by default.
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+
+  &--active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.media-library__drop-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  text-align: center;
+  color: $white;
+
+  padding: $spacing-xl;
+  border: 2px dashed rgba($white, 0.5);
+  border-radius: $radius-card;
+  min-width: 320px;
+
+  animation: drop-box-in 0.18s ease;
+
+  svg {
+    opacity: 0.85;
+  }
+
+  p {
+    color: $white;
+  }
+
+  .text-muted {
+    color: rgba($white, 0.6) !important;
+  }
+}
+
+@keyframes drop-box-in {
+  from {
+    transform: scale(0.93);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 // ─── Media Files Grid ──────────────────────────────────────────
 
 .media-files-grid {

@@ -56,6 +56,11 @@ export default function MediaCategoryPage() {
   const [error, setError] = useState<string | null>(null);
   const [previewFile, setPreviewFile] = useState<MediaFile | null>(null);
 
+  // Tracks whether a file is being dragged anywhere over the browser window.
+  const [isWindowDragActive, setIsWindowDragActive] = useState(false);
+  // Counter guards against spurious dragleave events fired on child elements.
+  const dragCounterRef = useRef(0);
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const fetchMedia = useCallback(
@@ -78,9 +83,48 @@ export default function MediaCategoryPage() {
       .finally(() => setLoading(false));
   }, [fetchMedia]);
 
+  // Window-level drag detection — fires the moment a file enters the browser
+  // from the OS, before it's over any specific element.
+  useEffect(() => {
+    if (uploading) return;
+
+    const onDragEnter = (e: DragEvent) => {
+      if (!e.dataTransfer?.types.includes("Files")) return;
+      dragCounterRef.current++;
+      if (dragCounterRef.current === 1) setIsWindowDragActive(true);
+    };
+
+    const onDragLeave = () => {
+      dragCounterRef.current = Math.max(0, dragCounterRef.current - 1);
+      if (dragCounterRef.current === 0) setIsWindowDragActive(false);
+    };
+
+    // Prevent the browser's default "open file" behaviour and reset state.
+    const onDrop = () => {
+      dragCounterRef.current = 0;
+      setIsWindowDragActive(false);
+    };
+
+    const onDragOver = (e: DragEvent) => e.preventDefault();
+
+    window.addEventListener("dragenter", onDragEnter);
+    window.addEventListener("dragleave", onDragLeave);
+    window.addEventListener("drop", onDrop);
+    window.addEventListener("dragover", onDragOver);
+
+    return () => {
+      window.removeEventListener("dragenter", onDragEnter);
+      window.removeEventListener("dragleave", onDragLeave);
+      window.removeEventListener("drop", onDrop);
+      window.removeEventListener("dragover", onDragOver);
+    };
+  }, [uploading]);
+
   const handleUploadFiles = useCallback(
     async (selected: File[]) => {
       if (!selected.length) return;
+      setIsWindowDragActive(false);
+      dragCounterRef.current = 0;
       setUploading(true);
       try {
         await uploadFiles(selected, folderId);
@@ -97,7 +141,9 @@ export default function MediaCategoryPage() {
     [folderId, fetchMedia]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  // react-dropzone is attached only to the overlay — it handles validation and
+  // calls handleUploadFiles with the accepted files.
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: handleUploadFiles,
     accept: ACCEPTED_TYPES,
     noClick: true,
@@ -133,18 +179,19 @@ export default function MediaCategoryPage() {
   };
 
   return (
-    <div className="media-library" {...getRootProps()}>
-      <input {...getInputProps()} />
-
-      {isDragActive && (
-        <div className="media-library__drop-overlay">
-          <div className="media-library__drop-box">
-            <Icon svg={ArrowUpRightIcon} size={32} />
-            <p className="body-1">Drop files to upload</p>
-            <p className="body-3 text-muted">Images, videos and PDFs up to 5 MB</p>
-          </div>
+    <div className="media-library">
+      {/* Full-page drop overlay — hidden until a file is dragged over the window */}
+      <div
+        className={`media-library__drop-overlay${isWindowDragActive ? " media-library__drop-overlay--active" : ""}`}
+        {...getRootProps()}
+      >
+        <input {...getInputProps()} />
+        <div className="media-library__drop-box">
+          <Icon svg={ArrowUpRightIcon} size={28} />
+          <p className="body-1">Drop files to upload</p>
+          <p className="body-3 text-muted">Images, videos and PDFs · max 5 MB</p>
         </div>
-      )}
+      </div>
 
       <div className="media-category-page__header">
         <div className="page-header">
@@ -184,7 +231,7 @@ export default function MediaCategoryPage() {
       {!loading && files.length === 0 && (
         <div className="media-library__empty">
           <div className="media-library__empty-icon">
-            <Icon svg={ArchiveIcon} size={32} />
+            <Icon svg={ArchiveIcon} size={20} />
           </div>
           <p className="body-1">No files here yet</p>
           <p className="body-3 text-muted">

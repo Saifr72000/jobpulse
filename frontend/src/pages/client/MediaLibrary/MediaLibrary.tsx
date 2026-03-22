@@ -4,6 +4,7 @@ import type { FunctionComponent, SVGProps } from "react";
 import { useAuth } from "../../../context";
 import { getFoldersByCompany, type Folder } from "../../../api/folders";
 import Icon from "../../../components/Icon/Icon";
+import { Loader } from "../../../components/Loader/Loader";
 
 import MediaIcon from "../../../assets/icons/media.svg?react";
 import VideoIcon from "../../../assets/icons/video.svg?react";
@@ -52,11 +53,7 @@ export default function MediaLibrary() {
         <p className="subheading">Manage and organize your media assets</p>
       </div>
 
-      {loading && (
-        <div className="media-library__state">
-          <p className="body-2 text-muted">Loading folders…</p>
-        </div>
-      )}
+      {loading && <Loader />}
 
       {!loading && error && (
         <div className="media-library__state">
@@ -67,7 +64,7 @@ export default function MediaLibrary() {
       {!loading && !error && folders.length === 0 && (
         <div className="media-library__empty">
           <div className="media-library__empty-icon">
-            <Icon svg={ArchiveIcon} size={32} />
+            <Icon svg={ArchiveIcon} size={20} />
           </div>
           <p className="body-1">No folders yet</p>
           <p className="body-3 text-muted">

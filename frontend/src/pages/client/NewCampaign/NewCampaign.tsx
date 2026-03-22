@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/axios";
 import Icon from "../../../components/Icon/Icon";
+import { Loader } from "../../../components/Loader/Loader";
 import type { Step, FormState, Product } from "./types";
 import { STEP_META, STEP_PROGRESS } from "./constants";
 import { calculateSubtotal, calculateVat, canContinueStep2 } from "./utils";
@@ -165,17 +166,14 @@ export default function NewCampaign() {
     },
   ];
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  const { title, subtitle } = STEP_META[step];
-  const progress = STEP_PROGRESS[step];
+  const { title, subtitle } = loading ? { title: "New Campaign", subtitle: "" } : STEP_META[step];
+  const progress = loading ? 0 : STEP_PROGRESS[step];
 
   return (
     <div className="new-order">
       <div className="page-header">
         <h2>{title}</h2>
-        <p className="subheading">{subtitle}</p>
+        {subtitle && <p className="subheading">{subtitle}</p>}
       </div>
 
       <div className="progress-bar">
@@ -195,63 +193,71 @@ export default function NewCampaign() {
         </div>
       </div>
 
-      {step === 1 && (
-        <Step1SelectPlan
-          form={form}
-          channels={channels}
-          packages={packages}
-          packageIcons={PACKAGE_ICONS}
-          onFormChange={updateForm}
-          onNext={next}
-        />
-      )}
-      {step === 2 && (
-        <Step2CustomizePackage
-          form={form}
-          channels={channels}
-          packages={packages}
-          addons={addons}
-          addonIcons={ADDON_ICONS}
-          onFormChange={updateForm}
-        />
-      )}
-      {step === 3 && (
-        <Step3CampaignDetails form={form} onFormChange={updateForm} />
-      )}
-      {step === 4 && (
-        <Step4Payment
-          form={form}
-          channels={channels}
-          packages={packages}
-          addons={addons}
-          paymentMethodsConfig={paymentMethodsConfig}
-          onFormChange={updateForm}
-        />
-      )}
+      {loading && <Loader />}
 
-      {step > 1 && (
-        <div className="step-nav">
-          <button className="step-nav__back" onClick={back}>
-            {step === 4 ? "← Back to review" : "← Back"}
-          </button>
-          {step < 4 ? (
-            <button
-              className="step-nav__continue"
-              onClick={next}
-              disabled={step === 2 && !canContinueStep2(form)}
-            >
-              Continue
-            </button>
-          ) : (
-            <button
-              className="step-nav__continue"
-              onClick={handleSubmit}
-              disabled={submitting}
-            >
-              {submitting ? "Submitting..." : "Confirm and pay"}
-            </button>
+      {error && <p className="body-3 text-muted">{error}</p>}
+
+      {!loading && !error && (
+        <>
+          {step === 1 && (
+            <Step1SelectPlan
+              form={form}
+              channels={channels}
+              packages={packages}
+              packageIcons={PACKAGE_ICONS}
+              onFormChange={updateForm}
+              onNext={next}
+            />
           )}
-        </div>
+          {step === 2 && (
+            <Step2CustomizePackage
+              form={form}
+              channels={channels}
+              packages={packages}
+              addons={addons}
+              addonIcons={ADDON_ICONS}
+              onFormChange={updateForm}
+            />
+          )}
+          {step === 3 && (
+            <Step3CampaignDetails form={form} onFormChange={updateForm} />
+          )}
+          {step === 4 && (
+            <Step4Payment
+              form={form}
+              channels={channels}
+              packages={packages}
+              addons={addons}
+              paymentMethodsConfig={paymentMethodsConfig}
+              onFormChange={updateForm}
+            />
+          )}
+
+          {step > 1 && (
+            <div className="step-nav">
+              <button className="step-nav__back" onClick={back}>
+                {step === 4 ? "← Back to review" : "← Back"}
+              </button>
+              {step < 4 ? (
+                <button
+                  className="step-nav__continue"
+                  onClick={next}
+                  disabled={step === 2 && !canContinueStep2(form)}
+                >
+                  Continue
+                </button>
+              ) : (
+                <button
+                  className="step-nav__continue"
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                >
+                  {submitting ? "Submitting..." : "Confirm and pay"}
+                </button>
+              )}
+            </div>
+          )}
+        </>
       )}
 
       <SuccessModal

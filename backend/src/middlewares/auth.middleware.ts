@@ -12,7 +12,7 @@ import { verifyAccessToken } from "../utils/jwt.util.js";
 export const authenticateUser = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const token = req.cookies.access_token; // Read from cookies

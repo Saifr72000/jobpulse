@@ -14,7 +14,7 @@ export function MainLayout() {
     if (path === "/orders/new") return "new-campaign";
     if (path.startsWith("/campaigns")) return "campaigns";
     if (path.startsWith("/orders")) return "campaigns";
-    if (path === "/media-library") return "media-library";
+    if (path.startsWith("/media-library")) return "media-library";
     if (path === "/settings") return "settings";
     return path.slice(1);
   };
