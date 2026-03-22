@@ -1,19 +1,33 @@
 import type { Request, Response, NextFunction } from "express";
 import * as mediaService from "../services/media.service.js";
+import { generateUploadUrl, generateDownloadUrl } from "../services/s3.service.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
     userId: string;
   };
   file?: Express.Multer.File | undefined;
-  /** Set by uploadMultiple middleware; can be array or keyed by field name */
   files?: Express.Multer.File[] | { [fieldname: string]: Express.Multer.File[] } | undefined;
 }
 
+const parsePagination = (query: Request["query"]) => {
+  const page = Math.max(1, parseInt(query.page as string) || 1);
+  const limit = Math.min(100, Math.max(1, parseInt(query.limit as string) || 20));
+  return { page, limit };
+};
+
+const enrichWithUrls = async (mediaList: Awaited<ReturnType<typeof mediaService.getMediaByCompany>>["data"]) => {
+  return Promise.all(
+    mediaList.map(async (m) => ({
+      ...m.toObject(),
+      url: await generateDownloadUrl({ key: m.s3Key, expiresIn: 60 * 60 }),
+    }))
+  );
+};
+
 /**
- * Upload one or more files (images/videos) for an order.
- * Requires multipart/form-data with field "files" (array) and "orderId".
- * Only orders belonging to the logged-in user are accepted.
+ * Upload one or more files for an order.
+ * Requires multipart/form-data with field "files". orderId and folderId are optional.
  */
 export const uploadMedia = async (
   req: AuthenticatedRequest,
@@ -31,16 +45,13 @@ export const uploadMedia = async (
     const files = Array.isArray(rawFiles) ? rawFiles : rawFiles?.files;
     if (!files?.length) {
       res.status(400).json({
-        error: "No files uploaded. Use multipart/form-data with field 'files' (array) and 'orderId'.",
+        error: "No files uploaded. Use multipart/form-data with field 'files' (array).",
       });
       return;
     }
 
     const orderId = req.body.orderId as string | undefined;
-    if (!orderId) {
-      res.status(400).json({ error: "orderId is required" });
-      return;
-    }
+    const folderId = req.body.folderId as string | undefined;
 
     const uploaded = await Promise.all(
       files.map((file) =>
@@ -50,7 +61,8 @@ export const uploadMedia = async (
           mimetype: file.mimetype,
           size: file.size,
           userId,
-          orderId,
+          ...(orderId ? { orderId } : {}),
+          ...(folderId ? { folderId } : {}),
         })
       )
     );
@@ -62,6 +74,7 @@ export const uploadMedia = async (
         companyId: m.companyId,
         uploadedBy: m.uploadedBy,
         orderId: m.orderId,
+        folderId: m.folderId,
         s3Key: m.s3Key,
         originalFilename: m.originalFilename,
         mimetype: m.mimetype,
@@ -88,17 +101,13 @@ export const uploadMedia = async (
   }
 };
 
-export const getMediaById = async ( 
+export const getMediaById = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const id = req.params.id;
-    if (typeof id !== "string") {
-      res.status(400).json({ error: "Invalid media ID" });
-      return;
-    }
+    const id = req.params.id as string;
     const media = await mediaService.getMediaById(id);
 
     if (!media) {
@@ -106,7 +115,8 @@ export const getMediaById = async (
       return;
     }
 
-    res.status(200).json(media);
+    const url = await generateDownloadUrl({ key: media.s3Key, expiresIn: 60 * 60 });
+    res.status(200).json({ ...media.toObject(), url });
   } catch (error) {
     next(error);
   }
@@ -118,13 +128,31 @@ export const getMediaByCompany = async (
   next: NextFunction
 ) => {
   try {
-    const companyId = req.params.companyId;
-    if (typeof companyId !== "string") {
-      res.status(400).json({ error: "Invalid company ID" });
-      return;
-    }
-    const media = await mediaService.getMediaByCompany(companyId);
-    res.status(200).json(media);
+    const companyId = req.params.companyId as string;
+    const { page, limit } = parsePagination(req.query);
+
+    const result = await mediaService.getMediaByCompany(companyId, page, limit);
+    const enriched = await enrichWithUrls(result.data);
+
+    res.status(200).json({ data: enriched, pagination: result.pagination });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getMediaByFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const folderId = req.params.folderId as string;
+    const { page, limit } = parsePagination(req.query);
+
+    const result = await mediaService.getMediaByFolder(folderId, page, limit);
+    const enriched = await enrichWithUrls(result.data);
+
+    res.status(200).json({ data: enriched, pagination: result.pagination });
   } catch (error) {
     next(error);
   }
@@ -136,13 +164,84 @@ export const getMediaByOrder = async (
   next: NextFunction
 ) => {
   try {
-    const orderId = req.params.orderId;
-    if (typeof orderId !== "string") {
-      res.status(400).json({ error: "Invalid order ID" });
+    const orderId = req.params.orderId as string;
+    const { page, limit } = parsePagination(req.query);
+
+    const result = await mediaService.getMediaByOrder(orderId, page, limit);
+    const enriched = await enrichWithUrls(result.data);
+
+    res.status(200).json({ data: enriched, pagination: result.pagination });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Assigns a media item to a folder, or removes it from any folder (pass folderId: null).
+ */
+export const assignMediaFolder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params.id as string;
+    const { folderId } = req.body as { folderId: string | null };
+
+    const media = await mediaService.assignMediaFolder(id, folderId ?? null);
+    if (!media) {
+      res.status(404).json({ error: "Media not found" });
       return;
     }
-    const media = await mediaService.getMediaByOrder(orderId);
+
     res.status(200).json(media);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteMedia = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = req.params.id as string;
+    await mediaService.deleteMedia(id);
+    res.status(200).json({ message: "Media deleted successfully" });
+  } catch (error) {
+    if (error instanceof Error && error.message === "Media not found") {
+      res.status(404).json({ error: error.message });
+      return;
+    }
+    next(error);
+  }
+};
+
+/**
+ * DEV ONLY — verifies S3 credentials and shows what presigned URLs look like.
+ */
+export const s3Test = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const testKey = `s3-test/ping-${Date.now()}.txt`;
+
+    const [uploadUrl, downloadUrl] = await Promise.all([
+      generateUploadUrl({ key: testKey, contentType: "text/plain" }),
+      generateDownloadUrl({ key: testKey }),
+    ]);
+
+    res.status(200).json({
+      message: "S3 credentials are valid — presigned URLs generated successfully",
+      bucket: process.env.S3_BUCKET_NAME,
+      region: process.env.AWS_REGION,
+      testKey,
+      uploadUrl,
+      downloadUrl,
+    });
   } catch (error) {
     next(error);
   }
