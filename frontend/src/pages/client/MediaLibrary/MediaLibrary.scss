@@ -1,0 +1,193 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+.media-library {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-lg;
+  }
+}
+
+.media-category-card {
+  background: $white;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-lg;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: $spacing-md;
+  cursor: pointer;
+  transition: box-shadow 0.15s;
+
+  &:hover {
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.1);
+  }
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__icon-wrap {
+    width: 48px;
+    height: 48px;
+    background: $color-bg;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__arrow {
+    align-self: flex-end;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: $color-bg;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+    flex-shrink: 0;
+
+    &:hover {
+      background: darken($frost, 5%);
+    }
+  }
+}
+
+// ─── Category Detail Page ──────────────────────────────────────
+
+.media-category-page {
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $spacing-md;
+  }
+
+  &__upload {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    background: $midnight;
+    color: $white;
+    border: none;
+    border-radius: $radius-pill;
+    padding: $spacing-sm $spacing-lg;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// ─── Empty / Error States ──────────────────────────────────────
+
+.media-library__empty,
+.media-library__state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: $spacing-sm;
+  padding: $spacing-xl 0;
+  width: 100%;
+
+  &-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: $color-bg;
+    border-radius: $radius-card;
+    margin-bottom: $spacing-xs;
+  }
+}
+
+// ─── Drag & Drop Overlay ───────────────────────────────────────
+
+.media-library__drop-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba($midnight, 0.6);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  // Hidden and non-interactive by default.
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+
+  &--active {
+    opacity: 1;
+    pointer-events: all;
+  }
+}
+
+.media-library__drop-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  text-align: center;
+  color: $white;
+
+  padding: $spacing-xl;
+  border: 2px dashed rgba($white, 0.5);
+  border-radius: $radius-card;
+  min-width: 320px;
+
+  animation: drop-box-in 0.18s ease;
+
+  svg {
+    opacity: 0.85;
+  }
+
+  p {
+    color: $white;
+  }
+
+  .text-muted {
+    color: rgba($white, 0.6) !important;
+  }
+}
+
+@keyframes drop-box-in {
+  from {
+    transform: scale(0.93);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// ─── Media Files Grid ──────────────────────────────────────────
+
+.media-files-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $spacing-lg;
+}

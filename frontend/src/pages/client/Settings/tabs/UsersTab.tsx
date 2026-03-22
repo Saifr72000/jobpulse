@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../../../context";
 import api from "../../../../api/axios";
 import { AddUserModal } from "../modals/AddUserModal";
+import { Loader } from "../../../../components/Loader/Loader";
 
 interface CompanyUser {
   id: string;
@@ -85,7 +86,7 @@ export function UsersTab() {
         </div>
 
         {loading ? (
-          <p className="body-3 text-muted">Loading...</p>
+          <Loader />
         ) : (
           <div className="users-list">
             {users.length === 0 && (

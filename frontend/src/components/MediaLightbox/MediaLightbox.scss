@@ -1,0 +1,141 @@
+@use "../../styles/variables" as *;
+@use "../../styles/typography" as *;
+
+.media-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-lg;
+  animation: lightbox-overlay-in 0.2s ease both;
+
+  &--closing {
+    animation: lightbox-overlay-out 0.2s ease both;
+
+    .media-lightbox__content {
+      animation: lightbox-content-out 0.2s cubic-bezier(0.4, 0, 1, 1) both;
+    }
+  }
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+    max-width: min(90vw, 1100px);
+    width: 100%;
+    animation: lightbox-content-in 0.25s cubic-bezier(0.34, 1.2, 0.64, 1) both;
+  }
+
+  &__close {
+    position: absolute;
+    top: -($spacing-xl + $spacing-sm);
+    right: 0;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    color: $white;
+    font-size: $text-base;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+    flex-shrink: 0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+  }
+
+  &__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-height: 80vh;
+    width: 100%;
+    border-radius: $radius-card;
+    overflow: hidden;
+    background: $coal;
+  }
+
+  &__image {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: $radius-card;
+  }
+
+  &__video {
+    display: block;
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: $radius-card;
+  }
+
+  &__pdf {
+    width: 80vw;
+    height: 80vh;
+    border: none;
+    border-radius: $radius-card;
+  }
+
+  &__fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-md;
+    padding: $spacing-xl;
+    color: $white;
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    color: rgba(255, 255, 255, 0.85);
+
+    .text-muted {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+@keyframes lightbox-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lightbox-overlay-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes lightbox-content-in {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lightbox-content-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+}

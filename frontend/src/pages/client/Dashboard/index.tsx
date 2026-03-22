@@ -10,24 +10,6 @@ const imgTrophy =
 const imgForward =
   "https://www.figma.com/api/mcp/asset/a366f735-6d89-446a-96d1-4dd85c157ab9";
 
-const weeklyData = [
-  { week: "W1", height: 62 },
-  { week: "W2", height: 50 },
-  { week: "W3", height: 26 },
-  { week: "W4", height: 57 },
-  { week: "W5", height: 68 },
-  { week: "W6", height: 93, tooltip: "32% increase" },
-];
-
-const channels = [
-  { name: "Facebook", percent: "55%", width: "100%" },
-  { name: "LinkedIn", percent: "32%", width: "94%" },
-  { name: "Snapchat", percent: "32%", width: "64%" },
-  { name: "TikTok", percent: "32%", width: "56%" },
-  { name: "X", percent: "32%", width: "38%" },
-  { name: "Schibsted", percent: "32%", width: "20%" },
-];
-
 export default function Dashboard() {
   const navigate = useNavigate();
 

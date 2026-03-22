@@ -310,13 +310,13 @@ A table listing all campaigns belonging to the client's company.
 
 **Table columns:**
 
-| Column        | Notes                                               |
-| ------------- | --------------------------------------------------- |
-| Campaign name | Clickable — navigates to the campaign detail page   |
-| Status        | Pill badge: Active (green), Completed (grey)        |
-| Date          | Campaign start date                                 |
-| Channels      | Platform icons shown inline (LinkedIn, Meta, etc.)  |
-| Total         | Order total in NOK                                  |
+| Column        | Notes                                              |
+| ------------- | -------------------------------------------------- |
+| Campaign name | Clickable — navigates to the campaign detail page  |
+| Status        | Pill badge: Active (green), Completed (grey)       |
+| Date          | Campaign start date                                |
+| Channels      | Platform icons shown inline (LinkedIn, Meta, etc.) |
+| Total         | Order total in NOK                                 |
 
 **Top-right actions:** `+ New campaign` button (midnight, pill) → navigates to Campaign Ordering Step 1.
 
@@ -357,13 +357,13 @@ Header: "Assets" / subtitle: "Key information and materials for your campaign"
 
 Displays read-only answers from Step 3 of the ordering flow:
 
-| Field                                    | Condition                          |
-| ---------------------------------------- | ---------------------------------- |
-| Campaign image                           | Always shown                       |
-| Lead Ad job description choice           | Only if Lead Ads add-on selected   |
-| Video materials source choice            | Only if Video Campaign add-on selected |
-| LinkedIn job description choice          | Only if LinkedIn Job Posting selected |
-| LinkedIn screening questions choice      | Only if LinkedIn Job Posting selected |
+| Field                               | Condition                              |
+| ----------------------------------- | -------------------------------------- |
+| Campaign image                      | Always shown                           |
+| Lead Ad job description choice      | Only if Lead Ads add-on selected       |
+| Video materials source choice       | Only if Video Campaign add-on selected |
+| LinkedIn job description choice     | Only if LinkedIn Job Posting selected  |
+| LinkedIn screening questions choice | Only if LinkedIn Job Posting selected  |
 
 **Target audience section:**
 
@@ -472,16 +472,16 @@ This tab has two states: live data and not-yet-published.
 
 **KPI stat cards (8 cards in a row):**
 
-| Metric        | Notes                         |
-| ------------- | ----------------------------- |
-| Total views   |                               |
-| Reach         |                               |
-| Clicks        |                               |
-| Frequency     |                               |
-| Unique clicks |                               |
-| Unique CTR    | Shown as percentage           |
-| Applications  |                               |
-| Spend         | Shown in NOK                  |
+| Metric        | Notes               |
+| ------------- | ------------------- |
+| Total views   |                     |
+| Reach         |                     |
+| Clicks        |                     |
+| Frequency     |                     |
+| Unique clicks |                     |
+| Unique CTR    | Shown as percentage |
+| Applications  |                     |
+| Spend         | Shown in NOK        |
 
 Cards are equal-width, arranged in a single horizontal row.
 
@@ -505,22 +505,22 @@ Appears below the charts on the same tab.
 
 **Candidate stat cards (4 cards):**
 
-| Metric          |
-| --------------- |
-| Total received  |
-| Contacted       |
-| Pending         |
-| Rejected        |
+| Metric         |
+| -------------- |
+| Total received |
+| Contacted      |
+| Pending        |
+| Rejected       |
 
 **Candidate table:**
 
-| Column        | Notes                                                        |
-| ------------- | ------------------------------------------------------------ |
-| Name          |                                                              |
-| Status        | Pill: Contacted (green), Pending (yellow), Rejected (red)    |
-| Date received | ISO date                                                     |
-| Email         |                                                              |
-| Phone         |                                                              |
+| Column        | Notes                                                     |
+| ------------- | --------------------------------------------------------- |
+| Name          |                                                           |
+| Status        | Pill: Contacted (green), Pending (yellow), Rejected (red) |
+| Date received | ISO date                                                  |
+| Email         |                                                           |
+| Phone         |                                                           |
 
 Table is paginated. Rows are clickable (future: candidate detail view).
 
@@ -565,12 +565,12 @@ This tab contains three stacked white cards: Profile information, Company detail
 
 **Fields (2-column grid):**
 
-| Label         | Type          | Example value       |
-| ------------- | ------------- | ------------------- |
-| First name    | Text input    | John                |
-| Last name     | Text input    | Doe                 |
-| Email address | Email input   | John@company.com    |
-| Phone number  | Tel input     | +47 909 09 090      |
+| Label         | Type        | Example value    |
+| ------------- | ----------- | ---------------- |
+| First name    | Text input  | John             |
+| Last name     | Text input  | Doe              |
+| Email address | Email input | John@company.com |
+| Phone number  | Tel input   | +47 909 09 090   |
 
 **Password subsection** (within the same card):
 
@@ -594,12 +594,12 @@ This tab contains three stacked white cards: Profile information, Company detail
 
 **Fields (2-column grid, then full-width):**
 
-| Label               | Type       | Example value              |
-| ------------------- | ---------- | -------------------------- |
-| Company name        | Text input | John company               |
-| Organization number | Text input | 927 343 282                |
-| Phone number        | Tel input  | +47 220 00 000             |
-| Website             | URL input  | https://Johncompany.com    |
+| Label               | Type       | Example value                              |
+| ------------------- | ---------- | ------------------------------------------ |
+| Company name        | Text input | John company                               |
+| Organization number | Text input | 927 343 282                                |
+| Phone number        | Tel input  | +47 220 00 000                             |
+| Website             | URL input  | https://Johncompany.com                    |
 | Address             | Text input | Karl Johans gate 1, 0154 Oslo (full width) |
 
 **Save button:** "Save changes" (violet, pill, bottom-right of card)
@@ -657,12 +657,12 @@ Contains two sections: Value card and Framework agreement.
 
 **Purchase cards (4 cards in a horizontal row):**
 
-| Card name      | Price      | Balance you receive |
-| -------------- | ---------- | ------------------- |
-| Value 100 000  | 90 000 kr  | 100 000 kr          |
-| Value 250 000  | 222 500 kr | 250 000 kr          |
-| Value 400 000  | 352 000 kr | 400 000 kr          |
-| Value 650 000  | 565 500 kr | 650 000 kr          |
+| Card name     | Price      | Balance you receive |
+| ------------- | ---------- | ------------------- |
+| Value 100 000 | 90 000 kr  | 100 000 kr          |
+| Value 250 000 | 222 500 kr | 250 000 kr          |
+| Value 400 000 | 352 000 kr | 400 000 kr          |
+| Value 650 000 | 565 500 kr | 650 000 kr          |
 
 Each card shows: card name (heading), Price row, Balance row, "Buy value card" button (violet, full-width pill).
 
@@ -689,12 +689,12 @@ Triggered by clicking "Buy value card" on any purchase card. Appears as a modal 
 
 **Order summary section** (frost background card):
 
-| Row                 | Value       |
-| ------------------- | ----------- |
-| Card name           | e.g. 90 000 kr |
+| Row                 | Value           |
+| ------------------- | --------------- |
+| Card name           | e.g. 90 000 kr  |
 | Balance you receive | e.g. 100 000 kr |
-| Divider             |             |
-| Total               | e.g. 90 000 kr |
+| Divider             |                 |
+| Total               | e.g. 90 000 kr  |
 
 **Payment method (radio cards, 2 options):**
 
@@ -703,12 +703,12 @@ Triggered by clicking "Buy value card" on any purchase card. Appears as a modal 
 
 **Card details form** (only visible when "Card payment" is selected):
 
-| Field           | Type   | Placeholder         |
-| --------------- | ------ | ------------------- |
-| Card number     | Text   | 1234 5678 9101 3456 |
-| Expire date     | Text   | MM / YY             |
-| CVC             | Text   | 123                 |
-| Cardholder name | Text   | Full name on card   |
+| Field           | Type | Placeholder         |
+| --------------- | ---- | ------------------- |
+| Card number     | Text | 1234 5678 9101 3456 |
+| Expire date     | Text | MM / YY             |
+| CVC             | Text | 123                 |
+| Cardholder name | Text | Full name on card   |
 
 **CTA:** "Complete purchase" (midnight `$midnight`, pill, full-width)
 

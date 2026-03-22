@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/axios";
 import Icon from "../../../components/Icon/Icon";
+import { Loader } from "../../../components/Loader/Loader";
 import type { Step, FormState, Product } from "./types";
 import { STEP_META, STEP_PROGRESS } from "./constants";
 import { calculateSubtotal, calculateVat, canContinueStep2 } from "./utils";
@@ -94,13 +95,19 @@ export default function NewCampaign() {
         campaignName: form.campaignName,
         assets: {
           imageOption: form.imageOption || "team-suggest",
-          ...(form.selectedAddons.some(a => a.toLowerCase().includes("lead")) && {
+          ...(form.selectedAddons.some((a) =>
+            a.toLowerCase().includes("lead"),
+          ) && {
             leadAdDescription: form.leadAdDesc || "team-create",
           }),
-          ...(form.selectedAddons.some(a => a.toLowerCase().includes("video")) && {
+          ...(form.selectedAddons.some((a) =>
+            a.toLowerCase().includes("video"),
+          ) && {
             videoMaterials: form.videoMaterials || "upload",
           }),
-          ...(form.selectedAddons.some(a => a.toLowerCase().includes("linkedin")) && {
+          ...(form.selectedAddons.some((a) =>
+            a.toLowerCase().includes("linkedin"),
+          ) && {
             linkedinJobDescription: form.linkedinJobDesc || "team-create",
             linkedinScreeningQuestions: form.linkedinScreening || "team-create",
           }),
@@ -128,7 +135,9 @@ export default function NewCampaign() {
   const ADDON_ICONS: Record<string, React.ReactNode> = {
     "lead-ads": <Icon svg={FileIcon} size={15} color="white" />,
     "video-campaign": <Icon svg={VideoIcon} size={15} color="white" />,
-    "linkedin-job-posting": <Icon svg={BriefcaseIcon} size={15} color="white" />,
+    "linkedin-job-posting": (
+      <Icon svg={BriefcaseIcon} size={15} color="white" />
+    ),
   };
 
   const paymentMethodsConfig = [
@@ -157,24 +166,21 @@ export default function NewCampaign() {
     },
   ];
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  const { title, subtitle } = STEP_META[step];
-  const progress = STEP_PROGRESS[step];
+  const { title, subtitle } = loading ? { title: "New Campaign", subtitle: "" } : STEP_META[step];
+  const progress = loading ? 0 : STEP_PROGRESS[step];
 
   return (
     <div className="new-order">
       <div className="page-header">
         <h2>{title}</h2>
-        <p className="subheading">{subtitle}</p>
+        {subtitle && <p className="subheading">{subtitle}</p>}
       </div>
 
       <div className="progress-bar">
-        <span 
-          className="progress-bar__label" 
-          style={{ 
-            left: `clamp(40px, ${progress}%, calc(100% - 40px))` 
+        <span
+          className="progress-bar__label"
+          style={{
+            left: `clamp(40px, ${progress}%, calc(100% - 40px))`,
           }}
         >
           Step {step}
@@ -187,63 +193,71 @@ export default function NewCampaign() {
         </div>
       </div>
 
-      {step === 1 && (
-        <Step1SelectPlan
-          form={form}
-          channels={channels}
-          packages={packages}
-          packageIcons={PACKAGE_ICONS}
-          onFormChange={updateForm}
-          onNext={next}
-        />
-      )}
-      {step === 2 && (
-        <Step2CustomizePackage
-          form={form}
-          channels={channels}
-          packages={packages}
-          addons={addons}
-          addonIcons={ADDON_ICONS}
-          onFormChange={updateForm}
-        />
-      )}
-      {step === 3 && (
-        <Step3CampaignDetails form={form} onFormChange={updateForm} />
-      )}
-      {step === 4 && (
-        <Step4Payment
-          form={form}
-          channels={channels}
-          packages={packages}
-          addons={addons}
-          paymentMethodsConfig={paymentMethodsConfig}
-          onFormChange={updateForm}
-        />
-      )}
+      {loading && <Loader />}
 
-      {step > 1 && (
-        <div className="step-nav">
-          <button className="step-nav__back" onClick={back}>
-            {step === 4 ? "← Back to review" : "← Back"}
-          </button>
-          {step < 4 ? (
-            <button
-              className="step-nav__continue"
-              onClick={next}
-              disabled={step === 2 && !canContinueStep2(form)}
-            >
-              Continue
-            </button>
-          ) : (
-            <button
-              className="step-nav__continue"
-              onClick={handleSubmit}
-              disabled={submitting}
-            >
-              {submitting ? "Submitting..." : "Confirm and pay"}
-            </button>
+      {error && <p className="body-3 text-muted">{error}</p>}
+
+      {!loading && !error && (
+        <>
+          {step === 1 && (
+            <Step1SelectPlan
+              form={form}
+              channels={channels}
+              packages={packages}
+              packageIcons={PACKAGE_ICONS}
+              onFormChange={updateForm}
+              onNext={next}
+            />
           )}
-        </div>
+          {step === 2 && (
+            <Step2CustomizePackage
+              form={form}
+              channels={channels}
+              packages={packages}
+              addons={addons}
+              addonIcons={ADDON_ICONS}
+              onFormChange={updateForm}
+            />
+          )}
+          {step === 3 && (
+            <Step3CampaignDetails form={form} onFormChange={updateForm} />
+          )}
+          {step === 4 && (
+            <Step4Payment
+              form={form}
+              channels={channels}
+              packages={packages}
+              addons={addons}
+              paymentMethodsConfig={paymentMethodsConfig}
+              onFormChange={updateForm}
+            />
+          )}
+
+          {step > 1 && (
+            <div className="step-nav">
+              <button className="step-nav__back" onClick={back}>
+                {step === 4 ? "← Back to review" : "← Back"}
+              </button>
+              {step < 4 ? (
+                <button
+                  className="step-nav__continue"
+                  onClick={next}
+                  disabled={step === 2 && !canContinueStep2(form)}
+                >
+                  Continue
+                </button>
+              ) : (
+                <button
+                  className="step-nav__continue"
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                >
+                  {submitting ? "Submitting..." : "Confirm and pay"}
+                </button>
+              )}
+            </div>
+          )}
+        </>
       )}
 
       <SuccessModal

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/axios";
+import { Loader } from "../../../components/Loader/Loader";
 import "./MyCampaigns.scss";
 
 // ─── Types ──────────────────────────────────────────────────────
@@ -72,7 +73,7 @@ export default function MyOrders() {
       <div className="campaigns-page__header">
         <div className="page-header">
           <h2>Campaigns</h2>
-          <p className="body-2">Access campaign details</p>
+          <p className="subheading">Access campaign details</p>
         </div>
         <button
           className="campaigns-page__new-btn"
@@ -94,7 +95,7 @@ export default function MyOrders() {
         </div>
 
         {loading ? (
-          <div className="campaigns-page__loading">Loading campaigns...</div>
+          <Loader />
         ) : campaigns.length === 0 ? (
           <div className="campaigns-page__empty">No campaigns found.</div>
         ) : (

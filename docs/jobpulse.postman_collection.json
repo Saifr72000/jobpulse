@@ -1,0 +1,493 @@
+{
+  "info": {
+    "name": "JobPulse API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "All JobPulse backend endpoints. Auth uses HTTP-only cookies — login first and Postman stores cookies automatically on all subsequent requests."
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3002" },
+    { "key": "userId", "value": "REPLACE_WITH_USER_ID" },
+    { "key": "companyId", "value": "REPLACE_WITH_COMPANY_ID" },
+    { "key": "orderId", "value": "REPLACE_WITH_ORDER_ID" },
+    { "key": "productId", "value": "REPLACE_WITH_PRODUCT_ID" },
+    { "key": "mediaId", "value": "REPLACE_WITH_MEDIA_ID" },
+    { "key": "folderId", "value": "REPLACE_WITH_FOLDER_ID" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"user@example.com\",\n  \"password\": \"yourpassword\"\n}"
+            },
+            "description": "Sets access_token and refresh_token as HTTP-only cookies. Postman stores these automatically."
+          }
+        },
+        {
+          "name": "Get Current User (me)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/auth/me"
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/refresh-token"
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/logout"
+          }
+        },
+        {
+          "name": "Set Password (invitation)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/auth/set-password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"REPLACE_WITH_INVITATION_TOKEN\",\n  \"newPassword\": \"NewPassword123!\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/users/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"Password123!\",\n  \"company\": \"{{companyId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users"
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/users/{{userId}}"
+          }
+        },
+        {
+          "name": "Update Current User (me)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/users/me",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Jane\",\n  \"lastName\": \"Updated\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Change Password (me)",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/users/me/password",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currentPassword\": \"OldPassword123!\",\n  \"newPassword\": \"NewPassword456!\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Update User by ID",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/users/{{userId}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"firstName\": \"Updated\",\n  \"lastName\": \"Name\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "item": [
+        {
+          "name": "Create Company",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/companies",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corp\",\n  \"orgNumber\": \"123456789\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Companies",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/companies"
+          }
+        },
+        {
+          "name": "Get Company by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/companies/{{companyId}}"
+          }
+        },
+        {
+          "name": "Update Company",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/companies/{{companyId}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Acme Corp Updated\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Company",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/companies/{{companyId}}"
+          }
+        },
+        {
+          "name": "Get Company Users",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/companies/{{companyId}}/users"
+          }
+        },
+        {
+          "name": "Add User to Company",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/companies/{{companyId}}/users",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Remove User from Company",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/companies/{{companyId}}/users/{{userId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/products",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Social Media Package\",\n  \"description\": \"Full social media campaign package\",\n  \"price\": 9900,\n  \"type\": \"package\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products"
+          }
+        },
+        {
+          "name": "Get Products by Type",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/type/package",
+            "description": "Replace 'package' with 'service' to get services/channels."
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/products/{{productId}}"
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/api/products/{{productId}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Package Name\",\n  \"price\": 12900\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/products/{{productId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/orders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"product\": \"{{productId}}\",\n      \"quantity\": 1\n    }\n  ],\n  \"shippingAddress\": \"Teknologiveien 22, 2815 Gjøvik\",\n  \"notes\": \"Optional notes here\"\n}"
+            },
+            "description": "Requires auth cookie. companyId is resolved from the authenticated user."
+          }
+        },
+        {
+          "name": "Get My Orders",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/orders/my-orders",
+            "description": "Returns orders for the authenticated user's company."
+          }
+        },
+        {
+          "name": "Get All Orders (admin)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/orders"
+          }
+        },
+        {
+          "name": "Get Orders by Company",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/orders/company/{{companyId}}"
+          }
+        },
+        {
+          "name": "Get Order by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/orders/{{orderId}}"
+          }
+        },
+        {
+          "name": "Update Order Status",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/orders/{{orderId}}/status",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in-progress\"\n}"
+            },
+            "description": "Valid values: pending, in-progress, completed"
+          }
+        },
+        {
+          "name": "Delete Order",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/orders/{{orderId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Folders",
+      "item": [
+        {
+          "name": "Create Folder",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/folders",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Campaign Assets\"\n}"
+            },
+            "description": "Requires auth cookie. companyId is resolved from the authenticated user."
+          }
+        },
+        {
+          "name": "Get Folders by Company",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/folders/company/{{companyId}}",
+            "description": "Returns all folders for a company, sorted alphabetically."
+          }
+        },
+        {
+          "name": "Rename Folder",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/folders/{{folderId}}",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New Folder Name\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete Folder",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/folders/{{folderId}}",
+            "description": "Files inside the folder are NOT deleted — they are moved to root (no folder)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "S3 Connectivity Test",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/media/s3-test",
+            "description": "DEV ONLY. Verifies AWS credentials and returns sample presigned URLs."
+          }
+        },
+        {
+          "name": "Upload File(s)",
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/api/media",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": [],
+                  "description": "Switch key type to File. Max 5 MB per file. Accepted: JPEG, PNG, GIF, WebP, MP4, MOV, WebM, PDF."
+                },
+                {
+                  "key": "orderId",
+                  "value": "{{orderId}}",
+                  "type": "text",
+                  "disabled": true,
+                  "description": "Optional"
+                },
+                {
+                  "key": "folderId",
+                  "value": "{{folderId}}",
+                  "type": "text",
+                  "disabled": true,
+                  "description": "Optional — upload directly into a folder"
+                }
+              ]
+            },
+            "description": "Do NOT set Content-Type header manually — Postman sets it with the multipart boundary."
+          }
+        },
+        {
+          "name": "Get Media by Company (paginated)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/media/company/{{companyId}}?page=1&limit=20",
+            "description": "Returns paginated media with presigned download URLs. Supports ?page and ?limit query params."
+          }
+        },
+        {
+          "name": "Get Media by Folder (paginated)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/media/folder/{{folderId}}?page=1&limit=20",
+            "description": "Returns all media inside a specific folder, paginated."
+          }
+        },
+        {
+          "name": "Get Media by Order (paginated)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/media/order/{{orderId}}?page=1&limit=20"
+          }
+        },
+        {
+          "name": "Assign Media to Folder",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/media/{{mediaId}}/folder",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"folderId\": \"{{folderId}}\"\n}"
+            },
+            "description": "Move a file to a folder. Pass folderId: null to move back to root."
+          }
+        },
+        {
+          "name": "Remove Media from Folder (move to root)",
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/api/media/{{mediaId}}/folder",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"folderId\": null\n}"
+            },
+            "description": "Removes folder assignment — file moves back to root."
+          }
+        },
+        {
+          "name": "Get Media by ID",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/media/{{mediaId}}"
+          }
+        },
+        {
+          "name": "Delete Media",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/media/{{mediaId}}",
+            "description": "Deletes from both S3 and MongoDB."
+          }
+        }
+      ]
+    }
+  ]
+}

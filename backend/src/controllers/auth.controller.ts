@@ -1,4 +1,8 @@
-import type { Request, Response, NextFunction } from "express-serve-static-core";
+import type {
+  Request,
+  Response,
+  NextFunction,
+} from "express-serve-static-core";
 import { User } from "../models/user.model.js";
 import { loginUser } from "../services/auth.service.js";
 import { generateAccessToken, verifyRefreshToken } from "../utils/jwt.util.js";
@@ -13,7 +17,7 @@ interface LoginRequestBody {
 export const loginController = async (
   req: Request<{}, {}, LoginRequestBody>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   console.log("Login controller called from FF");
   try {
@@ -34,8 +38,9 @@ export const loginController = async (
 export const refreshTokenController = async (
   req: Request<{}, {}, LoginRequestBody>,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
+  console.log("Refresh token controller called from FF");
   try {
     const { refresh_token } = req.cookies;
     if (!refresh_token) {
@@ -71,6 +76,7 @@ export const refreshTokenController = async (
 };
 
 export const logoutController = async (req: Request, res: Response) => {
+  console.log("Logout controller called from FF");
   try {
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
@@ -82,6 +88,7 @@ export const logoutController = async (req: Request, res: Response) => {
 };
 
 export const getMeController = async (req: Request, res: Response) => {
+  console.log("Get me controller called from FF");
   try {
     const userId = (req as any).user?.userId;
     if (!userId) {
@@ -92,7 +99,7 @@ export const getMeController = async (req: Request, res: Response) => {
     const user = await User.findById(userId)
       .select("-password -refreshToken -otp -otpExpires")
       .populate("company", "name _id");
-    
+
     if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
@@ -103,10 +110,12 @@ export const getMeController = async (req: Request, res: Response) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      company: user.company ? {
-        id: (user.company as any)._id,
-        name: (user.company as any).name,
-      } : null,
+      company: user.company
+        ? {
+            id: (user.company as any)._id,
+            name: (user.company as any).name,
+          }
+        : null,
       isVerified: user.isVerified,
     });
   } catch (error) {
@@ -120,8 +129,9 @@ export const getMeController = async (req: Request, res: Response) => {
  */
 export const setPasswordController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
+  console.log("Set password controller called from FF");
   try {
     const { token, newPassword } = req.body;
 
