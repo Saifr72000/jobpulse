@@ -3,8 +3,7 @@ import type { RequestHandler } from "express";
 
 export const uploadMediaValidator: RequestHandler[] = [
   body("orderId")
-    .notEmpty()
-    .withMessage("orderId is required")
+    .optional()
     .isMongoId()
     .withMessage("Invalid order ID format"),
 ];
