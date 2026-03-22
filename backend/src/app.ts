@@ -1,4 +1,8 @@
-import express, { type Request, type Response, type NextFunction } from "express";
+import express, {
+  type Request,
+  type Response,
+  type NextFunction,
+} from "express";
 import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
@@ -27,7 +31,7 @@ app.use(
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
+  }),
 );
 app.use(express.json());
 app.use(cookieParser());
@@ -36,7 +40,7 @@ app.use(
     crossOriginResourcePolicy: { policy: "cross-origin" },
     crossOriginOpenerPolicy: { policy: "unsafe-none" },
     crossOriginEmbedderPolicy: false,
-  })
+  }),
 );
 
 // Global rate limiter — applied to all API routes
@@ -51,16 +55,14 @@ const globalLimiter = rateLimit({
 // Strict limiter for auth endpoints — brute-force protection
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: 100,
   standardHeaders: true,
   legacyHeaders: false,
   message: { status: 429, error: "Too many attempts." },
 });
 
-app.use("/api", globalLimiter);
-
 /* ROUTES */
-app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/auth" /* , authLimiter */, authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/products", productRoutes);

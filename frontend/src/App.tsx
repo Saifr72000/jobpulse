@@ -37,7 +37,7 @@ export default function App() {
               <Route path="/campaigns/:orderId" element={<OrderDetail />} />
               <Route path="/media-library" element={<MediaLibrary />} />
               <Route
-                path="/media-library/:category"
+                path="/media-library/:folderId"
                 element={<MediaCategoryPage />}
               />
               <Route path="/settings" element={<SettingsPage />} />

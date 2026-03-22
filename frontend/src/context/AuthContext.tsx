@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
+      console.log("Checking auth from FF");
       const { data } = await api.get("/auth/me");
       setUser(data);
     } catch {
