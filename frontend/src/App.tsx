@@ -13,6 +13,8 @@ import MyOrders from "./pages/client/Campaigns/MyCampaigns";
 import NewCampaign from "./pages/client/NewCampaign/NewCampaign";
 import OrderDetail from "./pages/client/Orders/OrderDetail";
 import SettingsPage from "./pages/client/Settings/Settings";
+import MediaLibrary from "./pages/client/MediaLibrary/MediaLibrary";
+import MediaCategoryPage from "./pages/client/MediaLibrary/MediaCategoryPage";
 
 export default function App() {
   return (
@@ -33,6 +35,11 @@ export default function App() {
               <Route path="/orders/new" element={<NewCampaign />} />
               <Route path="/orders/:orderId" element={<OrderDetail />} />
               <Route path="/campaigns/:orderId" element={<OrderDetail />} />
+              <Route path="/media-library" element={<MediaLibrary />} />
+              <Route
+                path="/media-library/:category"
+                element={<MediaCategoryPage />}
+              />
               <Route path="/settings" element={<SettingsPage />} />
               <Route index element={<Navigate to="/dashboard" replace />} />
             </Route>

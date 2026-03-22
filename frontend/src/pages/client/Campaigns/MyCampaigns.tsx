@@ -72,7 +72,7 @@ export default function MyOrders() {
       <div className="campaigns-page__header">
         <div className="page-header">
           <h2>Campaigns</h2>
-          <p className="body-2">Access campaign details</p>
+          <p className="subheading">Access campaign details</p>
         </div>
         <button
           className="campaigns-page__new-btn"

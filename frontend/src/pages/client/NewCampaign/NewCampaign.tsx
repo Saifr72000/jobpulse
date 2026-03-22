@@ -94,13 +94,19 @@ export default function NewCampaign() {
         campaignName: form.campaignName,
         assets: {
           imageOption: form.imageOption || "team-suggest",
-          ...(form.selectedAddons.some(a => a.toLowerCase().includes("lead")) && {
+          ...(form.selectedAddons.some((a) =>
+            a.toLowerCase().includes("lead"),
+          ) && {
             leadAdDescription: form.leadAdDesc || "team-create",
           }),
-          ...(form.selectedAddons.some(a => a.toLowerCase().includes("video")) && {
+          ...(form.selectedAddons.some((a) =>
+            a.toLowerCase().includes("video"),
+          ) && {
             videoMaterials: form.videoMaterials || "upload",
           }),
-          ...(form.selectedAddons.some(a => a.toLowerCase().includes("linkedin")) && {
+          ...(form.selectedAddons.some((a) =>
+            a.toLowerCase().includes("linkedin"),
+          ) && {
             linkedinJobDescription: form.linkedinJobDesc || "team-create",
             linkedinScreeningQuestions: form.linkedinScreening || "team-create",
           }),
@@ -128,7 +134,9 @@ export default function NewCampaign() {
   const ADDON_ICONS: Record<string, React.ReactNode> = {
     "lead-ads": <Icon svg={FileIcon} size={15} color="white" />,
     "video-campaign": <Icon svg={VideoIcon} size={15} color="white" />,
-    "linkedin-job-posting": <Icon svg={BriefcaseIcon} size={15} color="white" />,
+    "linkedin-job-posting": (
+      <Icon svg={BriefcaseIcon} size={15} color="white" />
+    ),
   };
 
   const paymentMethodsConfig = [
@@ -171,10 +179,10 @@ export default function NewCampaign() {
       </div>
 
       <div className="progress-bar">
-        <span 
-          className="progress-bar__label" 
-          style={{ 
-            left: `clamp(40px, ${progress}%, calc(100% - 40px))` 
+        <span
+          className="progress-bar__label"
+          style={{
+            left: `clamp(40px, ${progress}%, calc(100% - 40px))`,
           }}
         >
           Step {step}
