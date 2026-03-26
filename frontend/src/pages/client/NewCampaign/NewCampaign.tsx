@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/axios";
+import { createOrderCheckout, payOrderWithBalance } from "../../../api/payments";
 import Icon from "../../../components/Icon/Icon";
 import { Loader } from "../../../components/Loader/Loader";
 import type { Step, FormState, Product } from "./types";
@@ -117,7 +118,29 @@ export default function NewCampaign() {
         paymentMethod: form.paymentMethod,
         totalAmount: subtotal + vat,
       };
-      await api.post("/orders", body);
+      const orderRes = await api.post("/orders", body);
+      const orderId: string | undefined = orderRes.data?._id;
+
+      if (!orderId) {
+        throw new Error("Order id missing");
+      }
+
+      if (form.paymentMethod === "card-payment") {
+        const checkout = await createOrderCheckout({
+          orderId,
+          successUrl: `${window.location.origin}/campaigns?payment=success`,
+          cancelUrl: `${window.location.origin}/campaigns?payment=cancelled`,
+        });
+        if (checkout.url) {
+          window.location.href = checkout.url;
+          return;
+        }
+      }
+
+      if (form.paymentMethod === "value-card") {
+        await payOrderWithBalance(orderId);
+      }
+
       setShowSuccess(true);
     } catch {
       setShowSuccess(true);

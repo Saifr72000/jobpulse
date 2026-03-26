@@ -11,6 +11,7 @@ export type VideoMaterials = "upload" | "media-library" | "combine";
 export type LinkedinJobDescription = "team-create" | "own";
 export type LinkedinScreeningQuestions = "team-create" | "own";
 export type PaymentMethod = "value-card" | "card-payment" | "invoice";
+export type PaymentStatus = "pending" | "paid" | "failed";
 
 export interface IOrderAssets {
   imageOption: ImageOption;
@@ -38,6 +39,9 @@ export interface IOrder extends Document {
   targetAudience: string;
   additionalNotes?: string;
   paymentMethod: PaymentMethod;
+  paymentStatus: PaymentStatus;
+  stripeCheckoutSessionId?: string;
+  paidAt?: Date;
   totalAmount: number;
   status: OrderStatus;
   createdAt: Date;
@@ -136,6 +140,17 @@ const orderSchema = new Schema<IOrder>(
       type: String,
       enum: ["value-card", "card-payment", "invoice"],
       required: true,
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["pending", "paid", "failed"],
+      default: "pending",
+    },
+    stripeCheckoutSessionId: {
+      type: String,
+    },
+    paidAt: {
+      type: Date,
     },
     totalAmount: {
       type: Number,

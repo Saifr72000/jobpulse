@@ -60,6 +60,7 @@ export const createOrder = async (
       targetAudience: order.targetAudience,
       additionalNotes: order.additionalNotes,
       paymentMethod: order.paymentMethod,
+      paymentStatus: order.paymentStatus,
       totalAmount: order.totalAmount,
       status: order.status,
       companyName: order.companyName,
@@ -87,7 +88,7 @@ export const getOrderById = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const order = await orderService.getOrderById(id);
 
     if (!order) {
@@ -130,7 +131,7 @@ export const getOrdersByCompany = async (
   next: NextFunction
 ) => {
   try {
-    const { companyId } = req.params;
+    const companyId = String(req.params.companyId);
     const orders = await orderService.getOrdersByCompany(companyId);
     res.status(200).json(orders);
   } catch (error) {
@@ -144,7 +145,7 @@ export const updateOrderStatus = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const { status } = req.body as { status: OrderStatus };
 
     const order = await orderService.updateOrderStatus(id, status);
@@ -169,7 +170,7 @@ export const deleteOrder = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const id = String(req.params.id);
     const order = await orderService.deleteOrder(id);
 
     if (!order) {

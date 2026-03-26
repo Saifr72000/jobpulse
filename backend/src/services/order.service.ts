@@ -92,7 +92,9 @@ export const getMyOrders = async (
 
   const [orders, total] = await Promise.all([
     Order.find({ company: user.company })
-      .select("_id campaignName status channels package addons totalAmount createdAt")
+      .select(
+        "_id campaignName status channels package addons totalAmount paymentMethod paymentStatus createdAt"
+      )
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)

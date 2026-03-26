@@ -7,6 +7,7 @@ export interface ICompany extends Document {
     address?: string;
     email: string;
     website?: string;
+    valueCardBalance: number;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -29,6 +30,11 @@ const companySchema = new Schema<ICompany>({
       },
       website: {
         type: String,
+      },
+      valueCardBalance: {
+        type: Number,
+        default: 0,
+        min: 0,
       },
     }, { timestamps: true });
 

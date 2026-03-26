@@ -1,5 +1,6 @@
 import { useState } from "react";
 import InputField from "../../../../components/InputField/InputField";
+import { createValueCardCheckout } from "../../../../api/payments";
 
 interface ValueCard {
   id: string;
@@ -21,12 +22,36 @@ function formatCurrency(n: number) {
 
 export function BuyValueCardModal({ card, onClose }: BuyValueCardModalProps) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [cardForm, setCardForm] = useState({
     cardNumber: "",
     expireDate: "",
     cvc: "",
     cardholderName: "",
   });
+
+  const handleCheckout = async () => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const checkout = await createValueCardCheckout({
+        cardId: card.id,
+        paymentMethod: paymentMethod === "card" ? "card-payment" : "invoice",
+        successUrl: `${window.location.origin}/settings?payment=success`,
+        cancelUrl: `${window.location.origin}/settings?payment=cancelled`,
+      });
+      if (checkout.url) {
+        window.location.href = checkout.url;
+        return;
+      }
+      setError("Could not start checkout. Please try again.");
+    } catch {
+      setError("Could not start checkout. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -122,8 +147,10 @@ export function BuyValueCardModal({ card, onClose }: BuyValueCardModalProps) {
           </div>
         )}
 
-        {/* TODO: wire to payment API */}
-        <button className="btn-midnight">Complete purchase</button>
+        {error && <p className="body-3 text-muted">{error}</p>}
+        <button className="btn-midnight" onClick={handleCheckout} disabled={submitting}>
+          {submitting ? "Starting checkout..." : "Complete purchase"}
+        </button>
       </div>
     </div>
   );

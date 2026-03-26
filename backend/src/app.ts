@@ -17,6 +17,7 @@ import productRoutes from "./routes/product.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
 import folderRoutes from "./routes/folder.routes.js";
+import paymentRoutes from "./routes/payment.routes.js";
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   }),
 );
+app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -69,6 +71,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/folders", folderRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {
