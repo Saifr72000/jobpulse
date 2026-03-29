@@ -7,6 +7,8 @@ import type {
   LinkedinScreening,
 } from "../types";
 import { RadioOption } from "../components/RadioOption";
+import { UploadZone } from "../components/UploadZone";
+import { MediaPicker } from "../components/MediaPicker";
 import "./Step3CampaignDetails.scss";
 
 interface Step3CampaignDetailsProps {
@@ -66,6 +68,27 @@ export function Step3CampaignDetails({
           ))}
         </div>
 
+        {form.imageOption === "upload" && (
+          <UploadZone
+            files={form.imageUploadFiles}
+            onChange={(files) => onFormChange({ imageUploadFiles: files })}
+            accept="image/*"
+            multiple={false}
+          />
+        )}
+
+        {form.imageOption === "media-library" && (
+          <MediaPicker
+            selectedIds={
+              form.selectedImageMediaId ? [form.selectedImageMediaId] : []
+            }
+            onSelect={(ids) =>
+              onFormChange({ selectedImageMediaId: ids[0] ?? "" })
+            }
+            multiple={false}
+          />
+        )}
+
         {hasLeadAds && (
           <>
             <p className="body-2">
@@ -89,6 +112,17 @@ export function Step3CampaignDetails({
                 />
               ))}
             </div>
+            {form.leadAdDesc === "own" && (
+              <textarea
+                className="form-input"
+                rows={5}
+                placeholder="Paste or type your job description here..."
+                value={form.leadAdDescText}
+                onChange={(e) =>
+                  onFormChange({ leadAdDescText: e.target.value })
+                }
+              />
+            )}
           </>
         )}
 
@@ -118,6 +152,25 @@ export function Step3CampaignDetails({
                 />
               ))}
             </div>
+            {(form.videoMaterials === "upload" ||
+              form.videoMaterials === "combine") && (
+              <UploadZone
+                files={form.videoUploadFiles}
+                onChange={(files) => onFormChange({ videoUploadFiles: files })}
+                accept="video/*,image/*"
+                multiple
+              />
+            )}
+            {(form.videoMaterials === "media-library" ||
+              form.videoMaterials === "combine") && (
+              <MediaPicker
+                selectedIds={form.selectedVideoMediaIds}
+                onSelect={(ids) =>
+                  onFormChange({ selectedVideoMediaIds: ids })
+                }
+                multiple
+              />
+            )}
           </>
         )}
 
@@ -146,6 +199,17 @@ export function Step3CampaignDetails({
                 />
               ))}
             </div>
+            {form.linkedinJobDesc === "own" && (
+              <textarea
+                className="form-input"
+                rows={5}
+                placeholder="Paste or type your LinkedIn job description here..."
+                value={form.linkedinJobDescText}
+                onChange={(e) =>
+                  onFormChange({ linkedinJobDescText: e.target.value })
+                }
+              />
+            )}
 
             <p className="body-2">
               Do you have any screening questions for the LinkedIn job posting?
@@ -173,6 +237,17 @@ export function Step3CampaignDetails({
                 />
               ))}
             </div>
+            {form.linkedinScreening === "own" && (
+              <textarea
+                className="form-input"
+                rows={5}
+                placeholder="Enter your screening questions, one per line..."
+                value={form.linkedinScreeningText}
+                onChange={(e) =>
+                  onFormChange({ linkedinScreeningText: e.target.value })
+                }
+              />
+            )}
           </>
         )}
       </div>

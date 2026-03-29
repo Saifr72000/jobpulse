@@ -16,10 +16,17 @@ export interface FormState {
   selectedAddons: string[];
   campaignName: string;
   imageOption: ImageOption;
+  imageUploadFiles: File[];
+  selectedImageMediaId: string;
   leadAdDesc: LeadAdDesc;
+  leadAdDescText: string;
   videoMaterials: VideoMaterials;
+  videoUploadFiles: File[];
+  selectedVideoMediaIds: string[];
   linkedinJobDesc: LinkedinJobDesc;
+  linkedinJobDescText: string;
   linkedinScreening: LinkedinScreening;
+  linkedinScreeningText: string;
   targetAudience: string;
   additionalNotes: string;
   paymentMethod: PaymentMethod;

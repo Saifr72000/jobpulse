@@ -1,0 +1,75 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.upload-zone {
+  margin-top: $spacing-sm;
+
+  &__drop {
+    border: 2px dashed rgba($ash, 0.35);
+    border-radius: $radius-input;
+    padding: $spacing-xl $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-sm;
+    cursor: pointer;
+    background: $frost;
+    text-align: center;
+    transition: border-color 0.15s, background 0.15s;
+
+    p {
+      color: $ash;
+      margin: 0;
+    }
+
+    &:hover {
+      border-color: rgba($ash, 0.6);
+    }
+
+    &--dragging {
+      border-color: $violet;
+      background: $mist;
+    }
+  }
+
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: $spacing-sm 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: $frost;
+    border-radius: $radius-input;
+    padding: $spacing-sm $spacing-md;
+  }
+
+  &__item-name {
+    font-size: $text-sm;
+    color: $coal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__item-remove {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $ash;
+    font-size: $text-sm;
+    padding: 0 $spacing-xs;
+    flex-shrink: 0;
+    font-family: $font-primary;
+
+    &:hover {
+      color: $red;
+    }
+  }
+}
