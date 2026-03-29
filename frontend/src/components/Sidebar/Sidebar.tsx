@@ -80,7 +80,7 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
         {bottomItems.map((item) => (
           <li
             key={item.label}
-            className="sidebar-nav-item"
+            className={`sidebar-nav-item${activePage === item.page ? " active" : ""}`}
             onClick={() => onNavigate(item.page)}
             title={isCollapsed ? item.label : undefined}
           >

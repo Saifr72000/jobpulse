@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../api/axios";
 import Icon from "../../../components/Icon/Icon";
 import { Loader } from "../../../components/Loader/Loader";
 import type { Step, FormState, Product } from "./types";
-import { STEP_META, STEP_PROGRESS } from "./constants";
+import { STEP_META } from "./constants";
 import { calculateSubtotal, calculateVat, canContinueStep2 } from "./utils";
 import { Step1SelectPlan } from "./steps/Step1SelectPlan";
 import { Step2CustomizePackage } from "./steps/Step2CustomizePackage";
@@ -167,7 +167,6 @@ export default function NewCampaign() {
   ];
 
   const { title, subtitle } = loading ? { title: "New Campaign", subtitle: "" } : STEP_META[step];
-  const progress = loading ? 0 : STEP_PROGRESS[step];
 
   return (
     <div className="new-order">
@@ -176,21 +175,17 @@ export default function NewCampaign() {
         {subtitle && <p className="subheading">{subtitle}</p>}
       </div>
 
-      <div className="progress-bar">
-        <span
-          className="progress-bar__label"
-          style={{
-            left: `clamp(40px, ${progress}%, calc(100% - 40px))`,
-          }}
-        >
-          Step {step}
-        </span>
-        <div className="progress-bar__track">
-          <div
-            className="progress-bar__fill"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+      <div className="step-indicator">
+        {([1, 2, 3, 4] as Step[]).map((stepNum, index) => (
+          <Fragment key={stepNum}>
+            <div className={`step-indicator__dot${stepNum <= step ? " step-indicator__dot--active" : ""}`}>
+              <span>{stepNum}</span>
+            </div>
+            {index < 3 && (
+              <div className={`step-indicator__line${step > stepNum ? " step-indicator__line--active" : ""}`} />
+            )}
+          </Fragment>
+        ))}
       </div>
 
       {loading && <Loader />}

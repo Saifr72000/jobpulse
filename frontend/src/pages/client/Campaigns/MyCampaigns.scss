@@ -10,7 +10,7 @@
   // ─── Header ────────────────────────────────────────────
   &__header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: $spacing-md;
   }
@@ -20,9 +20,9 @@
     color: $white;
     border: none;
     border-radius: $radius-pill;
-    padding: 12px 24px;
-    font-size: 18px;
-    font-weight: $font-bold;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $text-sm;
+    font-weight: $font-semibold;
     font-family: $font-primary;
     cursor: pointer;
     white-space: nowrap;

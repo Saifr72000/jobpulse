@@ -16,7 +16,7 @@ The platform does NOT handle media buying or campaign publishing.
 - **Backend:** Node.js, Express.js 5, TypeScript
 - **Database:** MongoDB with Mongoose
 - **Auth:** JWT (access + refresh tokens), bcrypt, OTP email verification
-- **File Storage:** Multer (local dev) — S3 not yet implemented
+- **File Storage:** Multer (memory storage) + AWS S3 (`@aws-sdk/client-s3`, presigned URLs for upload/download)
 - **Email:** Not yet implemented (no Nodemailer installed)
 - **Validation:** express-validator
 - **Testing:** Jest + Supertest + mongodb-memory-server (backend integration tests)

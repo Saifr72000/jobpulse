@@ -15,7 +15,7 @@ export function MainLayout() {
     if (path.startsWith("/campaigns")) return "campaigns";
     if (path.startsWith("/orders")) return "campaigns";
     if (path.startsWith("/media-library")) return "media-library";
-    if (path === "/settings") return "settings";
+    if (path.startsWith("/settings")) return "settings";
     return path.slice(1);
   };
 

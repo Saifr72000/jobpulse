@@ -21,8 +21,6 @@ export const STEP_META: Record<Step, { title: string; subtitle: string }> = {
   4: { title: "Payment", subtitle: "Select your preferred payment method" },
 };
 
-export const STEP_PROGRESS: Record<Step, number> = { 1: 25, 2: 50, 3: 75, 4: 100 };
-
 export const LOGO_MAP: Record<string, string> = {
   "LinkedIn": linkedinLogo,
   "Facebook": facebookLogo,
