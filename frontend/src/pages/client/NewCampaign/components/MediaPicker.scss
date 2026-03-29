@@ -1,0 +1,128 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.media-picker {
+  margin-top: $spacing-sm;
+  border: 1px solid rgba($ash, 0.2);
+  border-radius: $radius-input;
+  padding: $spacing-md;
+  background: $frost;
+
+  &__folders {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $spacing-sm;
+    margin-top: $spacing-xs;
+  }
+
+  &__folder {
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+    background: $white;
+    border: 1px solid rgba($ash, 0.2);
+    border-radius: $radius-pill;
+    padding: $spacing-sm $spacing-md;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    color: $coal;
+    font-family: $font-primary;
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s;
+
+    &:hover {
+      border-color: $violet;
+      color: $violet;
+    }
+  }
+
+  &__browser {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+
+  &__back {
+    background: none;
+    border: none;
+    font-size: $text-sm;
+    color: $ash;
+    cursor: pointer;
+    font-family: $font-primary;
+    padding: 0;
+    align-self: flex-start;
+
+    &:hover {
+      color: $coal;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: $spacing-sm;
+  }
+
+  &__tile {
+    position: relative;
+    border-radius: $radius-card;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    background: $white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $spacing-xs;
+    padding-bottom: $spacing-xs;
+    transition: border-color 0.15s;
+
+    &--selected {
+      border-color: $violet;
+    }
+
+    &:hover {
+      border-color: rgba($violet, 0.5);
+    }
+  }
+
+  &__thumb {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    display: block;
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: $mist;
+    }
+  }
+
+  &__check {
+    position: absolute;
+    top: $spacing-xs;
+    right: $spacing-xs;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: $violet;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  &__tile-name {
+    font-size: $text-xs;
+    color: $ash;
+    padding: 0 $spacing-xs;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

@@ -8,6 +8,8 @@ export interface IProduct extends Document {
   description?: string;
   price: number;
   type: ProductType;
+  channelLimit?: number;
+  features?: string[];
   logo?: string;
   isActive: boolean;
   createdAt: Date;
@@ -35,6 +37,14 @@ const productSchema = new Schema<IProduct>(
       required: true,
       enum: ["package", "service", "addon"],
     },
+    channelLimit: {
+      type: Number,
+      min: 1,
+    },
+    features: {
+      type: [String],
+      default: [],
+    },
     logo: {
       type: String,
       trim: true,
@@ -44,7 +54,7 @@ const productSchema = new Schema<IProduct>(
       default: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Index for filtering by type

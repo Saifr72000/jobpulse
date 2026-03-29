@@ -16,10 +16,17 @@ export interface FormState {
   selectedAddons: string[];
   campaignName: string;
   imageOption: ImageOption;
+  imageUploadFiles: File[];
+  selectedImageMediaId: string;
   leadAdDesc: LeadAdDesc;
+  leadAdDescText: string;
   videoMaterials: VideoMaterials;
+  videoUploadFiles: File[];
+  selectedVideoMediaIds: string[];
   linkedinJobDesc: LinkedinJobDesc;
+  linkedinJobDescText: string;
   linkedinScreening: LinkedinScreening;
+  linkedinScreeningText: string;
   targetAudience: string;
   additionalNotes: string;
   paymentMethod: PaymentMethod;
@@ -29,34 +36,10 @@ export interface Product {
   _id: string;
   title: string;
   description?: string;
+  features?: string[];
   price: number;
   type: "package" | "service" | "addon";
   logo?: string;
-  isActive: boolean;
-}
-
-export interface Channel {
-  _id: string;
-  title: string;
-  description?: string;
-  price: number;
-  logo?: string;
-}
-
-export interface Package {
-  _id: string;
-  title: string;
-  description?: string;
-  price: number;
-  logo?: string;
   channelLimit?: number;
-  features?: string[];
-}
-
-export interface Addon {
-  _id: string;
-  title: string;
-  description?: string;
-  price: number;
-  logo?: string;
+  isActive: boolean;
 }

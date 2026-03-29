@@ -1,5 +1,5 @@
 import type { FormState, Product } from "../types";
-import { PACKAGE_METADATA, LOGO_MAP } from "../constants";
+import { LOGO_MAP } from "../constants";
 import { ChannelRow } from "../../../../components/Channel/ChannelRow";
 import { AddonCard } from "../components/AddonCard";
 import { OrderSummary } from "../components/OrderSummary";
@@ -25,7 +25,6 @@ export function Step2CustomizePackage({
   const pkg = packages.find((p) =>
     p.title.toLowerCase().includes(form.selectedPackage || ""),
   );
-  const pkgMetadata = pkg ? PACKAGE_METADATA[pkg.title] : null;
 
   const toggleChannel = (channelTitle: string) => {
     const channelTitleLower = channelTitle.toLowerCase();
@@ -73,8 +72,8 @@ export function Step2CustomizePackage({
               );
               const atLimit =
                 form.planType === "package" &&
-                !!pkgMetadata &&
-                form.selectedChannels.length >= pkgMetadata.channelLimit &&
+                !!pkg?.channelLimit &&
+                form.selectedChannels.length >= pkg.channelLimit &&
                 !checked;
               return (
                 <ChannelRow
@@ -89,11 +88,10 @@ export function Step2CustomizePackage({
               );
             })}
           </div>
-          {pkgMetadata && (
-            <p style={{ fontSize: "13px", color: "#636363", marginTop: "8px" }}>
-              Select up to {pkgMetadata.channelLimit} channels (
-              {form.selectedChannels.length}/{pkgMetadata.channelLimit}{" "}
-              selected)
+          {pkg?.channelLimit && (
+            <p className="subheading" style={{ marginTop: "8px" }}>
+              Select up to {pkg.channelLimit} channels (
+              {form.selectedChannels.length}/{pkg.channelLimit} selected)
             </p>
           )}
         </div>

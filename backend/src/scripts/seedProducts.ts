@@ -8,6 +8,7 @@ const CHANNELS = [
   {
     title: "LinkedIn",
     description: "Professional network targeting",
+    features: ["Reach professionals by job title, industry & seniority", "Ideal for white-collar and senior roles"],
     price: 12600,
     type: "service" as const,
     logo: "/logos/linkedin.png",
@@ -15,6 +16,7 @@ const CHANNELS = [
   {
     title: "Facebook",
     description: "Broad audience reach",
+    features: ["Largest social network audience", "Advanced interest & behaviour targeting"],
     price: 8900,
     type: "service" as const,
     logo: "/logos/facebook.png",
@@ -22,6 +24,7 @@ const CHANNELS = [
   {
     title: "Google",
     description: "Broad audience reach",
+    features: ["Reach candidates actively searching", "Display & search network coverage"],
     price: 8900,
     type: "service" as const,
     logo: "/logos/google.png",
@@ -29,6 +32,7 @@ const CHANNELS = [
   {
     title: "Snapchat",
     description: "Reaching gen Z and young adults",
+    features: ["Engage younger demographics", "High-impact vertical video formats"],
     price: 8900,
     type: "service" as const,
     logo: "/logos/snapchat.png",
@@ -36,6 +40,7 @@ const CHANNELS = [
   {
     title: "Instagram",
     description: "Visual storytelling",
+    features: ["Strong brand awareness through visuals", "Reels and Stories placement"],
     price: 8900,
     type: "service" as const,
     logo: "/logos/instagram.png",
@@ -43,6 +48,7 @@ const CHANNELS = [
   {
     title: "X",
     description: "Real time engagement",
+    features: ["Reach trend-conscious professionals", "Promoted posts and follower campaigns"],
     price: 8900,
     type: "service" as const,
     logo: "/logos/x.png",
@@ -50,6 +56,7 @@ const CHANNELS = [
   {
     title: "YouTube",
     description: "Video reach and brand awareness",
+    features: ["Pre-roll and in-stream video ads", "Large reach across all demographics"],
     price: 8900,
     type: "service" as const,
     logo: "/logos/youtube.png",
@@ -59,24 +66,45 @@ const CHANNELS = [
 const PACKAGES = [
   {
     title: "Basic Package",
-    description:
-      "Choose up to 3 channels, 14 day campaign period, 50% ad spend included, full performance analytics, ongoing optimization",
+    description: "A focused campaign across up to 3 channels",
+    channelLimit: 3,
+    features: [
+      "Choose up to 3 channels",
+      "14 day campaign period",
+      "50% ad spend included",
+      "Full performance analytics",
+      "Ongoing optimization",
+    ],
     price: 8000,
     type: "package" as const,
     logo: "/logos/package-basic.png",
   },
   {
     title: "Medium Package",
-    description:
-      "Choose up to 5 channels, 14 day campaign period, 50% ad spend included, full performance analytics, ongoing optimization",
+    description: "Wider reach across up to 5 channels",
+    channelLimit: 5,
+    features: [
+      "Choose up to 5 channels",
+      "14 day campaign period",
+      "50% ad spend included",
+      "Full performance analytics",
+      "Ongoing optimization",
+    ],
     price: 15000,
     type: "package" as const,
     logo: "/logos/package-medium.png",
   },
   {
     title: "Deluxe Package",
-    description:
-      "Choose up to 7 channels, 14 day campaign period, 50% ad spend included, full performance analytics, ongoing optimization",
+    description: "Maximum exposure across up to 7 channels",
+    channelLimit: 7,
+    features: [
+      "Choose up to 7 channels",
+      "14 day campaign period",
+      "50% ad spend included",
+      "Full performance analytics",
+      "Ongoing optimization",
+    ],
     price: 25000,
     type: "package" as const,
     logo: "/logos/package-deluxe.png",
@@ -86,24 +114,24 @@ const PACKAGES = [
 const ADDONS = [
   {
     title: "Lead Ads",
-    description:
-      "Collect applications directly in the ad. No landing page needed",
+    description: "Collect applications directly in the ad. No landing page needed",
+    features: ["In-platform application form", "Instant candidate data capture", "Works on Facebook & Instagram"],
     price: 2500,
     type: "addon" as const,
     logo: "/logos/addon-lead-ads.png",
   },
   {
     title: "Video Campaign",
-    description:
-      "Engage candidates with dynamic video content across platforms",
+    description: "Engage candidates with dynamic video content across platforms",
+    features: ["Professional video ad production", "Multi-platform distribution", "Higher engagement than static ads"],
     price: 3800,
     type: "addon" as const,
     logo: "/logos/addon-video.png",
   },
   {
     title: "LinkedIn Job Posting",
-    description:
-      "Official job listing on LinkedIn's job board with applicant tracking",
+    description: "Official job listing on LinkedIn's job board with applicant tracking",
+    features: ["Listed on LinkedIn Jobs", "Applicant tracking included", "Screening questions support"],
     price: 4200,
     type: "addon" as const,
     logo: "/logos/addon-linkedin-job.png",

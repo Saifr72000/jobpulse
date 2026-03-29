@@ -1,8 +1,8 @@
-import type { Package } from "../types";
+import type { Product } from "../types";
 import "./PackageOption.scss";
 
 interface PackageOptionProps {
-  package: Package;
+  package: Product;
   selected: boolean;
   popular?: boolean;
   icon: React.ReactNode;
