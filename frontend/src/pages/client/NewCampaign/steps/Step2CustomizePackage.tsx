@@ -1,34 +1,32 @@
-import type { FormState, Product } from "../types";
+import Icon from "../../../../components/Icon/Icon";
 import { LOGO_MAP } from "../constants";
+import { useNewCampaign } from "../../../../context/NewCampaignContext";
 import { ChannelRow } from "../../../../components/Channel/ChannelRow";
 import { AddonCard } from "../components/AddonCard";
 import { OrderSummary } from "../components/OrderSummary";
+import FileIcon from "../../../../assets/icons/file.svg?react";
+import VideoIcon from "../../../../assets/icons/video.svg?react";
+import BriefcaseIcon from "../../../../assets/icons/briefcase.svg?react";
 import "./Step2CustomizePackage.scss";
 
-interface Step2CustomizePackageProps {
-  form: FormState;
-  channels: Product[];
-  packages: Product[];
-  addons: Product[];
-  addonIcons: Record<string, React.ReactNode>;
-  onFormChange: (updates: Partial<FormState>) => void;
-}
+export function Step2CustomizePackage() {
+  const { form, updateForm, channels, packages, addons } = useNewCampaign();
 
-export function Step2CustomizePackage({
-  form,
-  channels,
-  packages,
-  addons,
-  addonIcons,
-  onFormChange,
-}: Step2CustomizePackageProps) {
+  const ADDON_ICONS: Record<string, React.ReactNode> = {
+    "lead-ads": <Icon svg={FileIcon} size={15} color="white" />,
+    "video-campaign": <Icon svg={VideoIcon} size={15} color="white" />,
+    "linkedin-job-posting": (
+      <Icon svg={BriefcaseIcon} size={15} color="white" />
+    ),
+  };
+
   const pkg = packages.find((p) =>
     p.title.toLowerCase().includes(form.selectedPackage || ""),
   );
 
   const toggleChannel = (channelTitle: string) => {
     const channelTitleLower = channelTitle.toLowerCase();
-    onFormChange({
+    updateForm({
       selectedChannels: form.selectedChannels.includes(channelTitleLower)
         ? form.selectedChannels.filter((c) => c !== channelTitleLower)
         : [...form.selectedChannels, channelTitleLower],
@@ -37,7 +35,7 @@ export function Step2CustomizePackage({
 
   const toggleAddon = (addonTitle: string) => {
     const addonTitleLower = addonTitle.toLowerCase();
-    onFormChange({
+    updateForm({
       selectedAddons: form.selectedAddons.some((a) =>
         a.toLowerCase().includes(addonTitleLower),
       )
@@ -54,7 +52,7 @@ export function Step2CustomizePackage({
       : addonTitle.toLowerCase().includes("video")
         ? "video-campaign"
         : "linkedin-job-posting";
-    return addonIcons[addonId] || null;
+    return ADDON_ICONS[addonId] || null;
   };
 
   return (

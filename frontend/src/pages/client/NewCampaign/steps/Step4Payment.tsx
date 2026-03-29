@@ -1,6 +1,12 @@
-import type { FormState, Product, PaymentMethod } from "../types";
+import Icon from "../../../../components/Icon/Icon";
+import { useNewCampaign } from "../../../../context/NewCampaignContext";
 import { PaymentMethodCard } from "../components/PaymentMethodCard";
 import { OrderSummary } from "../components/OrderSummary";
+import GiftIcon from "../../../../assets/icons/gift.svg?react";
+import CardIcon from "../../../../assets/icons/card.svg?react";
+import InvoiceIcon from "../../../../assets/icons/invoice.svg?react";
+import { ash } from "../../../../styles/colors.ts";
+import type { PaymentMethod } from "../types";
 import "./Step4Payment.scss";
 
 interface PaymentMethodOption {
@@ -11,23 +17,35 @@ interface PaymentMethodOption {
   extra?: React.ReactNode;
 }
 
-interface Step4PaymentProps {
-  form: FormState;
-  channels: Product[];
-  packages: Product[];
-  addons: Product[];
-  paymentMethodsConfig: PaymentMethodOption[];
-  onFormChange: (updates: Partial<FormState>) => void;
-}
+export function Step4Payment() {
+  const { form, updateForm, channels, packages, addons } = useNewCampaign();
 
-export function Step4Payment({
-  form,
-  channels,
-  packages,
-  addons,
-  paymentMethodsConfig,
-  onFormChange,
-}: Step4PaymentProps) {
+  const paymentMethodsConfig: PaymentMethodOption[] = [
+    {
+      id: "value-card",
+      label: "Value card",
+      description: "Pay by using your prepaid value card balance",
+      icon: <Icon svg={GiftIcon} size={20} color={ash} />,
+      extra: (
+        <span className="payment-card__balance-pill">
+          Current balance on value card: <strong>42 500 kr</strong>
+        </span>
+      ),
+    },
+    {
+      id: "card-payment",
+      label: "Card payment",
+      description: "Pay securely with your debit or credit card",
+      icon: <Icon svg={CardIcon} size={20} color={ash} />,
+    },
+    {
+      id: "invoice",
+      label: "Invoice",
+      description: "Receive an invoice with 30 days due date",
+      icon: <Icon svg={InvoiceIcon} size={20} color={ash} />,
+    },
+  ];
+
   return (
     <div className="step4">
       <div className="order-card">
@@ -42,7 +60,7 @@ export function Step4Payment({
               label={pm.label}
               description={pm.description}
               extra={pm.extra}
-              onClick={() => onFormChange({ paymentMethod: pm.id })}
+              onClick={() => updateForm({ paymentMethod: pm.id })}
             />
           ))}
         </div>

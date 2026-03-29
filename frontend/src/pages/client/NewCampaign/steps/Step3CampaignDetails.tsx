@@ -1,25 +1,18 @@
 import type {
-  FormState,
   ImageOption,
   LeadAdDesc,
   VideoMaterials,
   LinkedinJobDesc,
   LinkedinScreening,
 } from "../types";
+import { useNewCampaign } from "../../../../context/NewCampaignContext";
 import { RadioOption } from "../components/RadioOption";
 import { UploadZone } from "../components/UploadZone";
 import { MediaPicker } from "../components/MediaPicker";
 import "./Step3CampaignDetails.scss";
 
-interface Step3CampaignDetailsProps {
-  form: FormState;
-  onFormChange: (updates: Partial<FormState>) => void;
-}
-
-export function Step3CampaignDetails({
-  form,
-  onFormChange,
-}: Step3CampaignDetailsProps) {
+export function Step3CampaignDetails() {
+  const { form, updateForm: onFormChange } = useNewCampaign();
   const hasLeadAds = form.selectedAddons.some((a) =>
     a.toLowerCase().includes("lead"),
   );
