@@ -1,30 +1,27 @@
-import type { FormState, Product } from "../types";
+import Icon from "../../../../components/Icon/Icon";
 import { LOGO_MAP } from "../constants";
 import { canContinueStep1 } from "../utils";
+import { useNewCampaign } from "../../../../context/NewCampaignContext";
 import { ChannelRow } from "../../../../components/Channel/ChannelRow";
 import { PackageOption } from "../components/PackageOption";
+import BoxIcon from "../../../../assets/icons/box.svg?react";
+import StarIcon from "../../../../assets/icons/star.svg?react";
+import DiamondIcon from "../../../../assets/icons/diamond.svg?react";
+import { colorPrimary } from "../../../../styles/colors.ts";
 import "./Step1SelectPlan.scss";
 
-interface Step1SelectPlanProps {
-  form: FormState;
-  channels: Product[];
-  packages: Product[];
-  packageIcons: Record<string, React.ReactNode>;
-  onFormChange: (updates: Partial<FormState>) => void;
-  onNext: () => void;
-}
+export function Step1SelectPlan() {
+  const { form, updateForm, channels, packages, next } = useNewCampaign();
 
-export function Step1SelectPlan({
-  form,
-  channels,
-  packages,
-  packageIcons,
-  onFormChange,
-  onNext,
-}: Step1SelectPlanProps) {
+  const PACKAGE_ICONS: Record<string, React.ReactNode> = {
+    basic: <Icon svg={BoxIcon} size={15} color={colorPrimary} />,
+    medium: <Icon svg={StarIcon} size={15} color={colorPrimary} />,
+    deluxe: <Icon svg={DiamondIcon} size={15} color={colorPrimary} />,
+  };
+
   const handleChannelToggle = (channelTitle: string) => {
     const channelTitleLower = channelTitle.toLowerCase();
-    onFormChange({
+    updateForm({
       planType: "custom",
       selectedPackage: null,
       selectedChannels: form.selectedChannels.includes(channelTitleLower)
@@ -39,7 +36,7 @@ export function Step1SelectPlan({
       : pkgTitle.toLowerCase().includes("medium")
         ? "medium"
         : "deluxe";
-    onFormChange({
+    updateForm({
       planType: "package",
       selectedPackage: pkgId,
       selectedChannels: [],
@@ -52,12 +49,11 @@ export function Step1SelectPlan({
       : pkgTitle.toLowerCase().includes("medium")
         ? "medium"
         : "deluxe";
-    return packageIcons[pkgId] || null;
+    return PACKAGE_ICONS[pkgId] || null;
   };
 
-  const isPackagePopular = (pkgTitle: string) => {
-    return pkgTitle.toLowerCase().includes("medium");
-  };
+  const isPackagePopular = (pkgTitle: string) =>
+    pkgTitle.toLowerCase().includes("medium");
 
   return (
     <>
@@ -114,7 +110,7 @@ export function Step1SelectPlan({
 
       {canContinueStep1(form) && (
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <button className="step-nav__continue" onClick={onNext}>
+          <button className="step-nav__continue" onClick={next}>
             Continue
           </button>
         </div>
