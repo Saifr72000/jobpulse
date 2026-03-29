@@ -1,4 +1,4 @@
-import express, {
+﻿import express, {
   type Request,
   type Response,
   type NextFunction,
@@ -17,6 +17,7 @@ import productRoutes from "./routes/product.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
 import folderRoutes from "./routes/folder.routes.js";
+import valueCardRoutes from "./routes/valueCard.routes.js";
 
 const app = express();
 
@@ -43,7 +44,7 @@ app.use(
   }),
 );
 
-// Global rate limiter — applied to all API routes
+// Global rate limiter - applied to all API routes
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 200,
@@ -52,7 +53,7 @@ const globalLimiter = rateLimit({
   message: { status: 429, error: "Too many requests." },
 });
 
-// Strict limiter for auth endpoints — brute-force protection
+// Strict limiter for auth endpoints - brute-force protection
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -69,6 +70,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/folders", folderRoutes);
+app.use("/api/value-cards", valueCardRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {
