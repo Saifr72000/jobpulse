@@ -27,7 +27,7 @@ export function UsersTab() {
       setLoading(true);
       try {
         const { data } = await api.get(`/companies/${user.company.id}/users`);
-        setUsers(data);
+        setUsers(data.map((u: any) => ({ ...u, id: u._id ?? u.id })));
       } catch (error) {
         console.error("Failed to fetch users:", error);
         // TODO: show error toast
