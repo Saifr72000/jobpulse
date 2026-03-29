@@ -1,39 +1,43 @@
-import { useState } from "react";
+﻿import { useState, useEffect, useCallback } from "react";
 import { BuyValueCardModal } from "../modals/BuyValueCardModal";
-
-interface ValueCard {
-  id: string;
-  name: string;
-  price: number;
-  balance: number;
-}
-
-const VALUE_CARDS: ValueCard[] = [
-  { id: "vc-100", name: "Value 100 000", price: 90000, balance: 100000 },
-  { id: "vc-250", name: "Value 250 000", price: 222500, balance: 250000 },
-  { id: "vc-400", name: "Value 400 000", price: 352000, balance: 400000 },
-  { id: "vc-650", name: "Value 650 000", price: 565500, balance: 650000 },
-];
-
-const MOCK_ACTIVE_CARD = {
-  name: "Value 250 000",
-  purchaseDate: "15.01.26",
-  remaining: 187400,
-};
+import { VALUE_CARDS, type ValueCardTier } from "../../../../data/valueCards";
+import { getValueCardAccount, type ValueCardAccountResponse } from "../../../../api/valueCards";
 
 const MOCK_FRAMEWORK = {
   status: "Active",
   discount: "20% on all services",
   commitPeriod: "2 years",
-  period: "01.02.25 – 01.02.26",
+  period: "01.02.25 - 01.02.26",
 };
 
 function formatCurrency(n: number) {
   return n.toLocaleString("nb-NO") + " kr";
 }
 
+function formatPurchaseDate(iso: string) {
+  return new Date(iso).toLocaleDateString("nb-NO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
+}
+
 export function PaymentTab() {
-  const [modalCard, setModalCard] = useState<ValueCard | null>(null);
+  const [modalCard, setModalCard] = useState<ValueCardTier | null>(null);
+  const [account, setAccount] = useState<ValueCardAccountResponse | null>(null);
+
+  const loadAccount = useCallback(async () => {
+    try {
+      const data = await getValueCardAccount();
+      setAccount(data);
+    } catch {
+      setAccount({ active: false });
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadAccount();
+  }, [loadAccount]);
 
   return (
     <>
@@ -69,19 +73,22 @@ export function PaymentTab() {
           ))}
         </div>
 
-        {/* Active Card Panel */}
-        <div className="active-card">
-          <div className="active-card__info">
-            <h4>{MOCK_ACTIVE_CARD.name}</h4>
-            <p className="body-3 text-muted">Purchased on {MOCK_ACTIVE_CARD.purchaseDate}</p>
+        {account?.active && (
+          <div className="active-card">
+            <div className="active-card__info">
+              <h4>{account.cardName}</h4>
+              <p className="body-3 text-muted">
+                Purchased on {formatPurchaseDate(account.purchasedAt)}
+              </p>
+            </div>
+            <div className="active-card__balance">
+              <span className="body-3 text-muted">Remaining balance</span>
+              <span className="active-card__amount body-1">
+                {formatCurrency(account.remainingBalance)}
+              </span>
+            </div>
           </div>
-          <div className="active-card__balance">
-            <span className="body-3 text-muted">Remaining balance</span>
-            <span className="active-card__amount body-1">
-              {formatCurrency(MOCK_ACTIVE_CARD.remaining)}
-            </span>
-          </div>
-        </div>
+        )}
       </div>
 
       {/* Framework Agreement */}
@@ -120,7 +127,13 @@ export function PaymentTab() {
       </div>
 
       {modalCard && (
-        <BuyValueCardModal card={modalCard} onClose={() => setModalCard(null)} />
+        <BuyValueCardModal
+          card={modalCard}
+          onClose={() => setModalCard(null)}
+          onSuccess={() => {
+            void loadAccount();
+          }}
+        />
       )}
     </>
   );

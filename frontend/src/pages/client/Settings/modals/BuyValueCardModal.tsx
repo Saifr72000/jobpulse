@@ -1,16 +1,12 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import InputField from "../../../../components/InputField/InputField";
-
-interface ValueCard {
-  id: string;
-  name: string;
-  price: number;
-  balance: number;
-}
+import type { ValueCardTier } from "../../../../data/valueCards";
+import { purchaseValueCard } from "../../../../api/valueCards";
 
 interface BuyValueCardModalProps {
-  card: ValueCard;
+  card: ValueCardTier;
   onClose: () => void;
+  onSuccess: () => void;
 }
 
 type PaymentMethod = "card" | "invoice";
@@ -19,14 +15,30 @@ function formatCurrency(n: number) {
   return n.toLocaleString("nb-NO") + " kr";
 }
 
-export function BuyValueCardModal({ card, onClose }: BuyValueCardModalProps) {
+export function BuyValueCardModal({ card, onClose, onSuccess }: BuyValueCardModalProps) {
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("card");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [cardForm, setCardForm] = useState({
     cardNumber: "",
     expireDate: "",
     cvc: "",
     cardholderName: "",
   });
+
+  const handleComplete = async () => {
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      await purchaseValueCard(card.id);
+      onSuccess();
+      onClose();
+    } catch {
+      setSubmitError("Could not complete purchase. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -122,8 +134,20 @@ export function BuyValueCardModal({ card, onClose }: BuyValueCardModalProps) {
           </div>
         )}
 
-        {/* TODO: wire to payment API */}
-        <button className="btn-midnight">Complete purchase</button>
+        {submitError && (
+          <p className="body-3 text-muted" role="alert">
+            {submitError}
+          </p>
+        )}
+
+        <button
+          className="btn-midnight"
+          type="button"
+          disabled={submitting}
+          onClick={() => void handleComplete()}
+        >
+          {submitting ? "Processing..." : "Complete purchase"}
+        </button>
       </div>
     </div>
   );
