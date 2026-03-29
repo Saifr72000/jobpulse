@@ -17,7 +17,7 @@ export interface FormState {
   campaignName: string;
   imageOption: ImageOption;
   imageUploadFiles: File[];
-  selectedImageMediaId: string;
+  selectedImageMediaIds: string[];
   leadAdDesc: LeadAdDesc;
   leadAdDescText: string;
   videoMaterials: VideoMaterials;

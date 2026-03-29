@@ -48,8 +48,6 @@
   }
 
   &__name {
-    font-size: 20px;
-    font-weight: $font-medium;
     color: $coal;
     flex: 1;
   }
@@ -80,20 +78,21 @@
   }
 
   &__features {
-    margin-top: $spacing-sm;
+    margin-top: $spacing-md;
     display: flex;
     flex-direction: column;
     gap: 2px;
     list-style: none;
     padding: 0;
+    line-height: $leading-normal;
   }
 
   &__feature {
-    font-size: 15px;
+    font-size: $text-base;
     color: $coal;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 
     &::before {
       content: "✓";

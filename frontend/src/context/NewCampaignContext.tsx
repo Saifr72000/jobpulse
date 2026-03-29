@@ -6,8 +6,15 @@ import {
   type ReactNode,
 } from "react";
 import api from "../api/axios";
-import { calculateSubtotal, canContinueStep2 } from "../pages/client/NewCampaign/utils";
-import type { Step, FormState, Product } from "../pages/client/NewCampaign/types";
+import {
+  calculateSubtotal,
+  canContinueStep2,
+} from "../pages/client/NewCampaign/utils";
+import type {
+  Step,
+  FormState,
+  Product,
+} from "../pages/client/NewCampaign/types";
 
 const INITIAL_FORM: FormState = {
   planType: null,
@@ -17,7 +24,7 @@ const INITIAL_FORM: FormState = {
   campaignName: "",
   imageOption: "",
   imageUploadFiles: [],
-  selectedImageMediaId: "",
+  selectedImageMediaIds: [],
   leadAdDesc: "",
   leadAdDescText: "",
   videoMaterials: "",
@@ -127,8 +134,7 @@ export function NewCampaignProvider({ children }: { children: ReactNode }) {
             a.toLowerCase().includes("linkedin"),
           ) && {
             linkedinJobDescription: form.linkedinJobDesc || "team-create",
-            linkedinScreeningQuestions:
-              form.linkedinScreening || "team-create",
+            linkedinScreeningQuestions: form.linkedinScreening || "team-create",
           }),
         },
         targetAudience: form.targetAudience,

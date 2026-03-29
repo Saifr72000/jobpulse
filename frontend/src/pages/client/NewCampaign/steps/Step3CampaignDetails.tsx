@@ -72,13 +72,9 @@ export function Step3CampaignDetails() {
 
         {form.imageOption === "media-library" && (
           <MediaPicker
-            selectedIds={
-              form.selectedImageMediaId ? [form.selectedImageMediaId] : []
-            }
-            onSelect={(ids) =>
-              onFormChange({ selectedImageMediaId: ids[0] ?? "" })
-            }
-            multiple={false}
+            selectedIds={form.selectedImageMediaIds}
+            onSelect={(ids) => onFormChange({ selectedImageMediaIds: ids })}
+            multiple
           />
         )}
 

@@ -27,7 +27,7 @@ export function ChannelRow({
       </span>
       <span className="channel-row__text">
         <span className="body-2">{name}</span>
-        <span className="body-3">{description}</span>
+        {/* <span className="body-2">{description}</span> */}
       </span>
       <span
         className={`channel-row__check${checked ? " channel-row__check--checked" : ""}`}
