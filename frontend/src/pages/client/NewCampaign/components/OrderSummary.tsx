@@ -1,4 +1,4 @@
-import type { FormState, Product, Channel, Package, Addon } from "../types";
+import type { FormState, Product } from "../types";
 import { LOGO_MAP } from "../constants";
 import {
   calculatePackagePrice,

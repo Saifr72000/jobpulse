@@ -36,34 +36,10 @@ export interface Product {
   _id: string;
   title: string;
   description?: string;
+  features?: string[];
   price: number;
   type: "package" | "service" | "addon";
   logo?: string;
-  isActive: boolean;
-}
-
-export interface Channel {
-  _id: string;
-  title: string;
-  description?: string;
-  price: number;
-  logo?: string;
-}
-
-export interface Package {
-  _id: string;
-  title: string;
-  description?: string;
-  price: number;
-  logo?: string;
   channelLimit?: number;
-  features?: string[];
-}
-
-export interface Addon {
-  _id: string;
-  title: string;
-  description?: string;
-  price: number;
-  logo?: string;
+  isActive: boolean;
 }

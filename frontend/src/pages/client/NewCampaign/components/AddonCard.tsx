@@ -1,8 +1,8 @@
-import type { Addon } from "../types";
+import type { Product } from "../types";
 import "./AddonCard.scss";
 
 interface AddonCardProps {
-  addon: Addon;
+  addon: Product;
   checked: boolean;
   icon: React.ReactNode;
   onClick: () => void;

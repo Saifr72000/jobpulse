@@ -1,5 +1,5 @@
-import type { FormState, Product, Package } from "../types";
-import { PACKAGE_METADATA, LOGO_MAP } from "../constants";
+import type { FormState, Product } from "../types";
+import { LOGO_MAP } from "../constants";
 import { canContinueStep1 } from "../utils";
 import { ChannelRow } from "../../../../components/Channel/ChannelRow";
 import { PackageOption } from "../components/PackageOption";
@@ -59,15 +59,6 @@ export function Step1SelectPlan({
     return pkgTitle.toLowerCase().includes("medium");
   };
 
-  const enrichPackageWithMetadata = (pkg: Product): Package => {
-    const metadata = PACKAGE_METADATA[pkg.title] || {};
-    return {
-      ...pkg,
-      channelLimit: metadata.channelLimit,
-      features: metadata.features,
-    };
-  };
-
   return (
     <>
       <div className="step1">
@@ -100,7 +91,6 @@ export function Step1SelectPlan({
           </p>
           <div className="step1__package-list">
             {packages.map((pkg) => {
-              const enrichedPkg = enrichPackageWithMetadata(pkg);
               const pkgId = pkg.title.toLowerCase().includes("basic")
                 ? "basic"
                 : pkg.title.toLowerCase().includes("medium")
@@ -110,7 +100,7 @@ export function Step1SelectPlan({
               return (
                 <PackageOption
                   key={pkg._id}
-                  package={enrichedPkg}
+                  package={pkg}
                   selected={selected}
                   popular={isPackagePopular(pkg.title)}
                   icon={getPackageIcon(pkg.title)}

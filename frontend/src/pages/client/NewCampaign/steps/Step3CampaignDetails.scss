@@ -52,6 +52,14 @@
   box-shadow: $shadow-card;
   padding: $spacing-lg;
 
+  // Breathing room between sub-section labels and the elements that precede them
+  .radio-group ~ p.body-2,
+  .upload-zone ~ p.body-2,
+  .media-picker ~ p.body-2,
+  .form-input ~ p.body-2 {
+    margin-top: $spacing-lg;
+  }
+
   &__title {
     font-size: 32px;
     font-weight: $font-bold;

@@ -165,9 +165,7 @@ export function Step3CampaignDetails({
               form.videoMaterials === "combine") && (
               <MediaPicker
                 selectedIds={form.selectedVideoMediaIds}
-                onSelect={(ids) =>
-                  onFormChange({ selectedVideoMediaIds: ids })
-                }
+                onSelect={(ids) => onFormChange({ selectedVideoMediaIds: ids })}
                 multiple
               />
             )}

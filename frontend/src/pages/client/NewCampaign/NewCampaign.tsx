@@ -4,7 +4,22 @@ import api from "../../../api/axios";
 import Icon from "../../../components/Icon/Icon";
 import { Loader } from "../../../components/Loader/Loader";
 import type { Step, FormState, Product } from "./types";
-import { STEP_META, STEP_PROGRESS } from "./constants";
+
+const STEP_META: Record<Step, { title: string; subtitle: string }> = {
+  1: { title: "New campaign", subtitle: "Choose your campaign setup" },
+  2: {
+    title: "Customize your package plan",
+    subtitle: "Choose your desired channels and add ons",
+  },
+  3: {
+    title: "Campaign details",
+    subtitle:
+      "Help us understand your campaign goals and audience so we can deliver the best possible results",
+  },
+  4: { title: "Payment", subtitle: "Select your preferred payment method" },
+};
+
+const STEP_PROGRESS: Record<Step, number> = { 1: 25, 2: 50, 3: 75, 4: 100 };
 import { calculateSubtotal, calculateVat, canContinueStep2 } from "./utils";
 import { Step1SelectPlan } from "./steps/Step1SelectPlan";
 import { Step2CustomizePackage } from "./steps/Step2CustomizePackage";
@@ -173,7 +188,9 @@ export default function NewCampaign() {
     },
   ];
 
-  const { title, subtitle } = loading ? { title: "New Campaign", subtitle: "" } : STEP_META[step];
+  const { title, subtitle } = loading
+    ? { title: "New Campaign", subtitle: "" }
+    : STEP_META[step];
   const progress = loading ? 0 : STEP_PROGRESS[step];
 
   return (
