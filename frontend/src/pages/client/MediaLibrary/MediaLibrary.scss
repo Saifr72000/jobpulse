@@ -71,7 +71,7 @@
 .media-category-page {
   &__header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: $spacing-md;
   }
@@ -85,6 +85,9 @@
     border: none;
     border-radius: $radius-pill;
     padding: $spacing-sm $spacing-lg;
+    font-size: $text-sm;
+    font-weight: $font-semibold;
+    font-family: $font-primary;
     cursor: pointer;
     transition: opacity 0.15s;
     white-space: nowrap;

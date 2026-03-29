@@ -13,38 +13,41 @@
   overflow-x: hidden;
 }
 
-.progress-bar {
-  position: relative;
-  max-width: 100%;
-  overflow: visible;
+.step-indicator {
+  display: flex;
+  align-items: center;
+  width: 100%;
 
-  &__track {
-    height: 11px;
-    border-radius: $radius-pill;
-    overflow: hidden;
-    width: 100%;
-    background: $frost;
-  }
-
-  &__fill {
-    height: 100%;
-    background: $violet;
-    border-radius: $radius-pill;
-    transition: width 0.3s ease;
-  }
-
-  &__label {
-    position: absolute;
-    top: 0;
-    transform: translateX(-50%);
-    background: $ash;
-    color: $white;
-    font-size: 12px;
+  &__dot {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba($ash, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $coal;
+    font-size: $text-base;
     font-weight: $font-medium;
-    padding: 3px 10px;
-    border-radius: $radius-pill;
-    white-space: nowrap;
-    transition: left 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+    &--active {
+      background: $plum;
+      border-color: $plum;
+      color: $white;
+    }
+  }
+
+  &__line {
+    flex: 1;
+    height: 1px;
+    background: rgba($ash, 0.25);
+    transition: background 0.3s ease;
+
+    &--active {
+      background: $plum;
+    }
   }
 }
 
