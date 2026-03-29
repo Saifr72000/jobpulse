@@ -1,66 +1,180 @@
 @use "../../../../styles/variables" as *;
 @use "../../../../styles/typography" as *;
 
-.media-picker {
+// ─── Trigger button ───────────────────────────────────────────
+.media-picker__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-sm;
   margin-top: $spacing-sm;
-  border: 1px solid rgba($ash, 0.2);
-  border-radius: $radius-input;
-  padding: $spacing-md;
-  background: $frost;
+  padding: $spacing-sm $spacing-md;
+  background: $white;
+  border: 1px solid rgba($ash, 0.25);
+  border-radius: $radius-pill;
+  font-family: $font-primary;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  color: $coal;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
 
-  &__folders {
+  &:hover {
+    border-color: $violet;
+    color: $violet;
+  }
+}
+
+// ─── Modal overlay ────────────────────────────────────────────
+.media-picker-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba($coal, 0.45);
+    backdrop-filter: blur(3px);
+  }
+
+  &__dialog {
+    position: relative;
+    z-index: 1;
+    background: $white;
+    border-radius: $radius-card;
+    width: min(920px, 92vw);
+    height: min(660px, 88vh);
     display: flex;
-    flex-wrap: wrap;
-    gap: $spacing-sm;
-    margin-top: $spacing-xs;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba($coal, 0.2);
+  }
+
+  // ─── Header ───────────────────────────────────────────────
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-lg;
+    border-bottom: 1px solid rgba($ash, 0.12);
+    flex-shrink: 0;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: $frost;
+    font-size: $text-base;
+    color: $ash;
+    cursor: pointer;
+    transition:
+      background 0.15s,
+      color 0.15s;
+
+    &:hover {
+      background: rgba($ash, 0.12);
+      color: $coal;
+    }
+  }
+
+  // ─── Body (sidebar + content) ─────────────────────────────
+  &__body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid rgba($ash, 0.12);
+    padding: $spacing-md;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+    background: $frost;
+  }
+
+  &__sidebar-label {
+    font-size: $text-xs;
+    font-weight: $font-semibold;
+    color: $ash;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: $spacing-xs $spacing-sm;
+    margin-bottom: $spacing-xs;
   }
 
   &__folder {
     display: flex;
     align-items: center;
-    gap: $spacing-xs;
-    background: $white;
-    border: 1px solid rgba($ash, 0.2);
-    border-radius: $radius-pill;
-    padding: $spacing-sm $spacing-md;
-    font-size: $text-sm;
+    gap: $spacing-sm;
+    padding: $spacing-md;
+    border-radius: $radius-input;
+    border: none;
+    background: none;
+    font-family: $font-primary;
+    font-size: $text-base;
     font-weight: $font-medium;
     color: $coal;
-    font-family: $font-primary;
     cursor: pointer;
-    transition: border-color 0.15s, color 0.15s;
+    text-align: left;
+    width: 100%;
+    transition:
+      background 0.15s,
+      color 0.15s;
+
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     &:hover {
-      border-color: $violet;
+      background: rgba($violet, 0.08);
       color: $violet;
     }
+
+    &--active {
+      background: rgba($violet, 0.12);
+      color: $violet;
+      font-weight: $font-semibold;
+    }
   }
 
-  &__browser {
+  // ─── File content area ────────────────────────────────────
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: $spacing-lg;
+  }
+
+  &__empty {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    gap: $spacing-sm;
-  }
-
-  &__back {
-    background: none;
-    border: none;
-    font-size: $text-sm;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
     color: $ash;
-    cursor: pointer;
-    font-family: $font-primary;
-    padding: 0;
-    align-self: flex-start;
-
-    &:hover {
-      color: $coal;
-    }
+    opacity: 0.5;
   }
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-    gap: $spacing-sm;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $spacing-md;
   }
 
   &__tile {
@@ -69,26 +183,27 @@
     overflow: hidden;
     cursor: pointer;
     border: 2px solid transparent;
-    background: $white;
+    background: $frost;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: $spacing-xs;
-    padding-bottom: $spacing-xs;
-    transition: border-color 0.15s;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
 
     &--selected {
       border-color: $violet;
+      box-shadow: 0 0 0 3px rgba($violet, 0.15);
     }
 
     &:hover {
-      border-color: rgba($violet, 0.5);
+      border-color: rgba($violet, 0.45);
+      box-shadow: $shadow-card;
     }
   }
 
   &__thumb {
     width: 100%;
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
     object-fit: cover;
     display: block;
 
@@ -97,15 +212,16 @@
       align-items: center;
       justify-content: center;
       background: $mist;
+      color: $ash;
     }
   }
 
   &__check {
     position: absolute;
-    top: $spacing-xs;
-    right: $spacing-xs;
-    width: 20px;
-    height: 20px;
+    top: $spacing-sm;
+    right: $spacing-sm;
+    width: 24px;
+    height: 24px;
     border-radius: 50%;
     background: $violet;
     display: flex;
@@ -114,15 +230,90 @@
     flex-shrink: 0;
   }
 
+  &__preview-btn {
+    position: absolute;
+    top: $spacing-sm;
+    left: $spacing-sm;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba($coal, 0.55);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: $white;
+    transition: background 0.15s;
+
+    &:hover {
+      background: rgba($coal, 0.8);
+    }
+  }
+
   &__tile-name {
-    font-size: $text-xs;
+    font-size: $text-sm;
     color: $ash;
-    padding: 0 $spacing-xs;
-    text-align: center;
+    padding: $spacing-sm $spacing-sm $spacing-md;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 100%;
     box-sizing: border-box;
+  }
+
+  // ─── Footer ───────────────────────────────────────────────
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacing-md $spacing-lg;
+    border-top: 1px solid rgba($ash, 0.12);
+    flex-shrink: 0;
+    background: $white;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $spacing-sm;
+  }
+
+  &__btn-cancel {
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-pill;
+    border: 1px solid rgba($ash, 0.25);
+    background: $white;
+    font-family: $font-primary;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    color: $coal;
+    cursor: pointer;
+    transition: border-color 0.15s;
+
+    &:hover {
+      border-color: $ash;
+    }
+  }
+
+  &__btn-confirm {
+    padding: $spacing-sm $spacing-lg;
+    border-radius: $radius-pill;
+    border: none;
+    background: $violet;
+    font-family: $font-primary;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    color: $white;
+    cursor: pointer;
+    transition: opacity 0.15s;
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    &:not(:disabled):hover {
+      opacity: 0.88;
+    }
   }
 }
