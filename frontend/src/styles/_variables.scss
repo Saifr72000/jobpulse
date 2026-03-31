@@ -47,6 +47,9 @@ $spacing-md: 16px; // input padding, medium gaps
 $spacing-lg: 24px; // card padding (p-6), section gaps — most used
 $spacing-xl: 32px; // chart card padding (p-8)
 
+// ─── Icon sizes ───────────────────────────────────────────
+$icon-box-lg: 75px; // large empty-state icon box
+
 // ─── Layout ───────────────────────────────────────────────
 $sidebar-width: 260px;
 $content-max-width: 1728px; // app stops growing beyond this

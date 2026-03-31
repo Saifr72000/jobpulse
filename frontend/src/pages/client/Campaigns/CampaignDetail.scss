@@ -1,0 +1,97 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+.campaign-detail {
+  // .page from _layouts.scss handles flex-col, gap, overflow-y
+}
+
+.campaign-detail-loading,
+.campaign-detail-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: $color-text-muted;
+  font-size: $text-base;
+}
+
+// ─── Back link ────────────────────────────────────────────
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: $text-sm;
+  color: $color-text-muted;
+  font-weight: $font-normal;
+  width: fit-content;
+
+  &:hover {
+    color: $color-text;
+  }
+}
+
+// ─── Campaign header ──────────────────────────────────────
+.campaign-date {
+  font-size: $text-sm;
+  color: $color-text-muted;
+  margin: 0;
+}
+
+.campaign-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+
+// ─── Tab bar ──────────────────────────────────────────────
+.tab-bar {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  background: $white;
+  border-radius: $radius-pill;
+  padding: $spacing-xs;
+  gap: $spacing-xs;
+  width: fit-content;
+  align-self: flex-start;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-pill;
+  border: 1px solid transparent;
+  background: transparent;
+  color: $coal;
+  font-size: $text-sm;
+  font-weight: $font-normal;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s;
+
+  &.active {
+    border-color: $coal;
+  }
+
+  &:not(.active):hover {
+    background: $frost;
+  }
+}
+
+// ─── Tab content ──────────────────────────────────────────
+.campaign-detail__tab-content {
+  // Natural flow; tab components handle their own layout
+}

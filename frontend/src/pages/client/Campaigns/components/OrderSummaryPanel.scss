@@ -1,0 +1,71 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.summary-panel {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+
+  h4 {
+    margin-bottom: 0;
+  }
+}
+
+.summary-section-title {
+  font-size: $text-sm;
+  font-weight: $font-semibold;
+  color: $color-text-muted;
+  margin: 0;
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  font-size: $text-sm;
+  color: $color-text-muted;
+}
+
+.summary-vat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  font-size: $text-sm;
+  color: $color-text-muted;
+}
+
+.summary-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-sm;
+  font-size: $text-base;
+  font-weight: $font-bold;
+  color: $color-text;
+}
+
+.btn-invoice {
+  display: block;
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  background: transparent;
+  border: 1px solid $color-text;
+  border-radius: $radius-pill;
+  color: $color-text;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+  text-align: center;
+  margin-top: $spacing-xs;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    background: $frost;
+  }
+}

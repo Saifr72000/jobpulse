@@ -11,7 +11,8 @@ import SetPasswordPage from "./pages/auth/SetPassword/SetPassword";
 import Dashboard from "./pages/client/Dashboard";
 import MyOrders from "./pages/client/Campaigns/MyCampaigns";
 import NewCampaign from "./pages/client/NewCampaign/NewCampaign";
-import OrderDetail from "./pages/client/Orders/OrderDetail";
+/* import OrderDetail from "./pages/client/Orders/OrderDetail"; */
+import CampaignDetail from "./pages/client/Campaigns/CampaignDetail";
 import SettingsPage from "./pages/client/Settings/Settings";
 import MediaLibrary from "./pages/client/MediaLibrary/MediaLibrary";
 import MediaCategoryPage from "./pages/client/MediaLibrary/MediaCategoryPage";
@@ -33,8 +34,8 @@ export default function App() {
               <Route path="/campaigns" element={<MyOrders />} />
               {/* <Route path="/orders" element={<MyOrders />} /> */}
               <Route path="/orders/new" element={<NewCampaign />} />
-              <Route path="/orders/:orderId" element={<OrderDetail />} />
-              <Route path="/campaigns/:orderId" element={<OrderDetail />} />
+              {/* <Route path="/orders/:orderId" element={<OrderDetail />} /> */}
+              <Route path="/campaigns/:orderId" element={<CampaignDetail />} />
               <Route path="/media-library" element={<MediaLibrary />} />
               <Route
                 path="/media-library/:folderId"

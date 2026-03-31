@@ -1,0 +1,36 @@
+@use "../../styles/variables" as *;
+@use "../../styles/typography" as *;
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-pill;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  border: 1px solid transparent;
+
+  &--pending {
+    background: $pending;
+    color: darken($pending, 55%);
+    border-color: darken($pending, 20%);
+  }
+
+  &--active {
+    background: rgba($active, 0.15);
+    color: $active;
+    border-color: rgba($active, 0.4);
+  }
+
+  &--ended {
+    background: $white;
+    color: $ash;
+    border-color: $ash;
+  }
+
+  &--awaiting-payment {
+    background: $pending;
+    color: darken($pending, 55%);
+    border-color: darken($pending, 20%);
+  }
+}
