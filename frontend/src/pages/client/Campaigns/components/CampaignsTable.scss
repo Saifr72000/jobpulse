@@ -1,0 +1,66 @@
+@use "sass:color";
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+$row-bg: #f5f9ff;
+
+.campaigns-table {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+
+  &__head {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.2fr 1.2fr 1fr;
+    gap: $spacing-md;
+    padding: 0 $spacing-md $spacing-md;
+
+    span {
+      font-size: $text-base;
+      font-weight: $font-medium;
+      color: $coal;
+    }
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.2fr 1.2fr 1fr;
+    gap: $spacing-md;
+    margin-bottom: $spacing-sm;
+    align-items: center;
+    padding: $spacing-lg;
+    background: $row-bg;
+    border-radius: $radius-input;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: color.adjust($row-bg, $lightness: -3%);
+    }
+  }
+
+  &__name {
+    font-size: $text-base;
+    font-weight: $font-semibold;
+    color: $coal;
+  }
+
+  &__status {
+    font-size: $text-base;
+    font-weight: $font-normal;
+    color: $ash;
+  }
+
+  &__cell {
+    font-size: $text-base;
+    font-weight: $font-normal;
+    color: $ash;
+  }
+
+  &__empty {
+    padding: $spacing-xl;
+    text-align: center;
+    color: $ash;
+    font-size: $text-base;
+  }
+}

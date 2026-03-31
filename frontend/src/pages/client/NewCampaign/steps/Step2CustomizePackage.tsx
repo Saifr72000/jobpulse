@@ -1,24 +1,13 @@
-import Icon from "../../../../components/Icon/Icon";
 import { LOGO_MAP } from "../constants";
 import { useNewCampaign } from "../../../../context/NewCampaignContext";
 import { ChannelRow } from "../../../../components/Channel/ChannelRow";
 import { AddonCard } from "../components/AddonCard";
 import { OrderSummary } from "../components/OrderSummary";
-import FileIcon from "../../../../assets/icons/file.svg?react";
-import VideoIcon from "../../../../assets/icons/video.svg?react";
-import BriefcaseIcon from "../../../../assets/icons/briefcase.svg?react";
+import { getAddonIcon } from "../addonIcons";
 import "./Step2CustomizePackage.scss";
 
 export function Step2CustomizePackage() {
   const { form, updateForm, channels, packages, addons } = useNewCampaign();
-
-  const ADDON_ICONS: Record<string, React.ReactNode> = {
-    "lead-ads": <Icon svg={FileIcon} size={15} color="white" />,
-    "video-campaign": <Icon svg={VideoIcon} size={15} color="white" />,
-    "linkedin-job-posting": (
-      <Icon svg={BriefcaseIcon} size={15} color="white" />
-    ),
-  };
 
   const pkg = packages.find((p) =>
     p.title.toLowerCase().includes(form.selectedPackage || ""),
@@ -44,15 +33,6 @@ export function Step2CustomizePackage() {
           )
         : [...form.selectedAddons, addonTitle],
     });
-  };
-
-  const getAddonIcon = (addonTitle: string) => {
-    const addonId = addonTitle.toLowerCase().includes("lead")
-      ? "lead-ads"
-      : addonTitle.toLowerCase().includes("video")
-        ? "video-campaign"
-        : "linkedin-job-posting";
-    return ADDON_ICONS[addonId] || null;
   };
 
   return (

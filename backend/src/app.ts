@@ -17,12 +17,16 @@ import productRoutes from "./routes/product.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
 import folderRoutes from "./routes/folder.routes.js";
+import webhookRoutes from "./routes/webhook.routes.js";
 
 const app = express();
 
 // Swagger docs
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Stripe webhook — must be mounted BEFORE express.json() so Stripe receives the raw body
+app.use("/api/webhooks", webhookRoutes);
 
 // Middleware
 app.use(

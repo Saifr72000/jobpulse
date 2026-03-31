@@ -1,10 +1,10 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export type OrderStatus = "pending" | "in-progress" | "completed";
+export type OrderStatus = "awaiting-payment" | "pending" | "in-progress" | "completed";
 export type OrderType = "custom" | "package";
 export type PackagePlan = "basic" | "medium" | "deluxe";
-export type Channel = "linkedin" | "facebook" | "google" | "snapchat" | "instagram" | "x";
-export type Addon = "lead-ads" | "video-campaign" | "linkedin-job-posting";
+export type Channel = string;
+export type Addon = string;
 export type ImageOption = "upload" | "media-library" | "team-suggest";
 export type LeadAdDescription = "team-create" | "own";
 export type VideoMaterials = "upload" | "media-library" | "combine";
@@ -40,6 +40,7 @@ export interface IOrder extends Document {
   paymentMethod: PaymentMethod;
   totalAmount: number;
   status: OrderStatus;
+  stripeSessionId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -105,7 +106,6 @@ const orderSchema = new Schema<IOrder>(
     },
     channels: {
       type: [String],
-      enum: ["linkedin", "facebook", "google", "snapchat", "instagram", "x"],
       required: true,
       validate: {
         validator: (channels: string[]) => channels.length > 0,
@@ -114,7 +114,6 @@ const orderSchema = new Schema<IOrder>(
     },
     addons: {
       type: [String],
-      enum: ["lead-ads", "video-campaign", "linkedin-job-posting"],
       default: [],
     },
     campaignName: {
@@ -127,7 +126,7 @@ const orderSchema = new Schema<IOrder>(
     },
     targetAudience: {
       type: String,
-      required: true,
+      default: "",
     },
     additionalNotes: {
       type: String,
@@ -144,8 +143,11 @@ const orderSchema = new Schema<IOrder>(
     },
     status: {
       type: String,
-      enum: ["pending", "in-progress", "completed"],
+      enum: ["awaiting-payment", "pending", "in-progress", "completed"],
       default: "pending",
+    },
+    stripeSessionId: {
+      type: String,
     },
   },
   { timestamps: true }

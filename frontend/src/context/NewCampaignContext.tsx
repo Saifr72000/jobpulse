@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import api from "../api/axios";
+import { createCheckoutSession } from "../api/checkout";
 import {
   calculateSubtotal,
   canContinueStep2,
@@ -142,8 +143,13 @@ export function NewCampaignProvider({ children }: { children: ReactNode }) {
         paymentMethod: form.paymentMethod,
         totalAmount: subtotal,
       };
-      await api.post("/orders", body);
-      setShowSuccess(true);
+      if (form.paymentMethod === "card-payment") {
+        const { url } = await createCheckoutSession(body);
+        window.location.href = url;
+      } else {
+        await api.post("/orders", body);
+        setShowSuccess(true);
+      }
     } catch {
       setSubmitError("Failed to place order. Please try again.");
     } finally {

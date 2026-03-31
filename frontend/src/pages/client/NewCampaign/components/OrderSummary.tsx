@@ -1,5 +1,6 @@
 import type { FormState, Product } from "../types";
 import { LOGO_MAP } from "../constants";
+import { getAddonIcon } from "../addonIcons";
 import {
   calculatePackagePrice,
   calculateChannelCost,
@@ -88,7 +89,9 @@ export function OrderSummary({
         selAddons.map((a) => (
           <div key={a._id} className="order-summary__row">
             <span className="order-summary__addon-name">
-              <span className="addon-dot" />
+              <span className="order-summary__addon-icon">
+                {getAddonIcon(a.title)}
+              </span>
               {a.title}
             </span>
             <span>{a.price.toLocaleString("nb-NO")} kr</span>
@@ -99,10 +102,16 @@ export function OrderSummary({
       <hr className="order-summary__divider" />
 
       {showVat && (
-        <div className="order-summary__row">
-          <span>VAT (25%)</span>
-          <span>{vat.toLocaleString("nb-NO")} kr</span>
-        </div>
+        <>
+          <div className="order-summary__row">
+            <span>Subtotal</span>
+            <span>{subtotal.toLocaleString("nb-NO")} kr</span>
+          </div>
+          <div className="order-summary__row">
+            <span>VAT (25%)</span>
+            <span>{vat.toLocaleString("nb-NO")} kr</span>
+          </div>
+        </>
       )}
 
       <div className="order-summary__row order-summary__row--total">

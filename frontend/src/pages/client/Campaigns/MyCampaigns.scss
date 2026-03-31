@@ -43,89 +43,28 @@
     overflow: hidden;
   }
 
-  // ─── Table head ────────────────────────────────────────
-  &__table-head {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.2fr 1.2fr 1fr;
-    gap: $spacing-md;
-    padding: 0 $spacing-md $spacing-md;
-    border-bottom: 1px solid rgba($ash, 0.15);
-  }
-
-  // ─── Table row ─────────────────────────────────────────
-  &__table-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.2fr 1.2fr 1fr;
-    gap: $spacing-md;
-    align-items: center;
-    padding: $spacing-md;
-    background: #f5f9ff;
-    border-radius: 14px;
-    margin-bottom: $spacing-sm;
-    cursor: pointer;
-    transition: background 0.15s;
-
-    &:hover {
-      background: color.adjust(#f5f9ff, $lightness: -3%);
-    }
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-  }
-
-  &__status {
-    display: inline-block;
-    font-size: 15px;
-    font-weight: $font-normal;
-    color: $ash;
-    // Status is plain text per Figma (not a pill badge in the listing)
-  }
-
-  &__date {
-    font-size: 20px;
-    font-weight: $font-normal;
-    color: $ash;
-  }
-
-  &__channels {
-    font-size: 20px;
-    font-weight: $font-normal;
-    color: $ash;
-  }
-
-  &__total {
-    font-size: 20px;
-    font-weight: $font-normal;
-    color: $ash;
-  }
-
-  // ─── States ────────────────────────────────────────────
-  &__loading,
-  &__empty {
-    padding: $spacing-xl;
-    text-align: center;
-    color: $ash;
-  }
-
   // ─── Pagination ────────────────────────────────────────
   &__pagination {
     display: flex;
     justify-content: flex-end;
-    margin-top: $spacing-md;
+    gap: $spacing-sm;
+  }
+
+  &__next-btn,
+  &__prev-btn {
+    border-radius: $radius-pill;
+    padding: $spacing-sm $spacing-lg;
+    font-size: $text-lg;
+    font-weight: $font-bold;
+    font-family: $font-primary;
+    cursor: pointer;
+    transition: background 0.15s;
   }
 
   &__next-btn {
     background: $midnight;
     color: $white;
     border: none;
-    border-radius: $radius-pill;
-    padding: 12px 24px;
-    font-size: 18px;
-    font-weight: $font-bold;
-    font-family: $font-primary;
-    cursor: pointer;
-    transition: background 0.15s;
 
     &:hover {
       background: color.adjust($midnight, $lightness: 8%);
@@ -134,6 +73,16 @@
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
+    }
+  }
+
+  &__prev-btn {
+    background: $white;
+    color: $ash;
+    border: 1px solid rgba($ash, 0.3);
+
+    &:hover {
+      background: $frost;
     }
   }
 }
