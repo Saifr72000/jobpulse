@@ -27,6 +27,7 @@ interface CreateOrderInput {
   additionalNotes?: string;
   paymentMethod: string;
   totalAmount: number;
+  status?: OrderStatus;
 }
 
 export const createOrder = async (
@@ -70,7 +71,7 @@ export const createOrder = async (
     additionalNotes: input.additionalNotes,
     paymentMethod: input.paymentMethod,
     totalAmount: input.totalAmount,
-    status: "pending",
+    status: input.status ?? "pending",
   });
 
   await newOrder.save();

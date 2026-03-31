@@ -8,6 +8,7 @@ import {
   deleteOrder,
   getAllOrders,
 } from "../controllers/order.controller.js";
+import { createCheckoutSessionHandler } from "../controllers/checkout.controller.js";
 import {
   createOrderValidator,
   updateOrderStatusValidator,
@@ -20,6 +21,9 @@ const router = Router();
 
 // Create campaign order (requires auth)
 router.post("/", authenticateUser, createOrderValidator, requestValidator, createOrder);
+
+// Create Stripe Checkout Session for card payment (requires auth)
+router.post("/checkout-session", authenticateUser, createCheckoutSessionHandler);
 
 // Get my orders — company-scoped, paginated (requires auth)
 router.get("/my-orders", authenticateUser, getMyOrders);

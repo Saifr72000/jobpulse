@@ -44,7 +44,7 @@
     font-size: 15px;
     color: $ash;
     gap: $spacing-sm;
-    margin-bottom: 2px;
+    margin-bottom: $spacing-xs;
 
     &--total {
       font-size: 15px;
@@ -81,13 +81,17 @@
     gap: 6px;
     font-size: 15px;
     color: $ash;
+  }
 
-    .addon-dot {
-      width: 13px;
-      height: 13px;
-      border-radius: 3px;
-      background: $violet;
-      flex-shrink: 0;
-    }
+  &__addon-icon {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid $violet;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $violet;
   }
 }

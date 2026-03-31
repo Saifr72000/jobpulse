@@ -134,6 +134,74 @@ export const sendOrderConfirmationEmail = async (
   }
 };
 
+export interface InvoiceEmailParams {
+  email: string;
+  customerName: string;
+  companyName: string;
+  orderId: string;
+  orderDate: Date;
+  campaignName: string;
+  orderLines: { name: string; price: number }[];
+  subtotal: number;
+  vat: number;
+  total: number;
+}
+
+/**
+ * Send branded invoice email after a card payment is confirmed by Stripe.
+ * Uses the "invoice-template" template published in the Resend dashboard.
+ */
+export const sendInvoiceEmail = async (
+  params: InvoiceEmailParams,
+): Promise<void> => {
+  const subject = `Invoice — ${params.campaignName}`;
+
+  const variables = {
+    CUSTOMER_NAME: params.customerName,
+    COMPANY_NAME: params.companyName,
+    ORDER_NUMBER: params.orderId,
+    ORDER_DATE: params.orderDate.toLocaleDateString("nb-NO"),
+    CAMPAIGN_NAME: params.campaignName,
+    ORDER_LINES: params.orderLines,
+    SUBTOTAL: formatCurrency(params.subtotal),
+    VAT: formatCurrency(params.vat),
+    TOTAL: formatCurrency(params.total),
+    DASHBOARD_URL: `${CLIENT_URL}/campaigns`,
+  };
+
+  if (resend) {
+    try {
+      const { error } = await resend.emails.send({
+        from: `${FROM_NAME} <${FROM_EMAIL}>`,
+        to: [params.email],
+        subject,
+        template: {
+          id: "invoice-template",
+          variables,
+        },
+      } as any);
+
+      if (error) {
+        console.error("Failed to send invoice email via Resend:", error);
+        throw new Error("Failed to send invoice email");
+      }
+
+      console.log(`Invoice email sent to ${params.email} via Resend`);
+    } catch (err) {
+      console.error("Unexpected error sending invoice email:", err);
+      throw new Error("Failed to send invoice email");
+    }
+  } else {
+    console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("INVOICE EMAIL (Development Mode - Not Actually Sent)");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log(`To: ${params.email}`);
+    console.log(`Subject: ${subject}`);
+    console.log(`Campaign: ${params.campaignName} | Total: ${formatCurrency(params.total)} kr`);
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
+  }
+};
+
 /**
  * Send invitation email to new user with magic link to set password.
  * Uses the "jobpulse-invitation" template published in the Resend dashboard.
