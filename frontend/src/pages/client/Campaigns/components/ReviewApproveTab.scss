@@ -1,0 +1,176 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+// Note: #fff3cd and #b45309 are warm-amber colors not covered by existing tokens.
+// $pending (#fbf396) is a yellow tone; these orange/amber tones are used as-is
+// since no token maps to this specific "waiting for review" amber style.
+
+.review-layout {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-xl;
+  align-items: flex-start;
+}
+
+.creative-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  min-width: 0;
+
+  &__header {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.creative-placeholder {
+  background: $frost;
+  border-radius: $radius-card;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-muted;
+  font-size: $text-base;
+}
+
+.version-btns {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-xs;
+}
+
+.version-btn {
+  padding: $spacing-xs $spacing-md;
+  border-radius: $radius-pill;
+  border: 1px solid $ash;
+  background: transparent;
+  color: $color-text;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+
+  &.active {
+    background: $midnight;
+    border-color: $midnight;
+    color: $white;
+  }
+
+  &:not(.active):hover {
+    background: $frost;
+  }
+}
+
+.dots {
+  display: flex;
+  flex-direction: row;
+  gap: $spacing-xs;
+  justify-content: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $ash;
+  opacity: 0.4;
+
+  &.active {
+    background: $violet;
+    opacity: 1;
+  }
+}
+
+.feedback-panel {
+  width: 340px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: $spacing-xs $spacing-md;
+  background: #fff3cd;
+  color: #b45309;
+  border-radius: $radius-pill;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  align-self: flex-start;
+}
+
+.feedback-section {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
+.feedback-label {
+  font-size: $text-sm;
+  font-weight: $font-semibold;
+  color: $color-text;
+  margin: 0;
+}
+
+.feedback-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: $radius-input;
+  border: 1px solid $ash;
+  padding: $spacing-md;
+  resize: vertical;
+  min-height: 120px;
+  font-family: $font-primary;
+  font-size: $text-base;
+  color: $color-text;
+  background: $white;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $violet;
+  }
+}
+
+.btn-send {
+  display: block;
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  background: transparent;
+  border: 1px solid $ash;
+  border-radius: $radius-pill;
+  color: $color-text;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    background: $frost;
+  }
+}
+
+.btn-approve {
+  display: block;
+  width: 100%;
+  padding: $spacing-sm $spacing-md;
+  background: $midnight;
+  border: none;
+  border-radius: $radius-pill;
+  color: $white;
+  font-size: $text-sm;
+  font-weight: $font-semibold;
+  cursor: pointer;
+  text-align: center;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
