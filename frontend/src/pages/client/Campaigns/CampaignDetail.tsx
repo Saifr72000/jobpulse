@@ -4,6 +4,7 @@ import { getOrderById } from "../../../api/orders";
 import type { IOrder } from "../../../api/orders";
 import { Loader } from "../../../components/Loader/Loader";
 import Icon from "../../../components/Icon/Icon";
+import StatusBadge from "../../../components/StatusBadge/StatusBadge";
 import { CampaignDetailsTab } from "./components/CampaignDetailsTab";
 import { ReviewApproveTab } from "./components/ReviewApproveTab";
 import { PerformanceCandidatesTab } from "./components/PerformanceCandidatesTab";
@@ -13,36 +14,6 @@ import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import "./CampaignDetail.scss";
 
 type ActiveTab = "details" | "review" | "performance";
-
-function statusLabel(status: IOrder["status"]): string {
-  switch (status) {
-    case "awaiting-payment":
-      return "Awaiting payment";
-    case "pending":
-      return "Pending";
-    case "in-progress":
-      return "Active";
-    case "completed":
-      return "Completed";
-    default:
-      return status;
-  }
-}
-
-function statusModifier(status: IOrder["status"]): string {
-  switch (status) {
-    case "awaiting-payment":
-      return "status-badge--awaiting-payment";
-    case "pending":
-      return "status-badge--pending";
-    case "in-progress":
-      return "status-badge--in-progress";
-    case "completed":
-      return "status-badge--completed";
-    default:
-      return "";
-  }
-}
 
 export default function CampaignDetail() {
   const { orderId } = useParams<{ orderId: string }>();
@@ -91,11 +62,18 @@ export default function CampaignDetail() {
       </button>
 
       {/* Page header */}
-      <div className="campaign-header">
-        <h2>{order.campaignName}</h2>
-        <span className={`status-badge ${statusModifier(order.status)}`}>
-          {statusLabel(order.status)}
-        </span>
+      <div>
+        <div className="campaign-header">
+          <h2>{order.campaignName}</h2>
+          <StatusBadge status={order.status} />
+        </div>
+        <p className="campaign-date">
+          {new Date(order.createdAt).toLocaleDateString("nb-NO", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </p>
       </div>
 
       {/* Tab bar */}

@@ -1,6 +1,15 @@
 import type { IOrder } from "../../../../api/orders";
+import { LOGO_MAP } from "../../NewCampaign/constants";
+import { getAddonIcon } from "../../NewCampaign/addonIcons";
 import { OrderSummaryPanel } from "./OrderSummaryPanel";
 import "./CampaignDetailsTab.scss";
+
+function getChannelLogo(channel: string): string | undefined {
+  const key = Object.keys(LOGO_MAP).find(
+    (k) => k.toLowerCase() === channel.toLowerCase(),
+  );
+  return key ? LOGO_MAP[key] : undefined;
+}
 
 interface CampaignDetailsTabProps {
   order: IOrder;
@@ -47,39 +56,47 @@ export function CampaignDetailsTab({ order }: CampaignDetailsTabProps) {
   return (
     <div className="tab-layout">
       <div className="tab-main">
-
         {/* Card 1: Campaign overview */}
         <div className="card">
           <h4>Campaign overview</h4>
 
-          <div className="overview-row">
-            <span className="text-muted overview-row__label">Campaign name</span>
-            <span>{order.campaignName}</span>
+          <div className="overview-field">
+            <span className="overview-field__label">Campaign name</span>
+            <p className="body-3 text-muted">{order.campaignName}</p>
           </div>
 
-          <div className="overview-row">
-            <span className="text-muted overview-row__label">Channels</span>
+          <div className="overview-field">
+            <span className="overview-field__label">Selected channels</span>
             <div className="pills-row">
               {order.channels.length === 0 ? (
                 <span className="text-muted">—</span>
               ) : (
-                order.channels.map((ch) => (
-                  <span key={ch} className="pill">
-                    {ch}
-                  </span>
-                ))
+                order.channels.map((ch) => {
+                  const logo = getChannelLogo(ch);
+                  return (
+                    <span key={ch} className="pill">
+                      {logo && (
+                        <img src={logo} alt={ch} className="pill__logo" />
+                      )}
+                      {ch}
+                    </span>
+                  );
+                })
               )}
             </div>
           </div>
 
-          <div className="overview-row">
-            <span className="text-muted overview-row__label">Add-ons</span>
+          <div className="overview-field">
+            <span className="overview-field__label">Add-ons</span>
             <div className="pills-row">
               {order.addons.length === 0 ? (
                 <span className="text-muted">—</span>
               ) : (
                 order.addons.map((addon) => (
-                  <span key={addon} className="pill pill--addon">
+                  <span key={addon} className="pill">
+                    <span className="pill__addon-icon">
+                      {getAddonIcon(addon)}
+                    </span>
                     {ADDON_LABELS[addon] ?? addon}
                   </span>
                 ))
@@ -97,7 +114,9 @@ export function CampaignDetailsTab({ order }: CampaignDetailsTabProps) {
 
           <div className="assets-rows">
             <div className="overview-row">
-              <span className="text-muted overview-row__label">Campaign image</span>
+              <span className="text-muted overview-row__label">
+                Campaign image
+              </span>
               <span>
                 {IMAGE_OPTION_LABELS[order.assets.imageOption] ??
                   order.assets.imageOption}
@@ -146,8 +165,9 @@ export function CampaignDetailsTab({ order }: CampaignDetailsTabProps) {
                   LinkedIn screening questions
                 </span>
                 <span>
-                  {LINKEDIN_SQ_LABELS[order.assets.linkedinScreeningQuestions] ??
-                    order.assets.linkedinScreeningQuestions}
+                  {LINKEDIN_SQ_LABELS[
+                    order.assets.linkedinScreeningQuestions
+                  ] ?? order.assets.linkedinScreeningQuestions}
                 </span>
               </div>
             )}
@@ -162,9 +182,7 @@ export function CampaignDetailsTab({ order }: CampaignDetailsTabProps) {
             <p className="text-muted text-small overview-row__label">
               Target audience
             </p>
-            <div className="readonly-block">
-              {order.targetAudience || "—"}
-            </div>
+            <div className="readonly-block">{order.targetAudience || "—"}</div>
           </div>
 
           {order.additionalNotes && (

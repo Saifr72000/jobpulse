@@ -35,6 +35,12 @@
 }
 
 // ─── Campaign header ──────────────────────────────────────
+.campaign-date {
+  font-size: $text-sm;
+  color: $color-text-muted;
+  margin: 0;
+}
+
 .campaign-header {
   display: flex;
   flex-direction: row;
@@ -47,35 +53,6 @@
   }
 }
 
-// ─── Status badge ─────────────────────────────────────────
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  padding: $spacing-xs $spacing-md;
-  border-radius: $radius-pill;
-  font-size: $text-sm;
-  font-weight: $font-medium;
-
-  &--pending {
-    background: $mist;
-    color: $midnight;
-  }
-
-  &--in-progress {
-    background: #d1fae5;
-    color: #055d04;
-  }
-
-  &--completed {
-    background: $frost;
-    color: $ash;
-  }
-
-  &--awaiting-payment {
-    background: $pending;
-    color: $coal;
-  }
-}
 
 // ─── Tab bar ──────────────────────────────────────────────
 .tab-bar {

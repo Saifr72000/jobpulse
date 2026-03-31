@@ -23,20 +23,16 @@
   top: $spacing-lg;
 }
 
-.overview-row {
+.overview-field {
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: $spacing-md;
+  flex-direction: column;
+  gap: $spacing-xs;
   padding: $spacing-sm 0;
 
   &__label {
-    min-width: 160px;
-    flex-shrink: 0;
     font-size: $text-sm;
-    font-weight: $font-medium;
-    margin: 0;
-    padding-top: $spacing-xs;
+    font-weight: $font-semibold;
+    color: $color-text;
   }
 }
 
@@ -51,16 +47,40 @@
 .pill {
   display: inline-flex;
   align-items: center;
+  gap: $spacing-xs;
   padding: $spacing-xs $spacing-md;
   background: $frost;
   border-radius: $radius-pill;
   font-size: $text-sm;
-  color: $color-text;
+  color: $ash;
+  margin-top: $spacing-xs;
+
+  &__logo {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
 }
 
 .pill--addon {
-  background: $mist;
+  background: rgba($violet, 0.12);
+  border-color: rgba($violet, 0.25);
   color: $midnight;
+  padding: $spacing-xs $spacing-sm;
+
+  .pill__addon-icon {
+    width: 28px;
+    height: 28px;
+    border: 1.5px solid $violet;
+    border-radius: 4px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $violet;
+  }
 }
 
 .assets-rows {
