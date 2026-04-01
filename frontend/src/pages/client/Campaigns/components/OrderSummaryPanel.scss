@@ -4,18 +4,24 @@
 .summary-panel {
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: $spacing-xs;
 
   h4 {
-    margin-bottom: 0;
+    margin-bottom: $spacing-xs;
   }
+}
+
+.summary-divider {
+  border: none;
+  border-top: 1px solid rgba($ash, 0.15);
+  margin: $spacing-xs 0;
 }
 
 .summary-section-title {
   font-size: $text-sm;
   font-weight: $font-semibold;
-  color: $color-text-muted;
-  margin: 0;
+  color: $coal;
+  margin: $spacing-xs 0 $spacing-xs;
 }
 
 .summary-row {
@@ -24,41 +30,69 @@
   justify-content: space-between;
   gap: $spacing-sm;
   font-size: $text-sm;
-  color: $color-text-muted;
-}
+  color: $ash;
+  margin-bottom: 2px;
 
-.summary-vat {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-sm;
-  font-size: $text-sm;
-  color: $color-text-muted;
-}
+  &__name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-.summary-total {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $spacing-sm;
-  font-size: $text-base;
-  font-weight: $font-bold;
-  color: $color-text;
+  &__logo {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  &__addon-icon {
+    width: 20px;
+    height: 20px;
+    border: 1.5px solid $violet;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $violet;
+  }
+
+  &--package {
+    font-size: $text-sm;
+    color: $ash;
+    margin-bottom: $spacing-xs;
+  }
+
+  &--vat {
+    font-size: $text-sm;
+    color: $ash;
+    margin-top: $spacing-xs;
+  }
+
+  &--total {
+    font-size: $text-base;
+    font-weight: $font-bold;
+    color: $coal;
+    margin-top: 2px;
+    margin-bottom: $spacing-sm;
+  }
 }
 
 .btn-invoice {
   display: block;
   width: 100%;
   padding: $spacing-sm $spacing-md;
-  background: transparent;
-  border: 1px solid $color-text;
+  background: $coal;
+  border: none;
   border-radius: $radius-pill;
-  color: $color-text;
+  color: $white;
   font-size: $text-sm;
   font-weight: $font-medium;
   cursor: pointer;
   text-align: center;
   margin-top: $spacing-xs;
+  transition: background 0.15s;
 
   &:disabled {
     opacity: 0.5;
@@ -66,6 +100,6 @@
   }
 
   &:not(:disabled):hover {
-    background: $frost;
+    background: $midnight;
   }
 }

@@ -9,6 +9,8 @@ import api from "../api/axios";
 import { createCheckoutSession } from "../api/checkout";
 import {
   calculateSubtotal,
+  calculateVat,
+  buildLineItems,
   canContinueStep2,
 } from "../pages/client/NewCampaign/utils";
 import type {
@@ -113,11 +115,17 @@ export function NewCampaignProvider({ children }: { children: ReactNode }) {
     setSubmitError(null);
     try {
       const subtotal = calculateSubtotal(form, channels, packages, addons);
+      const vatRate = 0.25;
+      const vatAmount = calculateVat(subtotal);
+      const totalAmount = subtotal + vatAmount;
+      const lineItems = buildLineItems(form, channels, packages, addons);
+
       const body = {
         orderType: form.planType ?? "custom",
         package: form.selectedPackage ?? undefined,
         channels: form.selectedChannels,
         addons: form.selectedAddons,
+        lineItems,
         campaignName: form.campaignName,
         assets: {
           imageOption: form.imageOption || "team-suggest",
@@ -141,7 +149,10 @@ export function NewCampaignProvider({ children }: { children: ReactNode }) {
         targetAudience: form.targetAudience,
         additionalNotes: form.additionalNotes,
         paymentMethod: form.paymentMethod,
-        totalAmount: subtotal,
+        subtotal,
+        vatRate,
+        vatAmount,
+        totalAmount,
       };
       if (form.paymentMethod === "card-payment") {
         const { url } = await createCheckoutSession(body);

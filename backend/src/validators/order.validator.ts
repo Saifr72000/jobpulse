@@ -132,6 +132,36 @@ export const createOrderValidator: RequestHandler[] = [
     .isIn(["value-card", "card-payment", "invoice"])
     .withMessage("paymentMethod must be 'value-card', 'card-payment', or 'invoice'"),
 
+  body("subtotal")
+    .notEmpty()
+    .withMessage("subtotal is required")
+    .isNumeric()
+    .withMessage("subtotal must be a number")
+    .custom((value) => {
+      if (Number(value) < 0) throw new Error("subtotal must be at least 0");
+      return true;
+    }),
+
+  body("vatRate")
+    .optional()
+    .isNumeric()
+    .withMessage("vatRate must be a number")
+    .custom((value) => {
+      const n = Number(value);
+      if (n < 0 || n > 1) throw new Error("vatRate must be between 0 and 1");
+      return true;
+    }),
+
+  body("vatAmount")
+    .notEmpty()
+    .withMessage("vatAmount is required")
+    .isNumeric()
+    .withMessage("vatAmount must be a number")
+    .custom((value) => {
+      if (Number(value) < 0) throw new Error("vatAmount must be at least 0");
+      return true;
+    }),
+
   body("totalAmount")
     .notEmpty()
     .withMessage("totalAmount is required")
@@ -141,6 +171,27 @@ export const createOrderValidator: RequestHandler[] = [
       if (Number(value) < 0) {
         throw new Error("totalAmount must be at least 0");
       }
+      return true;
+    }),
+
+  body("lineItems")
+    .isArray({ min: 1 })
+    .withMessage("lineItems must be a non-empty array"),
+
+  body("lineItems.*.type")
+    .isIn(["package", "channel", "addon"])
+    .withMessage("Each lineItem type must be 'package', 'channel', or 'addon'"),
+
+  body("lineItems.*.name")
+    .notEmpty()
+    .withMessage("Each lineItem must have a name")
+    .isString(),
+
+  body("lineItems.*.price")
+    .isNumeric()
+    .withMessage("Each lineItem must have a numeric price")
+    .custom((value) => {
+      if (Number(value) < 0) throw new Error("lineItem price must be at least 0");
       return true;
     }),
 ];

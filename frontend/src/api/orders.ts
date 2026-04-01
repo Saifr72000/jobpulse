@@ -8,6 +8,12 @@ export interface IOrderAssets {
   linkedinScreeningQuestions?: string;
 }
 
+export interface ILineItem {
+  type: "package" | "channel" | "addon";
+  name: string;
+  price: number;
+}
+
 export interface IOrder {
   _id: string;
   campaignName: string;
@@ -16,10 +22,14 @@ export interface IOrder {
   package?: "basic" | "medium" | "deluxe";
   channels: string[];
   addons: string[];
+  lineItems: ILineItem[];
   assets: IOrderAssets;
   targetAudience: string;
   additionalNotes?: string;
   paymentMethod: string;
+  subtotal: number;
+  vatRate: number;
+  vatAmount: number;
   totalAmount: number;
   orderedBy: { firstName: string; lastName: string; email: string };
   createdAt: string;
