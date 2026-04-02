@@ -8,7 +8,7 @@ import StatusBadge from "../../../components/StatusBadge/StatusBadge";
 import { CampaignDetailsTab } from "./components/CampaignDetailsTab";
 import { ReviewApproveTab } from "./components/ReviewApproveTab";
 import { PerformanceCandidatesTab } from "./components/PerformanceCandidatesTab";
-import LayoutLeftIcon from "../../../assets/icons/layout-left.svg?react";
+import BoxIcon from "../../../assets/icons/box.svg?react";
 import RefreshIcon from "../../../assets/icons/refresh.svg?react";
 import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import "./CampaignDetail.scss";
@@ -85,7 +85,7 @@ export default function CampaignDetail() {
           className={`tab-btn${activeTab === "details" ? " active" : ""}`}
           onClick={() => setActiveTab("details")}
         >
-          <Icon svg={LayoutLeftIcon} size={16} />
+          <Icon svg={BoxIcon} size={16} />
           Campaign details
         </button>
         <button

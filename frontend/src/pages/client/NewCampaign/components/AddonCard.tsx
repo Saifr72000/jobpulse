@@ -1,10 +1,13 @@
 import type { Product } from "../types";
+import type { FunctionComponent, SVGProps } from "react";
 import "./AddonCard.scss";
+import Icon from "../../../../components/Icon/Icon";
 
+type SvgComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
 interface AddonCardProps {
+  icon: SvgComponent;
   addon: Product;
   checked: boolean;
-  icon: React.ReactNode;
   onClick: () => void;
 }
 
@@ -15,7 +18,7 @@ export function AddonCard({ addon, checked, icon, onClick }: AddonCardProps) {
       onClick={onClick}
     >
       <div className="addon-card__header">
-        <div className="addon-card__icon-wrap">{icon}</div>
+        <Icon svg={icon} size={20} />
         <span
           className={`addon-card__check${checked ? " addon-card__check--checked" : ""}`}
         >

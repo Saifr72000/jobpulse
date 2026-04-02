@@ -12,8 +12,6 @@
 
   &--pending {
     background: $pending;
-    color: darken($pending, 55%);
-    border-color: darken($pending, 20%);
   }
 
   &--active {
@@ -30,7 +28,5 @@
 
   &--awaiting-payment {
     background: $pending;
-    color: darken($pending, 55%);
-    border-color: darken($pending, 20%);
   }
 }

@@ -5,11 +5,6 @@ import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import UsersIcon from "../../../assets/icons/users.svg?react";
 import CardIcon from "../../../assets/icons/card.svg?react";
 
-const imgTrophy =
-  "https://www.figma.com/api/mcp/asset/8401e075-e788-4ca4-aa11-a8ec94f401c1";
-const imgForward =
-  "https://www.figma.com/api/mcp/asset/a366f735-6d89-446a-96d1-4dd85c157ab9";
-
 export default function Dashboard() {
   const navigate = useNavigate();
 
@@ -81,7 +76,6 @@ export default function Dashboard() {
         </div>
         <button className="btn" onClick={() => navigate("/orders/new")}>
           Create campaign
-          <img src={imgForward} alt="" />
         </button>
       </div>
     </div>

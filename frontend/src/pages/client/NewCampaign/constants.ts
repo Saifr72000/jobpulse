@@ -1,10 +1,10 @@
-import linkedinLogo from "../../../assets/logos/linkedin.png";
-import facebookLogo from "../../../assets/logos/facebook.png";
-import googleLogo from "../../../assets/logos/google.png";
-import snapchatLogo from "../../../assets/logos/snapchat.png";
-import instagramLogo from "../../../assets/logos/instagram.png";
-import xLogo from "../../../assets/logos/x.png";
-import youtubeLogo from "../../../assets/logos/youtube.png";
+import linkedinLogo from "../../../assets/logos/linkedin1.svg";
+import facebookLogo from "../../../assets/logos/facebook1.svg";
+import googleLogo from "../../../assets/logos/google1.svg";
+import snapchatLogo from "../../../assets/logos/snapchat1.svg";
+import instagramLogo from "../../../assets/logos/instagram1.svg";
+import xLogo from "../../../assets/logos/x1.svg";
+import youtubeLogo from "../../../assets/logos/youtube1.svg";
 import type { Step } from "./types";
 
 export const LOGO_MAP: Record<string, string> = {

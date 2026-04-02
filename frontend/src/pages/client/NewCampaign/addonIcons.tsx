@@ -1,15 +1,16 @@
-import Icon from "../../../components/Icon/Icon";
 import FileIcon from "../../../assets/icons/file.svg?react";
 import VideoIcon from "../../../assets/icons/video.svg?react";
 import BriefcaseIcon from "../../../assets/icons/briefcase.svg?react";
+import type { FunctionComponent, SVGProps } from "react";
 
-export function getAddonIcon(addonTitle: string): React.ReactNode {
+type SvgComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
+export function getAddonIcon(addonTitle: string): SvgComponent {
   const title = addonTitle.toLowerCase();
   if (title.includes("lead")) {
-    return <Icon svg={FileIcon} size={15} />;
+    return FileIcon;
   }
   if (title.includes("video")) {
-    return <Icon svg={VideoIcon} size={15} />;
+    return VideoIcon;
   }
-  return <Icon svg={BriefcaseIcon} size={15} />;
+  return BriefcaseIcon;
 }

@@ -1,14 +1,9 @@
 import type { FormState, Product } from "../types";
 import { LOGO_MAP } from "../constants";
 import { getAddonIcon } from "../addonIcons";
-import {
-  calculatePackagePrice,
-  calculateChannelCost,
-  calculateAddonsCost,
-  calculateSubtotal,
-  calculateVat,
-} from "../utils";
+import { calculateSubtotal, calculateVat } from "../utils";
 import "./OrderSummary.scss";
+import Icon from "../../../../components/Icon/Icon";
 
 interface OrderSummaryProps {
   form: FormState;
@@ -89,9 +84,7 @@ export function OrderSummary({
         selAddons.map((a) => (
           <div key={a._id} className="order-summary__row">
             <span className="order-summary__addon-name">
-              <span className="order-summary__addon-icon">
-                {getAddonIcon(a.title)}
-              </span>
+              <Icon svg={getAddonIcon(a.title)} size={20} />
               {a.title}
             </span>
             <span>{a.price.toLocaleString("nb-NO")} kr</span>

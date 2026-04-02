@@ -24,21 +24,22 @@
     justify-content: space-between;
   }
 
-  &__icon-wrap {
-    width: 28px;
-    height: 28px;
-    background: transparent;
-    border: 1.5px solid $violet;
-    border-radius: 4px;
+  /* &__icon-wrap {
+    width: 36px;
+    height: 36px;
+    background: $white;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    line-height: 0;
 
     svg {
-      color: $violet;
+      color: $ash;
+      display: block;
     }
-  }
+  } */
 
   &__check {
     width: 20px;
