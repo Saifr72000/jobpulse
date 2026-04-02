@@ -1,4 +1,48 @@
 import type { FormState, Product } from "./types";
+import type { ILineItem } from "../../../api/orders";
+
+export function buildLineItems(
+  form: FormState,
+  channels: Product[],
+  packages: Product[],
+  addons: Product[],
+): ILineItem[] {
+  const items: ILineItem[] = [];
+
+  if (form.planType === "package" && form.selectedPackage) {
+    const pkg = packages.find((p) =>
+      p.title.toLowerCase().includes(form.selectedPackage!),
+    );
+    if (pkg) {
+      items.push({ type: "package", name: pkg.title, price: pkg.price });
+    }
+    // Channels included in package — price 0
+    form.selectedChannels.forEach((chTitle) => {
+      items.push({ type: "channel", name: chTitle, price: 0 });
+    });
+  } else {
+    // Custom — each channel priced individually
+    form.selectedChannels.forEach((chTitle) => {
+      const ch = channels.find(
+        (c) => c.title.toLowerCase() === chTitle.toLowerCase(),
+      );
+      items.push({ type: "channel", name: chTitle, price: ch?.price ?? 0 });
+    });
+  }
+
+  form.selectedAddons.forEach((addonTitle) => {
+    const addon = addons.find((a) =>
+      a.title.toLowerCase().includes(addonTitle.toLowerCase()),
+    );
+    items.push({
+      type: "addon",
+      name: addon?.title ?? addonTitle,
+      price: addon?.price ?? 0,
+    });
+  });
+
+  return items;
+}
 
 export function calculatePackagePrice(
   planType: string | null,

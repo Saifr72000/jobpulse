@@ -29,10 +29,14 @@ export const createCheckoutSessionHandler = async (
       package: packagePlan,
       channels,
       addons,
+      lineItems,
       campaignName,
       assets,
       targetAudience,
       additionalNotes,
+      subtotal,
+      vatRate,
+      vatAmount,
       totalAmount,
     } = req.body;
 
@@ -54,26 +58,29 @@ export const createCheckoutSessionHandler = async (
       package: packagePlan,
       channels,
       addons: addons ?? [],
+      lineItems: lineItems ?? [],
       campaignName,
       assets,
       targetAudience,
       additionalNotes,
       paymentMethod: "card-payment",
+      subtotal,
+      vatRate,
+      vatAmount,
       totalAmount,
       status: "awaiting-payment",
     });
 
-    const vat = Math.round(totalAmount * 0.25);
-    const lineItems = [
+    const stripeLineItems = [
       { name: `JobPulse Campaign — ${campaignName}`, amount: totalAmount },
-      { name: "VAT (25%)", amount: vat },
+      { name: "VAT (25%)", amount: vatAmount },
     ];
 
     const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
 
     const session = await createCheckoutSession({
       orderId: order._id.toString(),
-      lineItems,
+      lineItems: stripeLineItems,
       customerEmail: user.email,
       successUrl: `${clientUrl}/campaigns?payment=success`,
       cancelUrl: `${clientUrl}/new-campaign?step=4`,

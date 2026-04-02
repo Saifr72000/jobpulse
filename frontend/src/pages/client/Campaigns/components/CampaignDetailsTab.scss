@@ -45,8 +45,9 @@
 }
 
 .pill {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: $spacing-xs;
   padding: $spacing-xs $spacing-md;
   background: $frost;
@@ -64,22 +65,21 @@
 }
 
 .pill--addon {
-  background: rgba($violet, 0.12);
-  border-color: rgba($violet, 0.25);
-  color: $midnight;
-  padding: $spacing-xs $spacing-sm;
-
   .pill__addon-icon {
-    width: 28px;
-    height: 28px;
-    border: 1.5px solid $violet;
-    border-radius: 4px;
-    background: transparent;
+    width: 24px;
+    height: 24px;
+    background: $white;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: $violet;
+    line-height: 0;
+
+    svg {
+      display: block;
+      color: $ash;
+    }
   }
 }
 

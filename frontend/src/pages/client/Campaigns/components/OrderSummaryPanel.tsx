@@ -1,77 +1,109 @@
 import type { IOrder } from "../../../../api/orders";
+import { LOGO_MAP } from "../../NewCampaign/constants";
+import { getAddonIcon } from "../../NewCampaign/addonIcons";
 import "./OrderSummaryPanel.scss";
 
 interface OrderSummaryPanelProps {
   order: IOrder;
 }
 
-const ADDON_LABELS: Record<string, string> = {
-  "lead-ads": "Lead Ads",
-  "video-campaign": "Video Campaign",
-  "linkedin-job-posting": "LinkedIn Job Posting",
-};
-
 function formatNOK(amount: number): string {
-  return amount.toLocaleString("nb-NO", { style: "currency", currency: "NOK" });
+  return `${amount.toLocaleString("nb-NO")} kr`;
+}
+
+function getChannelLogo(name: string): string | undefined {
+  const key = Object.keys(LOGO_MAP).find(
+    (k) => k.toLowerCase() === name.toLowerCase(),
+  );
+  return key ? LOGO_MAP[key] : undefined;
 }
 
 function getPlanLabel(order: IOrder): string {
   if (order.orderType === "package" && order.package) {
     const capitalised =
       order.package.charAt(0).toUpperCase() + order.package.slice(1);
-    return `${capitalised} plan`;
+    return `${capitalised} campaign package`;
   }
   return "Custom plan";
 }
 
 export function OrderSummaryPanel({ order }: OrderSummaryPanelProps) {
-  const vat = order.totalAmount - order.totalAmount / 1.25;
+  const packageItem = order.lineItems?.find((i) => i.type === "package");
+  const channelItems = order.lineItems?.filter((i) => i.type === "channel") ?? [];
+  const addonItems = order.lineItems?.filter((i) => i.type === "addon") ?? [];
+
+  const vatRate = order.vatRate ?? 0.25;
+  const vatAmount = order.vatAmount ?? 0;
+  const totalAmount = order.totalAmount ?? 0;
 
   return (
     <div className="summary-panel card">
-      <h4>{getPlanLabel(order)}</h4>
+      <h4>Order summary</h4>
+
+      {packageItem && (
+        <div className="summary-row summary-row--package">
+          <span>{getPlanLabel(order)}</span>
+          <span>{formatNOK(packageItem.price)}</span>
+        </div>
+      )}
+
+      <hr className="summary-divider" />
 
       <p className="summary-section-title">Channels:</p>
-      {order.channels.length === 0 ? (
+      {channelItems.length === 0 ? (
         <div className="summary-row">
           <span>No channels</span>
-          <span>0 kr</span>
+          <span>—</span>
         </div>
       ) : (
-        order.channels.map((ch) => (
-          <div key={ch} className="summary-row">
-            <span>{ch}</span>
-            <span>0 kr</span>
-          </div>
-        ))
+        channelItems.map((item) => {
+          const logo = getChannelLogo(item.name);
+          return (
+            <div key={item.name} className="summary-row">
+              <span className="summary-row__name">
+                {logo && (
+                  <img src={logo} alt={item.name} className="summary-row__logo" />
+                )}
+                {item.name}
+              </span>
+              <span>{formatNOK(item.price)}</span>
+            </div>
+          );
+        })
       )}
 
-      <hr className="divider" />
+      <hr className="summary-divider" />
 
       <p className="summary-section-title">Add-ons:</p>
-      {order.addons.length === 0 ? (
+      {addonItems.length === 0 ? (
         <div className="summary-row">
           <span>No add-ons</span>
-          <span>0 kr</span>
+          <span>—</span>
         </div>
       ) : (
-        order.addons.map((addon) => (
-          <div key={addon} className="summary-row">
-            <span>{ADDON_LABELS[addon] ?? addon}</span>
-            <span>0 kr</span>
+        addonItems.map((item) => (
+          <div key={item.name} className="summary-row">
+            <span className="summary-row__name">
+              <span className="summary-row__addon-icon">
+                {getAddonIcon(item.name)}
+              </span>
+              {item.name}
+            </span>
+            <span>{formatNOK(item.price)}</span>
           </div>
         ))
       )}
 
-      <hr className="divider" />
+      <hr className="summary-divider" />
 
-      <div className="summary-vat">
-        <span>VAT (25%)</span>
-        <span>{formatNOK(vat)}</span>
+      <div className="summary-row summary-row--vat">
+        <span>VAT ({Math.round(vatRate * 100)}%)</span>
+        <span>{formatNOK(vatAmount)}</span>
       </div>
-      <div className="summary-total">
-        <span>Total</span>
-        <span>{formatNOK(order.totalAmount)}</span>
+
+      <div className="summary-row summary-row--total">
+        <span>Total:</span>
+        <span>{formatNOK(totalAmount)}</span>
       </div>
 
       <button className="btn-invoice" type="button" disabled>

@@ -40,7 +40,14 @@ const CANDIDATE_KPIS: { label: string }[] = [
   { label: "Rejected candidates" },
 ];
 
-const CHANNELS = ["All channels", "LinkedIn", "Facebook", "Google", "Snapchat", "Instagram"];
+const CHANNELS = [
+  "All channels",
+  "LinkedIn",
+  "Facebook",
+  "Google",
+  "Snapchat",
+  "Instagram",
+];
 
 export function PerformanceCandidatesTab({
   order: _order,
@@ -56,8 +63,8 @@ export function PerformanceCandidatesTab({
         <div className="perf-section-header">
           <h4>Performance</h4>
           <div className="filter-channel">
-            <SettingsIcon width={16} height={16} />
-            <span className="filter-channel__label">Filter channel</span>
+            {/* <SettingsIcon width={16} height={16} /> */}
+            {/* <span className="filter-channel__label">Filter channel</span> */}
             <div className="filter-channel__select-wrapper">
               <select
                 className="filter-channel__select"
@@ -65,7 +72,9 @@ export function PerformanceCandidatesTab({
                 onChange={(e) => setSelectedChannel(e.target.value)}
               >
                 {CHANNELS.map((ch) => (
-                  <option key={ch} value={ch}>{ch}</option>
+                  <option key={ch} value={ch}>
+                    {ch}
+                  </option>
                 ))}
               </select>
             </div>

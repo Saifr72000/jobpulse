@@ -1,4 +1,4 @@
-import { Order, type IOrder, type OrderStatus } from "../models/order.model.js";
+import { Order, type IOrder, type ILineItem, type OrderStatus } from "../models/order.model.js";
 import { Company } from "../models/company.model.js";
 import { User } from "../models/user.model.js";
 
@@ -21,11 +21,15 @@ interface CreateOrderInput {
   package?: string;
   channels: string[];
   addons?: string[];
+  lineItems: ILineItem[];
   campaignName: string;
   assets: OrderAssetsInput;
   targetAudience: string;
   additionalNotes?: string;
   paymentMethod: string;
+  subtotal: number;
+  vatRate?: number;
+  vatAmount: number;
   totalAmount: number;
   status?: OrderStatus;
 }
@@ -65,11 +69,15 @@ export const createOrder = async (
     package: input.package,
     channels: input.channels,
     addons: input.addons ?? [],
+    lineItems: input.lineItems,
     campaignName: input.campaignName,
     assets: input.assets,
     targetAudience: input.targetAudience,
     additionalNotes: input.additionalNotes,
     paymentMethod: input.paymentMethod,
+    subtotal: input.subtotal,
+    vatRate: input.vatRate ?? 0.25,
+    vatAmount: input.vatAmount,
     totalAmount: input.totalAmount,
     status: input.status ?? "pending",
   });

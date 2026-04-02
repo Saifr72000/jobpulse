@@ -84,14 +84,19 @@
   }
 
   &__addon-icon {
-    width: 20px;
-    height: 20px;
-    border: 1.5px solid $violet;
-    border-radius: 3px;
+    width: 24px;
+    height: 24px;
+    /* background: $frost; */
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    color: $violet;
+    line-height: 0;
+
+    svg {
+      display: block;
+      color: $ash;
+    }
   }
 }

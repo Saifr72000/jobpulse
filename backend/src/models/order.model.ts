@@ -11,6 +11,13 @@ export type VideoMaterials = "upload" | "media-library" | "combine";
 export type LinkedinJobDescription = "team-create" | "own";
 export type LinkedinScreeningQuestions = "team-create" | "own";
 export type PaymentMethod = "value-card" | "card-payment" | "invoice";
+export type LineItemType = "package" | "channel" | "addon";
+
+export interface ILineItem {
+  type: LineItemType;
+  name: string;
+  price: number;
+}
 
 export interface IOrderAssets {
   imageOption: ImageOption;
@@ -33,11 +40,15 @@ export interface IOrder extends Document {
   package?: PackagePlan;
   channels: Channel[];
   addons: Addon[];
+  lineItems: ILineItem[];
   campaignName: string;
   assets: IOrderAssets;
   targetAudience: string;
   additionalNotes?: string;
   paymentMethod: PaymentMethod;
+  subtotal: number;
+  vatRate: number;
+  vatAmount: number;
   totalAmount: number;
   status: OrderStatus;
   stripeSessionId?: string;
@@ -67,6 +78,26 @@ const orderAssetsSchema = new Schema<IOrderAssets>(
     linkedinScreeningQuestions: {
       type: String,
       enum: ["team-create", "own"],
+    },
+  },
+  { _id: false }
+);
+
+const lineItemSchema = new Schema<ILineItem>(
+  {
+    type: {
+      type: String,
+      enum: ["package", "channel", "addon"],
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
     },
   },
   { _id: false }
@@ -116,6 +147,10 @@ const orderSchema = new Schema<IOrder>(
       type: [String],
       default: [],
     },
+    lineItems: {
+      type: [lineItemSchema],
+      default: [],
+    },
     campaignName: {
       type: String,
       required: true,
@@ -135,6 +170,23 @@ const orderSchema = new Schema<IOrder>(
       type: String,
       enum: ["value-card", "card-payment", "invoice"],
       required: true,
+    },
+    subtotal: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    vatRate: {
+      type: Number,
+      required: true,
+      min: 0,
+      max: 1,
+      default: 0.25,
+    },
+    vatAmount: {
+      type: Number,
+      required: true,
+      min: 0,
     },
     totalAmount: {
       type: Number,
