@@ -10,10 +10,15 @@ const PACKAGE_CHANNEL_LIMITS: Record<string, number> = {
 
 interface OrderAssetsInput {
   imageOption: string;
+  imageMediaIds?: string[];
   leadAdDescription?: string;
+  leadAdDescriptionText?: string;
   videoMaterials?: string;
+  videoMediaIds?: string[];
   linkedinJobDescription?: string;
+  linkedinJobDescriptionText?: string;
   linkedinScreeningQuestions?: string;
+  linkedinScreeningQuestionsText?: string;
 }
 
 interface CreateOrderInput {

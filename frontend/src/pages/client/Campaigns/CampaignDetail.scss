@@ -2,7 +2,7 @@
 @use "../../../styles/typography" as *;
 
 .campaign-detail {
-  // .page from _layouts.scss handles flex-col, gap, overflow-y
+  padding-top: $spacing-lg;
 }
 
 .campaign-detail-loading,
@@ -38,7 +38,7 @@
 .campaign-date {
   font-size: $text-sm;
   color: $color-text-muted;
-  margin: 0;
+  margin: $spacing-sm 0 0;
 }
 
 .campaign-header {
@@ -52,7 +52,6 @@
     margin: 0;
   }
 }
-
 
 // ─── Tab bar ──────────────────────────────────────────────
 .tab-bar {

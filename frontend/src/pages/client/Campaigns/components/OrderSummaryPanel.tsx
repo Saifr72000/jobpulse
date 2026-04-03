@@ -1,6 +1,7 @@
 import type { IOrder } from "../../../../api/orders";
 import { LOGO_MAP } from "../../NewCampaign/constants";
 import { getAddonIcon } from "../../NewCampaign/addonIcons";
+import Icon from "../../../../components/Icon/Icon";
 import "./OrderSummaryPanel.scss";
 
 interface OrderSummaryPanelProps {
@@ -85,7 +86,7 @@ export function OrderSummaryPanel({ order }: OrderSummaryPanelProps) {
           <div key={item.name} className="summary-row">
             <span className="summary-row__name">
               <span className="summary-row__addon-icon">
-                {getAddonIcon(item.name)}
+                <Icon svg={getAddonIcon(item.name)} size={14} />
               </span>
               {item.name}
             </span>

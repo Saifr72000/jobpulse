@@ -7,6 +7,7 @@ import {
 } from "react";
 import api from "../api/axios";
 import { createCheckoutSession } from "../api/checkout";
+import { uploadFiles } from "../api/media";
 import {
   calculateSubtotal,
   calculateVat,
@@ -120,6 +121,23 @@ export function NewCampaignProvider({ children }: { children: ReactNode }) {
       const totalAmount = subtotal + vatAmount;
       const lineItems = buildLineItems(form, channels, packages, addons);
 
+      // Upload any local files to S3 first, then merge with media library selections
+      let imageMediaIds: string[] = [...form.selectedImageMediaIds];
+      if (form.imageUploadFiles.length > 0) {
+        const uploadedIds = await uploadFiles(form.imageUploadFiles);
+        imageMediaIds = [...imageMediaIds, ...uploadedIds];
+      }
+
+      let videoMediaIds: string[] = [...form.selectedVideoMediaIds];
+      if (form.videoUploadFiles.length > 0) {
+        const uploadedIds = await uploadFiles(form.videoUploadFiles);
+        videoMediaIds = [...videoMediaIds, ...uploadedIds];
+      }
+
+      const hasLeadAds = form.selectedAddons.some((a) => a.toLowerCase().includes("lead"));
+      const hasVideo = form.selectedAddons.some((a) => a.toLowerCase().includes("video"));
+      const hasLinkedin = form.selectedAddons.some((a) => a.toLowerCase().includes("linkedin"));
+
       const body = {
         orderType: form.planType ?? "custom",
         package: form.selectedPackage ?? undefined,
@@ -129,21 +147,26 @@ export function NewCampaignProvider({ children }: { children: ReactNode }) {
         campaignName: form.campaignName,
         assets: {
           imageOption: form.imageOption || "team-suggest",
-          ...(form.selectedAddons.some((a) =>
-            a.toLowerCase().includes("lead"),
-          ) && {
+          ...(imageMediaIds.length > 0 && { imageMediaIds }),
+          ...(hasLeadAds && {
             leadAdDescription: form.leadAdDesc || "team-create",
+            ...(form.leadAdDesc === "own" && form.leadAdDescText && {
+              leadAdDescriptionText: form.leadAdDescText,
+            }),
           }),
-          ...(form.selectedAddons.some((a) =>
-            a.toLowerCase().includes("video"),
-          ) && {
+          ...(hasVideo && {
             videoMaterials: form.videoMaterials || "upload",
+            ...(videoMediaIds.length > 0 && { videoMediaIds }),
           }),
-          ...(form.selectedAddons.some((a) =>
-            a.toLowerCase().includes("linkedin"),
-          ) && {
+          ...(hasLinkedin && {
             linkedinJobDescription: form.linkedinJobDesc || "team-create",
+            ...(form.linkedinJobDesc === "own" && form.linkedinJobDescText && {
+              linkedinJobDescriptionText: form.linkedinJobDescText,
+            }),
             linkedinScreeningQuestions: form.linkedinScreening || "team-create",
+            ...(form.linkedinScreening === "own" && form.linkedinScreeningText && {
+              linkedinScreeningQuestionsText: form.linkedinScreeningText,
+            }),
           }),
         },
         targetAudience: form.targetAudience,
