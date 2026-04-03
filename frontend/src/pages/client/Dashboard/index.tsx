@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import StatsCard from "../../../components/Card/StatsCard";
+import Button from "../../../components/Button/Button";
 import "./Dashboard.scss";
 import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import UsersIcon from "../../../assets/icons/users.svg?react";
@@ -74,9 +75,9 @@ export default function Dashboard() {
           <h3>Ready to launch a new campaign?</h3>
           <p>Create targeted job ads across multiple channels.</p>
         </div>
-        <button className="btn" onClick={() => navigate("/orders/new")}>
+        <Button onClick={() => navigate("/orders/new")}>
           Create campaign
-        </button>
+        </Button>
       </div>
     </div>
   );

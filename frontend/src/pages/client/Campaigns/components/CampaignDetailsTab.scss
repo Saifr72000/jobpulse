@@ -34,6 +34,12 @@
     font-weight: $font-semibold;
     color: $color-text;
   }
+
+  // Push content blocks away from the muted option subtext
+  .readonly-block,
+  .media-gallery {
+    margin-top: $spacing-sm;
+  }
 }
 
 .pills-row {
@@ -66,10 +72,6 @@
 
 .pill--addon {
   .pill__addon-icon {
-    width: 24px;
-    height: 24px;
-    background: $white;
-    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,7 +88,13 @@
 .assets-rows {
   display: flex;
   flex-direction: column;
+  gap: $spacing-md;
   margin-top: $spacing-md;
+}
+
+.asset-chip {
+  font-size: $text-sm;
+  color: $color-text-muted;
 }
 
 .brief-section {
@@ -103,10 +111,10 @@
 .readonly-block {
   background: $frost;
   border-radius: $radius-input;
-  padding: $spacing-md;
+  padding: $spacing-sm $spacing-md;
   color: $color-text;
   line-height: $leading-relaxed;
-  font-size: $text-base;
+  font-size: $text-sm;
   white-space: pre-wrap;
   word-break: break-word;
 }

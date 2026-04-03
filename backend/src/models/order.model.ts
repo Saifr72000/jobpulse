@@ -21,10 +21,15 @@ export interface ILineItem {
 
 export interface IOrderAssets {
   imageOption: ImageOption;
+  imageMediaIds?: mongoose.Types.ObjectId[];
   leadAdDescription?: LeadAdDescription;
+  leadAdDescriptionText?: string;
   videoMaterials?: VideoMaterials;
+  videoMediaIds?: mongoose.Types.ObjectId[];
   linkedinJobDescription?: LinkedinJobDescription;
+  linkedinJobDescriptionText?: string;
   linkedinScreeningQuestions?: LinkedinScreeningQuestions;
+  linkedinScreeningQuestionsText?: string;
 }
 
 export interface IOrder extends Document {
@@ -63,22 +68,27 @@ const orderAssetsSchema = new Schema<IOrderAssets>(
       enum: ["upload", "media-library", "team-suggest"],
       required: true,
     },
+    imageMediaIds: [{ type: Schema.Types.ObjectId, ref: "Media" }],
     leadAdDescription: {
       type: String,
       enum: ["team-create", "own"],
     },
+    leadAdDescriptionText: { type: String },
     videoMaterials: {
       type: String,
       enum: ["upload", "media-library", "combine"],
     },
+    videoMediaIds: [{ type: Schema.Types.ObjectId, ref: "Media" }],
     linkedinJobDescription: {
       type: String,
       enum: ["team-create", "own"],
     },
+    linkedinJobDescriptionText: { type: String },
     linkedinScreeningQuestions: {
       type: String,
       enum: ["team-create", "own"],
     },
+    linkedinScreeningQuestionsText: { type: String },
   },
   { _id: false }
 );

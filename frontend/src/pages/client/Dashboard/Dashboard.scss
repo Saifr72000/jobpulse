@@ -204,32 +204,5 @@
       }
     }
 
-    .btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: $coal;
-      color: $color-text-inverted;
-      border-radius: $radius-pill;
-      padding: 13px 28px;
-      font-size: $text-lg;
-      font-weight: $font-bold;
-      cursor: pointer;
-      transition: background 0.15s;
-      white-space: nowrap;
-      flex-shrink: 0;
-      border: 0;
-
-      &:hover {
-        background: #333;
-      }
-
-      img {
-        width: 15px;
-        height: 15px;
-        object-fit: contain;
-        filter: invert(1);
-      }
-    }
   }
 }

@@ -23,6 +23,11 @@ export interface PaginatedMedia {
   };
 }
 
+export const getMediaById = async (id: string): Promise<MediaItem> => {
+  const { data } = await api.get<MediaItem>(`/media/${id}`);
+  return data;
+};
+
 export const getMediaByFolder = async (
   folderId: string,
   page = 1,
@@ -34,11 +39,12 @@ export const getMediaByFolder = async (
   return data;
 };
 
-export const uploadFiles = async (files: File[], folderId?: string): Promise<void> => {
+export const uploadFiles = async (files: File[], folderId?: string): Promise<string[]> => {
   const formData = new FormData();
   files.forEach((file) => formData.append("files", file));
   if (folderId) formData.append("folderId", folderId);
-  await api.post("/media", formData);
+  const { data } = await api.post<{ media: Array<{ _id: string }> }>("/media", formData);
+  return data.media.map((m) => m._id);
 };
 
 export const deleteMedia = async (mediaId: string): Promise<void> => {

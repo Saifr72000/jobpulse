@@ -1,0 +1,132 @@
+@use "sass:color";
+@use "../../styles/variables" as *;
+@use "../../styles/typography" as *;
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  border-radius: $radius-pill;
+  font-family: $font-primary;
+  font-weight: $font-semibold;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, opacity 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  // ─── Sizes ────────────────────────────────────────────────
+  &--sm {
+    padding: $spacing-xs $spacing-md;
+    font-size: $text-sm;
+
+    .btn__icon svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &--md {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $text-base;
+
+    .btn__icon svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &--lg {
+    padding: $spacing-md $spacing-xl;
+    font-size: $text-lg;
+
+    .btn__icon svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  // ─── Full width ───────────────────────────────────────────
+  &--full {
+    width: 100%;
+  }
+
+  // ─── Variants ─────────────────────────────────────────────
+  &--primary {
+    background: $plum;
+    color: $white;
+
+    &:hover:not(:disabled) {
+      background: color.adjust($plum, $lightness: 5%);
+    }
+
+    &:active:not(:disabled) {
+      background: color.adjust($plum, $lightness: -5%);
+    }
+  }
+
+  &--secondary {
+    background: transparent;
+    color: $coal;
+    border: 1.5px solid $coal;
+
+    &:hover:not(:disabled) {
+      background: $frost;
+    }
+
+    &:active:not(:disabled) {
+      background: color.adjust($frost, $lightness: -3%);
+    }
+  }
+
+  &--danger {
+    background: transparent;
+    color: $red;
+    border: 1.5px solid $red;
+
+    &:hover:not(:disabled) {
+      background: rgba($red, 0.06);
+    }
+
+    &:active:not(:disabled) {
+      background: rgba($red, 0.12);
+    }
+  }
+
+  // ─── Disabled ─────────────────────────────────────────────
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  // ─── Loading ──────────────────────────────────────────────
+  &--loading {
+    cursor: not-allowed;
+  }
+
+  // ─── Icon ─────────────────────────────────────────────────
+  &__icon {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    line-height: 0;
+  }
+
+  // ─── Spinner ──────────────────────────────────────────────
+  &__spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba($white, 0.35);
+    border-top-color: $white;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

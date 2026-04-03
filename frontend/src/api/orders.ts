@@ -2,10 +2,15 @@ import api from "./axios";
 
 export interface IOrderAssets {
   imageOption: string;
+  imageMediaIds?: string[];
   leadAdDescription?: string;
+  leadAdDescriptionText?: string;
   videoMaterials?: string;
+  videoMediaIds?: string[];
   linkedinJobDescription?: string;
+  linkedinJobDescriptionText?: string;
   linkedinScreeningQuestions?: string;
+  linkedinScreeningQuestionsText?: string;
 }
 
 export interface ILineItem {

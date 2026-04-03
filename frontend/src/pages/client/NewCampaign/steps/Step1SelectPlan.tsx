@@ -7,16 +7,15 @@ import { PackageOption } from "../components/PackageOption";
 import BoxIcon from "../../../../assets/icons/box.svg?react";
 import StarIcon from "../../../../assets/icons/star.svg?react";
 import DiamondIcon from "../../../../assets/icons/diamond.svg?react";
-import { colorPrimary } from "../../../../styles/colors.ts";
 import "./Step1SelectPlan.scss";
 
 export function Step1SelectPlan() {
   const { form, updateForm, channels, packages, next } = useNewCampaign();
 
   const PACKAGE_ICONS: Record<string, React.ReactNode> = {
-    basic: <Icon svg={BoxIcon} size={15} color={colorPrimary} />,
-    medium: <Icon svg={StarIcon} size={15} color={colorPrimary} />,
-    deluxe: <Icon svg={DiamondIcon} size={15} color={colorPrimary} />,
+    basic: <Icon svg={BoxIcon} size={20} />,
+    medium: <Icon svg={StarIcon} size={20} />,
+    deluxe: <Icon svg={DiamondIcon} size={20} />,
   };
 
   const handleChannelToggle = (channelTitle: string) => {
