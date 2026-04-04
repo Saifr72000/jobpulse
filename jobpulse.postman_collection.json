@@ -408,6 +408,20 @@
             "header": [],
             "url": { "raw": "{{baseUrl}}/api/orders/:id", "host": ["{{baseUrl}}"], "path": ["api", "orders", ":id"], "variable": [{ "key": "id", "value": "<orderId>" }] }
           }
+        },
+        {
+          "name": "Download Invoice PDF",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/orders/:id/invoice",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orders", ":id", "invoice"],
+              "variable": [{ "key": "id", "value": "<orderId>" }]
+            },
+            "description": "Streams a PDF invoice for the given order. Disabled for orders with status 'awaiting-payment'."
+          }
         }
       ]
     },

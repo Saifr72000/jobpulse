@@ -9,6 +9,7 @@ import {
   getAllOrders,
 } from "../controllers/order.controller.js";
 import { createCheckoutSessionHandler } from "../controllers/checkout.controller.js";
+import { downloadInvoice } from "../controllers/invoice.controller.js";
 import {
   createOrderValidator,
   updateOrderStatusValidator,
@@ -33,6 +34,9 @@ router.get("/", getAllOrders);
 
 // Get orders by company
 router.get("/company/:companyId", getOrdersByCompany);
+
+// Download invoice PDF for an order (auth required) — must be before /:id
+router.get("/:id/invoice", authenticateUser, orderIdValidator, requestValidator, downloadInvoice);
 
 // Get order by ID
 router.get("/:id", orderIdValidator, requestValidator, getOrderById);
