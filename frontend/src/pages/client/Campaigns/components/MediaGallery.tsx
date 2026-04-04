@@ -26,15 +26,31 @@ function toMediaFile(item: MediaItem): MediaFile {
 
 export function MediaGallery({ mediaIds }: MediaGalleryProps) {
   const [items, setItems] = useState<MediaItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<MediaFile | null>(null);
 
   useEffect(() => {
     if (mediaIds.length === 0) return;
+    setLoading(true);
+    setError(null);
     Promise.all(mediaIds.map((id) => getMediaById(id)))
       .then(setItems)
-      .catch(() => {});
+      .catch((err) => {
+        console.error("[MediaGallery] Failed to load media:", err);
+        setError("Failed to load media files.");
+      })
+      .finally(() => setLoading(false));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mediaIds.join(",")]);
+
+  if (loading) {
+    return <p className="media-gallery__status">Loading files...</p>;
+  }
+
+  if (error) {
+    return <p className="media-gallery__status media-gallery__status--error">{error}</p>;
+  }
 
   if (items.length === 0) return null;
 

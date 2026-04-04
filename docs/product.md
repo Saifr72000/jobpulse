@@ -396,18 +396,23 @@ This tab has multiple states depending on campaign progress.
 
 Two-column layout: ad creative preview (left, wide) + feedback panel (right).
 
+**Version switcher (top-right of content area, outside tab bar):**
+
+- `V1` | `V2` | `V3` square buttons — active version: black (`$coal`) background, white text; inactive: white background, black text
+
 **Ad creative preview (left):**
 
-- Full-width image/creative display
-- Image carousel with dot indicators for multiple creatives
-- Version selector buttons top-right: `V1` | `V2` | `V3` (active version highlighted)
+- Full-width image/creative card — the uploaded campaign creative
+- Company name + building icon overlaid top-left of image
+- Headline + subline overlaid bottom-center of image (pearl card, 20px radius)
+- Carousel dot pagination below image (3 dots; active dot filled dark)
 
 **Feedback panel (right):**
 
-- Status pill: "Waiting for your review" (orange background)
-- Feedback textarea: placeholder "Write your feedback here..."
-- "Send feedback" button (outlined)
-- "Approve campaign" CTA button (midnight, full-width)
+- Notice bar: white background, orange border (`#F69800`), pill-shaped, clock icon on left. Text: "Waiting for your review - Approve or request changes on version 1"
+- Feedback textarea: white, black border, 20px radius. Placeholder: "Write your feedback on the campaign..."
+- "Send feedback" button — outlined (white bg, `$coal` border, pill-shaped, send icon)
+- "Approve campaign" button — filled **`$plum`** background (NOT midnight), pearl text, pill-shaped, checkmark icon, full-width
 
 ---
 
@@ -415,18 +420,18 @@ Two-column layout: ad creative preview (left, wide) + feedback panel (right).
 
 **Figma:** https://www.figma.com/design/KfU9yRaXgJRC1zoSBRxwC3/JobPulse?node-id=595-757
 
-Same layout as V1 state, but the feedback panel shows a full comment thread:
+Same layout as V1 state, but the feedback panel shows a full conversation thread above the input.
 
 **Comment thread:**
 
-- Each message shows: avatar initials, sender name (e.g. "Maria Jensen" for client, "Erik Andersen" for agency), timestamp, and message body
-- Client and agency messages alternate — full conversation history visible
-- Thread is scrollable
+- Scrollable thread of alternating client/agency messages
+- Each message: circular avatar (35px, `$mist` background, initials in `$coal` semibold), sender name, timestamp (right-aligned), message body below
+- Client messages right-aligned; agency messages left-aligned
 
-**Bottom actions (two buttons):**
+**Bottom actions (same as V1 — no "Request changes"):**
 
-- "Request changes" (outlined, left)
-- "Approve campaign" (midnight filled, right)
+- "Send feedback" (outlined, `$coal` border)
+- "Approve campaign" (filled **`$plum`**, full-width)
 
 ---
 
