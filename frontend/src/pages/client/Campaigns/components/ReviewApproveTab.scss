@@ -1,10 +1,6 @@
 @use "../../../../styles/variables" as *;
 @use "../../../../styles/typography" as *;
 
-// Note: #fff3cd and #b45309 are warm-amber colors not covered by existing tokens.
-// $pending (#fbf396) is a yellow tone; these orange/amber tones are used as-is
-// since no token maps to this specific "waiting for review" amber style.
-
 .review-layout {
   display: flex;
   flex-direction: row;
@@ -95,8 +91,8 @@
   display: inline-flex;
   align-items: center;
   padding: $spacing-xs $spacing-md;
-  background: #fff3cd;
-  color: #b45309;
+  background: $pending;
+  color: $coal;
   border-radius: $radius-pill;
   font-size: $text-sm;
   font-weight: $font-medium;
@@ -173,4 +169,110 @@
   &:hover {
     opacity: 0.9;
   }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.btn-send {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.status-pill--approved {
+  background: $active;
+  color: $white;
+}
+
+
+.comment-thread {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: $spacing-sm 0;
+
+  &__empty {
+    font-size: $text-sm;
+    color: $color-text-muted;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-card;
+  background: $frost;
+
+  &--admin {
+    background: $midnight;
+    align-self: flex-start;
+    max-width: 90%;
+
+    .comment__author,
+    .comment__message {
+      color: $white;
+    }
+
+    .comment__role {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  &--client {
+    background: $frost;
+    align-self: flex-end;
+    max-width: 90%;
+  }
+
+  &__author {
+    font-size: $text-xs;
+    font-weight: $font-semibold;
+    color: $color-text;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: $spacing-xs;
+  }
+
+  &__role {
+    font-size: $text-xs;
+    font-weight: $font-normal;
+    color: $color-text-muted;
+    text-transform: capitalize;
+  }
+
+  &__message {
+    font-size: $text-sm;
+    color: $color-text;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
+
+.approved-notice {
+  text-align: center;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  color: $white;
+  padding: $spacing-sm $spacing-md;
+  background: $active;
+  border-radius: $radius-pill;
+}
+
+.completed-notice {
+  font-size: $text-sm;
+  color: $color-text-muted;
+  text-align: center;
+  margin: 0;
 }

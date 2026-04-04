@@ -1,0 +1,75 @@
+@use "../../../../styles/variables" as *;
+@use "../../../../styles/typography" as *;
+
+.creative-preview {
+  border-radius: $radius-card;
+  overflow: hidden;
+  background: $frost;
+  display: flex;
+  flex-direction: column;
+
+  // Image variant: fills the area naturally, no fixed aspect ratio imposed
+  &__image {
+    width: 100%;
+    display: block;
+    object-fit: contain;
+    border-radius: $radius-card $radius-card 0 0;
+  }
+
+  // Iframe variant (YouTube / Vimeo): 16:9 embed
+  &__iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: none;
+    display: block;
+  }
+
+  // External / no-url card variant: centered text + optional link
+  &__card {
+    aspect-ratio: 16 / 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-sm;
+    padding: $spacing-lg;
+    text-align: center;
+  }
+
+  &__headline {
+    font-size: $text-lg;
+    font-weight: $font-semibold;
+    color: $color-text;
+    margin: 0;
+  }
+
+  &__subline {
+    font-size: $text-base;
+    color: $color-text-muted;
+    margin: 0;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacing-xs;
+    font-size: $text-sm;
+    font-weight: $font-medium;
+    color: $violet;
+    text-decoration: none;
+    margin-top: $spacing-xs;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Shown below all variants
+  &__meta {
+    font-size: $text-xs;
+    color: $color-text-muted;
+    padding: $spacing-sm $spacing-md;
+    border-top: 1px solid $mist;
+    margin: 0;
+  }
+}

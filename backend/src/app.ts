@@ -18,6 +18,8 @@ import orderRoutes from "./routes/order.routes.js";
 import mediaRoutes from "./routes/media.routes.js";
 import folderRoutes from "./routes/folder.routes.js";
 import webhookRoutes from "./routes/webhook.routes.js";
+import creativeRoutes from "./routes/creative.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
 
 const app = express();
 
@@ -73,6 +75,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/media", mediaRoutes);
 app.use("/api/folders", folderRoutes);
+app.use("/api/creatives", creativeRoutes);
+app.use("/api/comments", commentRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {
