@@ -1,4 +1,6 @@
+import { useState } from "react";
 import type { IOrder } from "../../../../api/orders";
+import { downloadInvoice } from "../../../../api/orders";
 import { LOGO_MAP } from "../../NewCampaign/constants";
 import { getAddonIcon } from "../../NewCampaign/addonIcons";
 import Icon from "../../../../components/Icon/Icon";
@@ -29,6 +31,17 @@ function getPlanLabel(order: IOrder): string {
 }
 
 export function OrderSummaryPanel({ order }: OrderSummaryPanelProps) {
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownloadInvoice = async () => {
+    setDownloading(true);
+    try {
+      await downloadInvoice(order);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
   const packageItem = order.lineItems?.find((i) => i.type === "package");
   const channelItems = order.lineItems?.filter((i) => i.type === "channel") ?? [];
   const addonItems = order.lineItems?.filter((i) => i.type === "addon") ?? [];
@@ -107,8 +120,13 @@ export function OrderSummaryPanel({ order }: OrderSummaryPanelProps) {
         <span>{formatNOK(totalAmount)}</span>
       </div>
 
-      <button className="btn-invoice" type="button" disabled>
-        Download invoice
+      <button
+        className="btn-invoice"
+        type="button"
+        disabled={downloading}
+        onClick={handleDownloadInvoice}
+      >
+        {downloading ? "Generating..." : "Download invoice"}
       </button>
     </div>
   );
