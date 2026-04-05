@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { FunctionComponent, SVGProps } from "react";
 import { ProfileTab } from "./tabs/ProfileTab";
 import { UsersTab } from "./tabs/UsersTab";
-import { PaymentTab } from "./tabs/PaymentTab";
+/* import { PaymentTab } from "./tabs/PaymentTab"; */
 import Icon from "../../../components/Icon/Icon";
 import "./Settings.scss";
 
@@ -28,7 +28,9 @@ export default function Settings() {
     <div className="settings">
       <div className="page-header">
         <h2>Settings</h2>
-        <p className="body-2 text-muted">Manage your account settings and preferences</p>
+        <p className="body-2 text-muted">
+          Manage your account settings and preferences
+        </p>
       </div>
 
       <nav className="settings__tabs">
@@ -47,7 +49,13 @@ export default function Settings() {
       <div className="settings__content">
         {activeTab === "settings" && <ProfileTab />}
         {activeTab === "users" && <UsersTab />}
-        {activeTab === "payment" && <PaymentTab />}
+        {/* The payment method tab is not yet implemented in backend */}
+        {activeTab === "payment" && (
+          <div className="settings-card settings__placeholder">
+            <p className="body-2 text-muted">Payment methods is coming soon.</p>
+          </div>
+        )}
+        {/* {activeTab === "payment" && <PaymentTab />} */}
         {activeTab === "billing" && (
           <div className="settings-card settings__placeholder">
             <p className="body-2 text-muted">Billing is coming soon.</p>
