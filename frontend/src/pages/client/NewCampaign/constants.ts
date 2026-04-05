@@ -5,9 +5,13 @@ import snapchatLogo from "../../../assets/logos/snapchat1.svg";
 import instagramLogo from "../../../assets/logos/instagram1.svg";
 import xLogo from "../../../assets/logos/x1.svg";
 import youtubeLogo from "../../../assets/logos/youtube1.svg";
+import metaLogo from "../../../assets/logos/meta.svg";
+import tiktokLogo from "../../../assets/logos/tiktok1.svg";
 import type { Step } from "./types";
 
 export const LOGO_MAP: Record<string, string> = {
+  Meta: metaLogo,
+  Tiktok: tiktokLogo,
   LinkedIn: linkedinLogo,
   Facebook: facebookLogo,
   Google: googleLogo,
