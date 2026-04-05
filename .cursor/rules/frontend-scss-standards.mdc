@@ -18,16 +18,16 @@ All colors, spacing, shadows, radii, fonts, and type styles **must** come from t
 Always `@use` the token files at the top before writing any styles:
 
 ```scss
-@use '../styles/variables' as *;
-@use '../styles/typography' as *;
+@use "../styles/variables" as *;
+@use "../styles/typography" as *;
 
 .my-component {
-  background: $color-bg;        // ✅ use token
-  background: #f1f4f8;          // ❌ never hardcode
-  border-radius: $radius-card;  // ✅ use token
-  border-radius: 20px;          // ❌ never hardcode
-  font-size: $text-base;        // ✅ use token
-  font-size: 15px;              // ❌ never hardcode
+  background: $color-bg; // use token
+  background: #f1f4f8; // never hardcode
+  border-radius: $radius-card; // use token
+  border-radius: 20px; // never hardcode
+  font-size: $text-base; // use token
+  font-size: 15px; // never hardcode
 }
 ```
 
@@ -36,9 +36,9 @@ Always `@use` the token files at the top before writing any styles:
 Use the semantic class names from `_typography.scss` directly:
 
 ```tsx
-<h1>Dashboard</h1>          // ✅ h1 style auto-applied globally
-<p className="body-2">...</p>   // ✅ use type class
-<p className="subheading">...</p> // ✅ use type class
+<h1>Dashboard</h1>          // h1 style auto-applied globally
+<p className="body-2">...</p>   // use type class
+<p className="subheading">...</p> //use type class
 ```
 
 ## Missing tokens
@@ -51,7 +51,7 @@ If a required style value does not exist in `_variables.scss` or `_typography.sc
 
 ## Available token files
 
-| File | Contains |
-|---|---|
-| `_variables.scss` | `$color-*`, `$shadow-*`, `$radius-*`, `$spacing-*`, `$sidebar-width`, `$font-primary` |
+| File               | Contains                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `_variables.scss`  | `$color-*`, `$shadow-*`, `$radius-*`, `$spacing-*`, `$sidebar-width`, `$font-primary` |
 | `_typography.scss` | `$text-*`, `$font-*`, `$leading-*`, `.h1`–`.h4`, `.body-*`, `.menu-*`, `.btn-label-*` |
