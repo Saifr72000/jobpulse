@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import * as orderService from "../services/order.service.js";
-import type { OrderStatus } from "../models/order.model.js";
+import type { OrderStatus, IPlatformCampaign } from "../models/order.model.js";
+import { Order } from "../models/order.model.js";
 
 // Extended request type for authenticated requests
 interface AuthenticatedRequest extends Request {
@@ -178,6 +179,39 @@ export const deleteOrder = async (
     }
 
     res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateOrderCampaigns = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const { platformCampaigns } = req.body as {
+      platformCampaigns?: IPlatformCampaign[];
+    };
+
+    if (!Array.isArray(platformCampaigns)) {
+      res.status(400).json({ error: "'platformCampaigns' must be an array." });
+      return;
+    }
+
+    const order = await Order.findByIdAndUpdate(
+      id,
+      { platformCampaigns },
+      { new: true, runValidators: true }
+    ).lean();
+
+    if (!order) {
+      res.status(404).json({ error: "Order not found." });
+      return;
+    }
+
+    res.status(200).json(order);
   } catch (error) {
     next(error);
   }

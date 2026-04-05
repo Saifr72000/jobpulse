@@ -32,6 +32,15 @@ export interface IOrderAssets {
   linkedinScreeningQuestionsText?: string;
 }
 
+export interface IPlatformCampaign {
+  platform: string;
+  externalCampaignId: string;
+  adAccountId?: string;
+  startDate?: string; // YYYY-MM-DD
+  endDate?: string;   // YYYY-MM-DD
+  campaignStatus?: "active" | "paused" | "completed" | "draft";
+}
+
 export interface IOrder extends Document {
   _id: mongoose.Types.ObjectId;
   // Company reference + denormalized fields
@@ -57,6 +66,8 @@ export interface IOrder extends Document {
   totalAmount: number;
   status: OrderStatus;
   stripeSessionId?: string;
+  // Platform campaign links (manually assigned by admin)
+  platformCampaigns: IPlatformCampaign[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -210,6 +221,25 @@ const orderSchema = new Schema<IOrder>(
     },
     stripeSessionId: {
       type: String,
+    },
+    platformCampaigns: {
+      type: [
+        new Schema<IPlatformCampaign>(
+          {
+            platform: { type: String, required: true },
+            externalCampaignId: { type: String, required: true },
+            adAccountId: { type: String },
+            startDate: { type: String },
+            endDate: { type: String },
+            campaignStatus: {
+              type: String,
+              enum: ["active", "paused", "completed", "draft"],
+            },
+          },
+          { _id: false }
+        ),
+      ],
+      default: [],
     },
   },
   { timestamps: true }

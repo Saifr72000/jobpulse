@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { loginController, refreshTokenController, logoutController, getMeController, setPasswordController } from "../controllers/auth.controller.js";
+import { metaOAuthRedirect, metaOAuthCallback } from "../controllers/platformOAuth.controller.js";
 import { authenticateUser } from "../middlewares/auth.middleware.js";
 import { setPasswordValidator } from "../validators/auth.validator.js";
 import { requestValidator } from "../middlewares/requestValidator.middleware.js";
@@ -20,5 +21,9 @@ router.post("/refresh-token", refreshTokenController);
 
 // Logout
 router.post("/logout", logoutController);
+
+// Platform OAuth flows
+router.get("/oauth/meta", metaOAuthRedirect);
+router.get("/oauth/meta/callback", metaOAuthCallback);
 
 export default router;
