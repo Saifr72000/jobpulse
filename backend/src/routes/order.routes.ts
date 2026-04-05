@@ -5,6 +5,7 @@ import {
   getOrdersByCompany,
   getMyOrders,
   updateOrderStatus,
+  updateOrderCampaigns,
   deleteOrder,
   getAllOrders,
 } from "../controllers/order.controller.js";
@@ -43,6 +44,9 @@ router.get("/:id", orderIdValidator, requestValidator, getOrderById);
 
 // Update order status
 router.patch("/:id/status", updateOrderStatusValidator, requestValidator, updateOrderStatus);
+
+// Update platform campaigns on an order
+router.patch("/:id/campaigns", authenticateUser, updateOrderCampaigns);
 
 // Delete order
 router.delete("/:id", orderIdValidator, requestValidator, deleteOrder);
