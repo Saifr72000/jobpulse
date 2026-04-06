@@ -34,16 +34,21 @@ export interface ReportingDemographic {
   spend: number;
 }
 
+interface SummaryResponse {
+  platforms: ReportingSummary[];
+  totals: Record<string, number>;
+}
+
 export const getSummary = async (
   orderId: string,
   since: string,
   until: string,
 ): Promise<ReportingSummary[]> => {
-  const { data } = await api.get<ReportingSummary[]>(
+  const { data } = await api.get<SummaryResponse>(
     `/reporting/${orderId}/summary`,
     { params: { since, until } },
   );
-  return data;
+  return data.platforms;
 };
 
 export const getTimeSeries = async (

@@ -44,6 +44,29 @@ export default function CampaignDetail() {
       .finally(() => setLoading(false));
   }, [orderId]);
 
+  // Derive default date range from platform campaigns once order loads
+  useEffect(() => {
+    if (!order || appliedFrom) return; // only run on first load
+
+    const today = new Date().toISOString().split("T")[0];
+    const campaigns = order.platformCampaigns ?? [];
+    const startDates = campaigns.map((c) => c.startDate).filter(Boolean) as string[];
+    const endDates = campaigns.map((c) => c.endDate).filter(Boolean) as string[];
+
+    const from = startDates.length > 0
+      ? startDates.sort()[0]
+      : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+    const to = endDates.length > 0
+      ? endDates.sort().at(-1)!
+      : today;
+
+    setFromDate(from);
+    setToDate(to);
+    setAppliedFrom(from);
+    setAppliedTo(to);
+  }, [order, appliedFrom]);
+
   if (loading) {
     return (
       <div className="campaign-detail-loading">

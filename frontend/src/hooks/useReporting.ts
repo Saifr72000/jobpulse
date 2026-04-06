@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getDemographics, getTimeSeries } from "../api/reporting";
+import { getSummary, getDemographics, getTimeSeries } from "../api/reporting";
 import type {
   ReportingSummary,
   ReportingTimeSeriesPoint,
@@ -19,7 +19,7 @@ export function useReporting(
   since: string,
   until: string,
 ): UseReportingResult {
-  const [summary] = useState<ReportingSummary[]>([]);
+  const [summary, setSummary] = useState<ReportingSummary[]>([]);
   const [timeSeries, setTimeSeries] = useState<ReportingTimeSeriesPoint[]>([]);
   const [demographics, setDemographics] = useState<ReportingDemographic[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,11 +34,13 @@ export function useReporting(
       setLoading(true);
       setError(null);
       try {
-        const [timeSeriesData, demographicsData] = await Promise.all([
+        const [summaryData, timeSeriesData, demographicsData] = await Promise.all([
+          getSummary(orderId, since, until),
           getTimeSeries(orderId, since, until),
           getDemographics(orderId, since, until),
         ]);
         if (!cancelled) {
+          setSummary(summaryData);
           setTimeSeries(timeSeriesData);
           setDemographics(demographicsData);
         }

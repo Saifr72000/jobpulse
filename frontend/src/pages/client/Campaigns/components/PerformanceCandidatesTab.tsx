@@ -1,4 +1,6 @@
 import { useState, useMemo } from "react";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import type { IOrder } from "../../../../api/orders";
 import type { ReportingSummary } from "../../../../api/reporting";
 import type { UseReportingResult } from "../../../../hooks/useReporting";
@@ -11,13 +13,16 @@ import "./PerformanceCandidatesTab.scss";
 interface KpiCardProps {
   label: string;
   value: string | number;
+  isLoading?: boolean;
 }
 
-function KpiCard({ label, value }: KpiCardProps) {
+function KpiCard({ label, value, isLoading }: KpiCardProps) {
   return (
     <div className="kpi-card">
       <span className="kpi-label">{label}</span>
-      <span className="kpi-value">{value}</span>
+      <span className="kpi-value">
+        {isLoading ? <Skeleton width={80} height={28} borderRadius={6} /> : value}
+      </span>
     </div>
   );
 }
@@ -139,6 +144,7 @@ export function PerformanceCandidatesTab({
   ];
 
   return (
+    <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
     <div className="performance-tab">
       {/* Performance section */}
       <div className="perf-section">
@@ -189,7 +195,8 @@ export function PerformanceCandidatesTab({
             <KpiCard
               key={kpi.label}
               label={kpi.label}
-              value={loading ? "…" : kpi.value}
+              value={kpi.value}
+              isLoading={loading}
             />
           ))}
         </div>
@@ -224,5 +231,6 @@ export function PerformanceCandidatesTab({
         </div>
       </div>
     </div>
+    </SkeletonTheme>
   );
 }
