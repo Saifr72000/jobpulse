@@ -192,10 +192,6 @@
     cursor: pointer;
     transition: background 0.2s;
 
-    /*  &:hover {
-      background: darken($violet, 8%);
-    } */
-
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;

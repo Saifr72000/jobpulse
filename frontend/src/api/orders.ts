@@ -19,6 +19,15 @@ export interface ILineItem {
   price: number;
 }
 
+export interface IPlatformCampaign {
+  platform: string;
+  externalCampaignId: string;
+  adAccountId?: string;
+  startDate?: string;
+  endDate?: string;
+  campaignStatus?: "active" | "paused" | "completed" | "draft";
+}
+
 export interface IOrder {
   _id: string;
   campaignName: string;
@@ -39,6 +48,7 @@ export interface IOrder {
   vatAmount: number;
   totalAmount: number;
   orderedBy: { firstName: string; lastName: string; email: string };
+  platformCampaigns?: IPlatformCampaign[];
   createdAt: string;
 }
 

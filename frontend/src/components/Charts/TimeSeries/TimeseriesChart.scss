@@ -1,0 +1,21 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+:root {
+  --chart-area-stroke: #{$violet};
+}
+
+.timeseries-card {
+  background: $color-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-xl;
+
+  &__header {
+    margin-bottom: $spacing-lg;
+
+    h4 {
+      margin-bottom: $spacing-xs;
+    }
+  }
+}

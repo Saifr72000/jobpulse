@@ -36,10 +36,6 @@
       background: $midnight;
       color: $white;
     }
-
-    &:hover:not(&--active) {
-      background: darken($frost, 4%);
-    }
   }
 
   &__content {

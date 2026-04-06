@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOrderById } from "../../../api/orders";
 import type { IOrder } from "../../../api/orders";
+import { useReporting } from "../../../hooks/useReporting";
 import { Loader } from "../../../components/Loader/Loader";
 import Icon from "../../../components/Icon/Icon";
 import StatusBadge from "../../../components/StatusBadge/StatusBadge";
@@ -23,6 +24,15 @@ export default function CampaignDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>("details");
+
+  // Lifted from PerformanceCandidatesTab so filter state and fetched data survive tab switches
+  const [selectedChannel, setSelectedChannel] = useState("All channels");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [appliedFrom, setAppliedFrom] = useState("");
+  const [appliedTo, setAppliedTo] = useState("");
+
+  const reporting = useReporting(orderId ?? "", appliedFrom, appliedTo);
 
   useEffect(() => {
     if (!orderId) return;
@@ -115,7 +125,17 @@ export default function CampaignDetail() {
         {activeTab === "details" && <CampaignDetailsTab order={order} />}
         {activeTab === "review" && <ReviewApproveTab order={order} />}
         {activeTab === "performance" && (
-          <PerformanceCandidatesTab order={order} />
+          <PerformanceCandidatesTab
+            order={order}
+            selectedChannel={selectedChannel}
+            onChannelChange={setSelectedChannel}
+            fromDate={fromDate}
+            onFromDateChange={setFromDate}
+            toDate={toDate}
+            onToDateChange={setToDate}
+            onApply={(from, to) => { setAppliedFrom(from); setAppliedTo(to); }}
+            reporting={reporting}
+          />
         )}
       </div>
     </div>
