@@ -1,0 +1,26 @@
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
+
+// Expose SCSS tokens as CSS custom properties so TSX can reference them via var()
+:root {
+  --chart-bar-female: #{$lavender};
+  --chart-bar-male: #{$plum};
+  --chart-axis-tick: #{$ash};
+  --chart-grid: #{$mist};
+  --chart-tooltip-cursor: #{rgba($plum, 0.05)};
+}
+
+.demographics-card {
+  background: $color-surface;
+  border-radius: $radius-card;
+  box-shadow: $shadow-card;
+  padding: $spacing-xl;
+
+  &__header {
+    margin-bottom: $spacing-lg;
+
+    h4 {
+      margin-bottom: $spacing-xs;
+    }
+  }
+}

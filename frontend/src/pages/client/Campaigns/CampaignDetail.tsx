@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getOrderById } from "../../../api/orders";
 import type { IOrder } from "../../../api/orders";
+import { useReporting } from "../../../hooks/useReporting";
 import { Loader } from "../../../components/Loader/Loader";
 import Icon from "../../../components/Icon/Icon";
 import StatusBadge from "../../../components/StatusBadge/StatusBadge";
@@ -24,6 +25,15 @@ export default function CampaignDetail() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ActiveTab>("details");
 
+  // Lifted from PerformanceCandidatesTab so filter state and fetched data survive tab switches
+  const [selectedChannel, setSelectedChannel] = useState("All channels");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [appliedFrom, setAppliedFrom] = useState("");
+  const [appliedTo, setAppliedTo] = useState("");
+
+  const reporting = useReporting(orderId ?? "", appliedFrom, appliedTo);
+
   useEffect(() => {
     if (!orderId) return;
     setLoading(true);
@@ -33,6 +43,29 @@ export default function CampaignDetail() {
       .catch(() => setError("Could not load campaign. Please try again."))
       .finally(() => setLoading(false));
   }, [orderId]);
+
+  // Derive default date range from platform campaigns once order loads
+  useEffect(() => {
+    if (!order || appliedFrom) return; // only run on first load
+
+    const today = new Date().toISOString().split("T")[0];
+    const campaigns = order.platformCampaigns ?? [];
+    const startDates = campaigns.map((c) => c.startDate).filter(Boolean) as string[];
+    const endDates = campaigns.map((c) => c.endDate).filter(Boolean) as string[];
+
+    const from = startDates.length > 0
+      ? startDates.sort()[0]
+      : new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+    const to = endDates.length > 0
+      ? endDates.sort().at(-1)!
+      : today;
+
+    setFromDate(from);
+    setToDate(to);
+    setAppliedFrom(from);
+    setAppliedTo(to);
+  }, [order, appliedFrom]);
 
   if (loading) {
     return (
@@ -115,7 +148,17 @@ export default function CampaignDetail() {
         {activeTab === "details" && <CampaignDetailsTab order={order} />}
         {activeTab === "review" && <ReviewApproveTab order={order} />}
         {activeTab === "performance" && (
-          <PerformanceCandidatesTab order={order} />
+          <PerformanceCandidatesTab
+            order={order}
+            selectedChannel={selectedChannel}
+            onChannelChange={setSelectedChannel}
+            fromDate={fromDate}
+            onFromDateChange={setFromDate}
+            toDate={toDate}
+            onToDateChange={setToDate}
+            onApply={(from, to) => { setAppliedFrom(from); setAppliedTo(to); }}
+            reporting={reporting}
+          />
         )}
       </div>
     </div>

@@ -117,6 +117,19 @@
   gap: $spacing-md;
 }
 
+.perf-error {
+  font-size: $text-sm;
+  color: $red;
+  margin: 0;
+}
+
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: $spacing-lg;
+  align-items: start;
+}
+
 .empty-state-panel {
   display: flex;
   flex-direction: column;
