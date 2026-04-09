@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export type OrderStatus = "awaiting-payment" | "pending" | "in-progress" | "completed";
+export type OrderStatus = "awaiting-payment" | "pending" | "in-progress" | "active" | "completed";
 export type OrderType = "custom" | "package";
 export type PackagePlan = "basic" | "medium" | "deluxe";
 export type Channel = string;
@@ -216,7 +216,7 @@ const orderSchema = new Schema<IOrder>(
     },
     status: {
       type: String,
-      enum: ["awaiting-payment", "pending", "in-progress", "completed"],
+      enum: ["awaiting-payment", "pending", "in-progress", "active", "completed"],
       default: "pending",
     },
     stripeSessionId: {
