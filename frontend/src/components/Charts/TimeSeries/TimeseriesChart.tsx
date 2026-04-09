@@ -7,6 +7,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import type { ReportingTimeSeriesPoint } from "../../../api/reporting";
 import "./TimeseriesChart.scss";
 
@@ -42,11 +44,20 @@ function formatXDate(dateStr: string): string {
 
 interface TimeseriesChartProps {
   data: ReportingTimeSeriesPoint[];
+  isLoading?: boolean;
 }
 
-const TimeseriesChart = ({ data }: TimeseriesChartProps) => {
+const TimeseriesChart = ({ data, isLoading = false }: TimeseriesChartProps) => {
   const chartData = aggregateByDate(data);
   const interval = getTickInterval(chartData.length);
+
+  if (isLoading) {
+    return (
+      <div className="timeseries-card">
+        <Skeleton height={340} borderRadius={12} />
+      </div>
+    );
+  }
 
   return (
     <div className="timeseries-card">

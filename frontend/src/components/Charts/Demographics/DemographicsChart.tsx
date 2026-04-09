@@ -8,6 +8,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import type { ReportingDemographic } from "../../../api/reporting";
 import "./DemographicsChart.scss";
 
@@ -33,10 +35,19 @@ function pivotDemographics(data: ReportingDemographic[]): PivotedRow[] {
 
 interface DemographicsChartProps {
   data: ReportingDemographic[];
+  isLoading?: boolean;
 }
 
-const DemographicsChart = ({ data }: DemographicsChartProps) => {
+const DemographicsChart = ({ data, isLoading = false }: DemographicsChartProps) => {
   const chartData = pivotDemographics(data);
+
+  if (isLoading) {
+    return (
+      <div className="demographics-card">
+        <Skeleton height={340} borderRadius={12} />
+      </div>
+    );
+  }
 
   return (
     <div className="demographics-card">
