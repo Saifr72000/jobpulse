@@ -7,15 +7,29 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import Icon from "../../Icon/Icon";
 import "./ChannelPerformanceChart.scss";
 
 interface ChannelPerformanceChartProps {
   data: { platform: string; clicks: number }[];
+  isLoading?: boolean;
 }
 
-const ChannelPerformanceChart = ({ data }: ChannelPerformanceChartProps) => {
+const ChannelPerformanceChart = ({
+  data,
+  isLoading = false,
+}: ChannelPerformanceChartProps) => {
+  if (isLoading) {
+    return (
+      <div className="channel-performance-card">
+        <Skeleton height={380} borderRadius={12} />
+      </div>
+    );
+  }
+
   return (
     <div className="channel-performance-card">
       {data.length > 0 && (

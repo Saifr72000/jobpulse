@@ -56,10 +56,16 @@ export default function Dashboard() {
 
         <div className="dashboard__charts">
           <div className="dashboard__chart-card--large">
-            <ChannelPerformanceChart data={data?.clicksByPlatform ?? []} />
+            <ChannelPerformanceChart
+              data={data?.clicksByPlatform ?? []}
+              isLoading={loading}
+            />
           </div>
           <div className="dashboard__chart-card--medium">
-            <TotalViewsChart data={data?.viewsTimeseries ?? []} />
+            <TotalViewsChart
+              data={data?.viewsTimeseries ?? []}
+              isLoading={loading}
+            />
           </div>
         </div>
 

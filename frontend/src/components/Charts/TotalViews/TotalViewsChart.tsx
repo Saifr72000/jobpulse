@@ -7,12 +7,15 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import Icon from "../../Icon/Icon";
 import "./TotalViewsChart.scss";
 
 interface TotalViewsChartProps {
   data: { date: string; impressions: number }[];
+  isLoading?: boolean;
 }
 
 function getTickInterval(pointCount: number): number {
@@ -30,8 +33,19 @@ function formatXDate(dateStr: string): string {
   });
 }
 
-const TotalViewsChart = ({ data }: TotalViewsChartProps) => {
+const TotalViewsChart = ({
+  data,
+  isLoading = false,
+}: TotalViewsChartProps) => {
   const interval = getTickInterval(data.length);
+
+  if (isLoading) {
+    return (
+      <div className="total-views-card">
+        <Skeleton height={380} borderRadius={12} />
+      </div>
+    );
+  }
 
   return (
     <div className="total-views-card">
