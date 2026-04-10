@@ -1,84 +1,84 @@
 import { useNavigate } from "react-router-dom";
+import { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import StatsCard from "../../../components/Card/StatsCard";
 import Button from "../../../components/Button/Button";
+import ChannelPerformanceChart from "../../../components/Charts/ChannelPerformance/ChannelPerformanceChart";
+import TotalViewsChart from "../../../components/Charts/TotalViews/TotalViewsChart";
 import "./Dashboard.scss";
+import { useDashboard } from "../../../hooks/useDashboard";
 import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import UsersIcon from "../../../assets/icons/users.svg?react";
 import CardIcon from "../../../assets/icons/card.svg?react";
 
+function fmt(n: number): string {
+  return n.toLocaleString("nb-NO");
+}
+
 export default function Dashboard() {
   const navigate = useNavigate();
+  const { data, loading } = useDashboard();
 
   return (
-    <div className="dashboard">
-      {/* Header */}
-      <div className="page-header">
-        <h2>Dashboard</h2>
-        <p className="subheading">View your data across all active campaigns</p>
-      </div>
-
-      {/* Stat Cards */}
-      <div className="dashboard__stat-cards">
-        <StatsCard icon={BarChartIcon} label="Active campaigns" value="3" />
-        <StatsCard icon={UsersIcon} label="Applications received" value="25" />
-        <StatsCard icon={CardIcon} label="Ad spend" value="150 000 NOK" />
-      </div>
-
-      {/* Charts Section */}
-      <div className="dashboard__charts">
-        {/* Bar Chart */}
-        <div className="dashboard__chart-card dashboard__chart-card--large">
-          {/* <h2>Total views per week</h2>
-          <p className="subtitle">All campaigns</p>
-          <div className="dashboard__bar-chart">
-            {weeklyData.map((d) => (
-              <div key={d.week} className="bar-group">
-                <div className="bar-container">
-                  {d.tooltip && (
-                    <div className="tooltip">
-                      <span>{d.tooltip}</span>
-                      <span className="dot" />
-                    </div>
-                  )}
-                  <div className="bar" style={{ height: `${d.height}%` }} />
-                </div>
-                <span className="week-label">{d.week}</span>
-              </div>
-            ))}
-          </div> */}
+    <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
+      <div className="dashboard">
+        <div className="page-header">
+          <div className="dashboard__header-row">
+            <div>
+              <h2>Dashboard</h2>
+              <p className="subheading">
+                View your data across all active campaigns
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Channel Performance */}
-        {/* <div className="dashboard__chart-card dashboard__chart-card--medium">
-          <h2>Channel performance</h2>
-          <div className="dashboard__channel-banner">
-            <img src={imgTrophy} alt="" />
-            <span>Facebook is leading on channel performance</span>
-          </div>
-          <div className="dashboard__channel-list">
-            {channels.map((ch) => (
-              <div key={ch.name} className="channel-item">
-                <span className="name">{ch.name}</span>
-                <div className="bar-row">
-                  <div className="bar" style={{ width: ch.width }} />
-                  <span className="percent">{ch.percent}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
-      </div>
-
-      {/* Campaign Banner */}
-      <div className="dashboard__cta-banner">
-        <div className="text">
-          <h3>Ready to launch a new campaign?</h3>
-          <p>Create targeted job ads across multiple channels.</p>
+        <div className="dashboard__stat-cards">
+          <StatsCard
+            icon={BarChartIcon}
+            label="Active campaigns"
+            value={data ? String(data.activeCampaigns) : "0"}
+            isLoading={loading}
+          />
+          <StatsCard
+            icon={UsersIcon}
+            label="Reach"
+            value={data ? fmt(data.totals.reach) : "0"}
+            isLoading={loading}
+          />
+          <StatsCard
+            icon={CardIcon}
+            label="Ad spend"
+            value={data ? `${fmt(data.totals.spend)} NOK` : "0 NOK"}
+            isLoading={loading}
+          />
         </div>
-        <Button onClick={() => navigate("/orders/new")}>
-          Create campaign
-        </Button>
+
+        <div className="dashboard__charts">
+          <div className="dashboard__chart-card--large">
+            <ChannelPerformanceChart
+              data={data?.clicksByPlatform ?? []}
+              isLoading={loading}
+            />
+          </div>
+          <div className="dashboard__chart-card--medium">
+            <TotalViewsChart
+              data={data?.viewsTimeseries ?? []}
+              isLoading={loading}
+            />
+          </div>
+        </div>
+
+        <div className="dashboard__cta-banner">
+          <div className="text">
+            <h3>Ready to launch a new campaign?</h3>
+            <p>Create targeted job ads across multiple channels.</p>
+          </div>
+          <Button onClick={() => navigate("/orders/new")}>
+            Create campaign
+          </Button>
+        </div>
       </div>
-    </div>
+    </SkeletonTheme>
   );
 }
