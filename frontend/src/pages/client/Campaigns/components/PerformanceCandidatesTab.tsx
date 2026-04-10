@@ -204,8 +204,8 @@ export function PerformanceCandidatesTab({
         {error && <p className="perf-error">Failed to load data: {error}</p>}
 
         <div className="charts-row">
-          <DemographicsChart data={activeDemographics} />
-          <TimeseriesChart data={activeTimeSeries} />
+          <DemographicsChart data={activeDemographics} isLoading={loading} />
+          <TimeseriesChart data={activeTimeSeries} isLoading={loading} />
         </div>
       </div>
 

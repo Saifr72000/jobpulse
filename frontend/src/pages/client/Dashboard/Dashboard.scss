@@ -1,5 +1,5 @@
-@use '../../../styles/variables' as *;
-@use '../../../styles/typography' as *;
+@use "../../../styles/variables" as *;
+@use "../../../styles/typography" as *;
 
 .dashboard {
   display: flex;
@@ -18,38 +18,17 @@
   &__charts {
     display: flex;
     gap: $spacing-lg;
-    flex: 1;
-    min-height: 0;
+    align-items: flex-start;
   }
 
-  &__chart-card {
-    background: $color-surface;
-    border-radius: $radius-card;
-    box-shadow: $shadow-card;
-    padding: $spacing-xl;
-    display: flex;
-    flex-direction: column;
+  &__chart-card--large {
+    flex: 3;
     min-width: 0;
+  }
 
-    &--large {
-      flex: 3;
-    }
-
-    &--medium {
-      flex: 2;
-    }
-
-    h2 {
-      font-size: $text-3xl;
-      font-weight: $font-bold;
-      color: $coal;
-    }
-
-    .subtitle {
-      font-size: $text-xl;
-      color: $color-text;
-      margin-top: 4px;
-    }
+  &__chart-card--medium {
+    flex: 2;
+    min-width: 0;
   }
 
   &__bar-chart {
@@ -203,6 +182,5 @@
         margin-top: 4px;
       }
     }
-
   }
 }
