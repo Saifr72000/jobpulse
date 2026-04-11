@@ -6,12 +6,23 @@ import type {
   NormalizedTimeSeriesPoint,
 } from "./adapter.interface.js";
 
-const BASE_URL = "https://adsapi.snapchat.com/v1";
+const DEFAULT_SNAPCHAT_BASE = "https://adsapi.snapchat.com/v1";
+
+function snapBase(): string {
+  const raw = process.env.SNAPCHAT_API_BASE?.trim();
+  return (raw || DEFAULT_SNAPCHAT_BASE).replace(/\/$/, "");
+}
 
 function toSnapchatTime(dateStr: string, endOfDay = false): string {
   return endOfDay
-    ? `${dateStr}T23:59:59.000Z`
+    ? `${dateStr}T23:59:59.999Z`
     : `${dateStr}T00:00:00.000Z`;
+}
+
+/** Snapchat returns spend in micro-currency; normalize to currency units. */
+function microToCurrency(micro: number | undefined): number {
+  if (micro === undefined || micro === null) return 0;
+  return micro / 1e6;
 }
 
 function buildUrl(base: string, params: Record<string, string | number>): string {
@@ -29,30 +40,36 @@ async function getJson<T>(url: string, token: string): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-interface SnapchatStats {
+interface SnapchatApiStats {
   impressions?: number;
   swipes?: number;
   spend?: number;
+  uniques?: number;
+  frequency?: number;
   reach?: number;
-  swipe_up_rate?: number;
-  conversion_sign_ups?: number;
-}
-
-interface SnapchatLifetimeStat {
-  lifetime_stat?: {
-    stats?: SnapchatStats;
-  };
 }
 
 interface SnapchatTimeSeriesEntry {
   start_time?: string;
-  stats?: SnapchatStats;
+  age?: string;
+  gender?: string;
+  stats?: SnapchatApiStats;
 }
 
-interface SnapchatTimeSeriesStat {
-  timeseries_stat?: {
-    timeseries?: SnapchatTimeSeriesEntry[];
-  };
+interface SnapchatTotalResponse {
+  total_stats?: Array<{
+    total_stat?: {
+      stats?: SnapchatApiStats;
+    };
+  }>;
+}
+
+interface SnapchatTimeSeriesResponse {
+  timeseries_stats?: Array<{
+    timeseries_stat?: {
+      timeseries?: SnapchatTimeSeriesEntry[];
+    };
+  }>;
 }
 
 function safeNum(val: number | undefined): number {
@@ -68,34 +85,39 @@ export class SnapchatAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedSummary> {
-    const url = buildUrl(`${BASE_URL}/campaigns/${campaignId}/stats`, {
-      granularity: "LIFETIME",
-      fields: "impressions,swipes,spend,reach,swipe_up_rate,conversion_sign_ups",
+    const url = buildUrl(`${snapBase()}/campaigns/${campaignId}/stats`, {
+      granularity: "TOTAL",
+      fields: "impressions,swipes,spend,uniques,frequency",
       start_time: toSnapchatTime(dateRange.since),
       end_time: toSnapchatTime(dateRange.until, true),
     });
-    const data = await getJson<{ lifetime_stats?: SnapchatLifetimeStat[] }>(url, token);
+    const data = await getJson<SnapchatTotalResponse>(url, token);
 
-    const rows: SnapchatLifetimeStat[] = data.lifetime_stats ?? [];
-    const totals = rows.reduce(
-      (acc, row) => {
-        const s = row.lifetime_stat?.stats ?? {};
-        return {
-          impressions: acc.impressions + safeNum(s.impressions),
-          clicks: acc.clicks + safeNum(s.swipes),
-          spend: acc.spend + safeNum(s.spend),
-          reach: acc.reach + safeNum(s.reach),
-          conversions: acc.conversions + safeNum(s.conversion_sign_ups),
-        };
-      },
-      { impressions: 0, clicks: 0, spend: 0, reach: 0, conversions: 0 }
-    );
+    const stats = data.total_stats?.[0]?.total_stat?.stats ?? {};
+    const impressions = safeNum(stats.impressions);
+    const clicks = safeNum(stats.swipes);
+    const spend = microToCurrency(stats.spend);
+    const reach = safeNum(stats.uniques);
+    const ctr = impressions > 0 ? (clicks / impressions) * 100 : 0;
+    const cpc = clicks > 0 ? spend / clicks : 0;
+    /** Snapchat: unique CTR = swipes ÷ uniques (as %, same scale as ctr). */
+    const uniqueCtr = reach > 0 ? (clicks / reach) * 100 : 0;
 
-    const ctr =
-      totals.impressions > 0 ? (totals.clicks / totals.impressions) * 100 : 0;
-    const cpc = totals.clicks > 0 ? totals.spend / totals.clicks : 0;
-
-    return { platform: this.platform, ...totals, ctr, cpc };
+    const summary: NormalizedSummary = {
+      platform: this.platform,
+      impressions,
+      clicks,
+      spend,
+      reach,
+      ctr,
+      cpc,
+      conversions: 0,
+      /** Total swipes; used as "unique clicks" until unique-swipes exists in the API. */
+      uniqueClicks: clicks,
+      uniqueCtr,
+    };
+    if (stats.frequency !== undefined) summary.frequency = stats.frequency;
+    return summary;
   }
 
   async fetchTimeSeries(
@@ -104,33 +126,50 @@ export class SnapchatAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedTimeSeriesPoint[]> {
-    const url = buildUrl(`${BASE_URL}/campaigns/${campaignId}/stats`, {
+    const url = buildUrl(`${snapBase()}/campaigns/${campaignId}/stats`, {
       granularity: "DAY",
-      fields: "impressions,swipes,spend,reach",
+      fields: "impressions,swipes,spend,uniques,frequency",
       start_time: toSnapchatTime(dateRange.since),
       end_time: toSnapchatTime(dateRange.until, true),
     });
-    const data = await getJson<{ timeseries_stats?: SnapchatTimeSeriesStat[] }>(url, token);
+    const data = await getJson<SnapchatTimeSeriesResponse>(url, token);
 
-    const rows: SnapchatTimeSeriesStat[] = data.timeseries_stats ?? [];
-    const points: NormalizedTimeSeriesPoint[] = [];
+    const entries =
+      data.timeseries_stats?.[0]?.timeseries_stat?.timeseries ?? [];
 
-    for (const row of rows) {
-      const entries = row.timeseries_stat?.timeseries ?? [];
-      for (const entry of entries) {
-        const s = entry.stats ?? {};
-        points.push({
+    const merged = new Map<string, NormalizedTimeSeriesPoint>();
+
+    for (const entry of entries) {
+      const dateStr = entry.start_time?.slice(0, 10) ?? "";
+      const s = entry.stats ?? {};
+      const impressions = safeNum(s.impressions);
+      const clicks = safeNum(s.swipes);
+      const spend = microToCurrency(s.spend);
+      const reach = safeNum(s.uniques);
+
+      const prev = merged.get(dateStr);
+      if (!prev) {
+        merged.set(dateStr, {
           platform: this.platform,
-          date: entry.start_time?.substring(0, 10) ?? "",
-          impressions: safeNum(s.impressions),
-          clicks: safeNum(s.swipes),
-          spend: safeNum(s.spend),
-          reach: safeNum(s.reach),
+          date: dateStr,
+          impressions,
+          clicks,
+          spend,
+          reach,
+        });
+      } else {
+        merged.set(dateStr, {
+          platform: this.platform,
+          date: dateStr,
+          impressions: prev.impressions + impressions,
+          clicks: prev.clicks + clicks,
+          spend: prev.spend + spend,
+          reach: prev.reach + reach,
         });
       }
     }
 
-    return points;
+    return [...merged.values()].sort((a, b) => a.date.localeCompare(b.date));
   }
 
   async fetchDemographics(
@@ -139,46 +178,29 @@ export class SnapchatAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedDemographic[]> {
-    const breakdowns: Array<{ breakdown: string; dimension: string }> = [
-      { breakdown: "gender", dimension: "gender" },
-      { breakdown: "age_group", dimension: "age" },
-    ];
-    const result: NormalizedDemographic[] = [];
+    const url = buildUrl(`${snapBase()}/campaigns/${campaignId}/stats`, {
+      granularity: "DAY",
+      fields: "impressions,swipes,spend,uniques,frequency",
+      report_dimension: "age,gender",
+      start_time: toSnapchatTime(dateRange.since),
+      end_time: toSnapchatTime(dateRange.until, true),
+    });
+    const data = await getJson<SnapchatTimeSeriesResponse>(url, token);
 
-    for (const { breakdown, dimension } of breakdowns) {
-      const url = buildUrl(`${BASE_URL}/campaigns/${campaignId}/stats`, {
-        granularity: "LIFETIME",
-        fields: "impressions,swipes,spend",
-        breakdown,
-        start_time: toSnapchatTime(dateRange.since),
-        end_time: toSnapchatTime(dateRange.until, true),
-      });
-      const data = await getJson<{
-        lifetime_stats?: Array<{
-          breakdown_stats?: Array<{
-            breakdowns?: Record<string, string>;
-            stats?: SnapchatStats;
-          }>;
-        }>;
-      }>(url, token);
+    const entries =
+      data.timeseries_stats?.[0]?.timeseries_stat?.timeseries ?? [];
 
-      const rows = data.lifetime_stats ?? [];
-      for (const row of rows) {
-        for (const segment of row.breakdown_stats ?? []) {
-          const s = segment.stats ?? {};
-          const label = segment.breakdowns?.[breakdown] ?? "unknown";
-          result.push({
-            platform: this.platform,
-            dimension,
-            label,
-            impressions: safeNum(s.impressions),
-            clicks: safeNum(s.swipes),
-            spend: safeNum(s.spend),
-          });
-        }
-      }
-    }
-
-    return result;
+    return entries.map((entry) => {
+      const s = entry.stats ?? {};
+      const row: NormalizedDemographic = {
+        platform: this.platform,
+        impressions: safeNum(s.impressions),
+        clicks: safeNum(s.swipes),
+        spend: microToCurrency(s.spend),
+      };
+      if (entry.age !== undefined) row.age = entry.age;
+      if (entry.gender !== undefined) row.gender = entry.gender;
+      return row;
+    });
   }
 }
