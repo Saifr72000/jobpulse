@@ -44,9 +44,23 @@ async function getOrderCampaigns(orderId: string) {
   return order.platformCampaigns ?? [];
 }
 
+/** Avoid leading/trailing spaces in stored IDs (breaks LinkedIn List(urn:...) and mock DB lookups). */
+function trimCampaignFields<T extends { externalCampaignId: string; platform: string }>(
+  c: T
+): T {
+  return {
+    ...c,
+    platform: c.platform.trim(),
+    externalCampaignId: c.externalCampaignId.trim(),
+  };
+}
+
 async function getToken(platform: string): Promise<string> {
   if (platform === "snapchat" && process.env.SNAPCHAT_USE_MOCK === "true") {
     return process.env.SNAPCHAT_MOCK_BEARER ?? "mock";
+  }
+  if (platform === "linkedin" && process.env.LINKEDIN_USE_MOCK === "true") {
+    return process.env.LINKEDIN_MOCK_BEARER ?? "mock";
   }
   const doc = await PlatformToken.findOne({ platform }).lean();
   if (!doc) throw new Error(`No token found for platform: ${platform}`);
@@ -61,14 +75,15 @@ export async function getSummary(
   const results: NormalizedSummary[] = [];
 
   for (const campaign of campaigns) {
-    const adapter = ADAPTERS[campaign.platform];
+    const c = trimCampaignFields(campaign);
+    const adapter = ADAPTERS[c.platform];
     if (!adapter) continue;
 
     try {
-      const token = await getToken(campaign.platform);
+      const token = await getToken(c.platform);
       const summary = await adapter.fetchSummary(
-        campaign.externalCampaignId,
-        campaign.adAccountId ?? "",
+        c.externalCampaignId,
+        campaign.adAccountId?.trim() ?? "",
         dateRange,
         token,
       );
@@ -76,7 +91,7 @@ export async function getSummary(
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(
-        `[reporting] getSummary skipped platform=${campaign.platform} campaign=${campaign.externalCampaignId}:`,
+        `[reporting] getSummary skipped platform=${c.platform} campaign=${c.externalCampaignId}:`,
         msg,
       );
     }
@@ -112,14 +127,15 @@ export async function getTimeSeries(
   const allPoints: NormalizedTimeSeriesPoint[] = [];
 
   for (const campaign of campaigns) {
-    const adapter = ADAPTERS[campaign.platform];
+    const c = trimCampaignFields(campaign);
+    const adapter = ADAPTERS[c.platform];
     if (!adapter) continue;
 
     try {
-      const token = await getToken(campaign.platform);
+      const token = await getToken(c.platform);
       const points = await adapter.fetchTimeSeries(
-        campaign.externalCampaignId,
-        campaign.adAccountId ?? "",
+        c.externalCampaignId,
+        campaign.adAccountId?.trim() ?? "",
         dateRange,
         token,
       );
@@ -127,7 +143,7 @@ export async function getTimeSeries(
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(
-        `[reporting] getTimeSeries skipped platform=${campaign.platform} campaign=${campaign.externalCampaignId}:`,
+        `[reporting] getTimeSeries skipped platform=${c.platform} campaign=${c.externalCampaignId}:`,
         msg,
       );
     }
@@ -144,14 +160,15 @@ export async function getDemographics(
   const allDemographics: NormalizedDemographic[] = [];
 
   for (const campaign of campaigns) {
-    const adapter = ADAPTERS[campaign.platform];
+    const c = trimCampaignFields(campaign);
+    const adapter = ADAPTERS[c.platform];
     if (!adapter) continue;
 
     try {
-      const token = await getToken(campaign.platform);
+      const token = await getToken(c.platform);
       const demographics = await adapter.fetchDemographics(
-        campaign.externalCampaignId,
-        campaign.adAccountId ?? "",
+        c.externalCampaignId,
+        campaign.adAccountId?.trim() ?? "",
         dateRange,
         token,
       );
@@ -159,7 +176,7 @@ export async function getDemographics(
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(
-        `[reporting] getDemographics skipped platform=${campaign.platform} campaign=${campaign.externalCampaignId}:`,
+        `[reporting] getDemographics skipped platform=${c.platform} campaign=${c.externalCampaignId}:`,
         msg,
       );
     }

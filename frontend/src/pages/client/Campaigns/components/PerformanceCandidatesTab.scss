@@ -104,6 +104,12 @@
   font-weight: $font-bold;
   color: $color-text;
   line-height: $leading-tight;
+
+  &--na {
+    font-size: $text-xl;
+    font-weight: $font-medium;
+    color: $color-text-muted;
+  }
 }
 
 .kpi-label {
@@ -127,7 +133,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: $spacing-lg;
-  align-items: start;
+  align-items: stretch;
 }
 
 .empty-state-panel {

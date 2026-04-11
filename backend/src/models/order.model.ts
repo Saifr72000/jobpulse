@@ -226,8 +226,8 @@ const orderSchema = new Schema<IOrder>(
       type: [
         new Schema<IPlatformCampaign>(
           {
-            platform: { type: String, required: true },
-            externalCampaignId: { type: String, required: true },
+            platform: { type: String, required: true, trim: true },
+            externalCampaignId: { type: String, required: true, trim: true },
             adAccountId: { type: String },
             startDate: { type: String },
             endDate: { type: String },

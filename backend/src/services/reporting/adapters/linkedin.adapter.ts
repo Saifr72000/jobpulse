@@ -6,8 +6,13 @@ import type {
   NormalizedTimeSeriesPoint,
 } from "./adapter.interface.js";
 
-const BASE_URL = "https://api.linkedin.com/rest";
+const DEFAULT_LINKEDIN_REST_BASE = "https://api.linkedin.com/rest";
 const API_VERSION = "202509";
+
+function linkedInRestBase(): string {
+  const raw = process.env.LINKEDIN_API_BASE?.trim();
+  return (raw || DEFAULT_LINKEDIN_REST_BASE).replace(/\/$/, "");
+}
 
 interface LinkedInMetric {
   impressions?: number;
@@ -19,6 +24,7 @@ interface LinkedInMetric {
   likes?: number;
   shares?: number;
   approximateUniqueImpressions?: number;
+  approximateMemberReach?: number;
 }
 
 interface LinkedInRow {
@@ -34,6 +40,7 @@ interface LinkedInRow {
   costInLocalCurrency?: string;
   reach?: number;
   leads?: number;
+  approximateMemberReach?: number;
 }
 
 function safeNum(val: number | string | undefined): number {
@@ -60,7 +67,11 @@ function buildUrl(base: string, params: Record<string, string | number>): string
 
 async function getJson<T>(url: string, headers: Record<string, string>): Promise<T> {
   const res = await fetch(url, { headers });
-  if (!res.ok) throw new Error(`LinkedIn API error: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text();
+    const hint = body ? ` — ${body.slice(0, 500)}` : "";
+    throw new Error(`LinkedIn API error: ${res.status}${hint}`);
+  }
   return res.json() as Promise<T>;
 }
 
@@ -81,12 +92,14 @@ export class LinkedInAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedSummary> {
-    const url = buildUrl(`${BASE_URL}/adAnalytics`, {
+    const id = campaignId.trim();
+    const url = buildUrl(`${linkedInRestBase()}/adAnalytics`, {
       q: "analytics",
       pivot: "CAMPAIGN",
-      campaigns: `List(urn:li:sponsoredCampaign:${campaignId})`,
+      campaigns: `List(urn:li:sponsoredCampaign:${id})`,
       dateRange: buildLinkedInDateParam(dateRange),
-      fields: "impressions,clicks,costInLocalCurrency,landingPageClicks,likes,shares",
+      fields:
+        "impressions,clicks,costInLocalCurrency,landingPageClicks,likes,shares,approximateMemberReach",
       timeGranularity: "ALL",
     });
     const data = await getJson<{ elements?: LinkedInRow[] }>(url, this.authHeaders(token));
@@ -101,7 +114,11 @@ export class LinkedInAdapter implements IReportingAdapter {
           impressions: acc.impressions + safeNum(m.impressions),
           clicks: acc.clicks + safeNum(m.clicks),
           spend: acc.spend + safeNum(m.costInLocalCurrency),
-          reach: acc.reach + safeNum(m.reach ?? m.approximateUniqueImpressions),
+          reach:
+            acc.reach +
+            safeNum(
+              m.reach ?? m.approximateUniqueImpressions ?? m.approximateMemberReach
+            ),
           conversions: acc.conversions + safeNum(m.landingPageClicks ?? m.leads),
         };
       },
@@ -112,7 +129,19 @@ export class LinkedInAdapter implements IReportingAdapter {
       totals.impressions > 0 ? (totals.clicks / totals.impressions) * 100 : 0;
     const cpc = totals.clicks > 0 ? totals.spend / totals.clicks : 0;
 
-    return { platform: this.platform, ...totals, ctr, cpc };
+    /** LinkedIn: approximate delivery frequency ≈ impressions ÷ member reach (not Meta/Snapchat “frequency”). */
+    const frequency: number | null =
+      totals.reach > 0 ? totals.impressions / totals.reach : null;
+
+    return {
+      platform: this.platform,
+      ...totals,
+      ctr,
+      cpc,
+      frequency,
+      uniqueClicks: null,
+      uniqueCtr: null,
+    };
   }
 
   async fetchTimeSeries(
@@ -121,12 +150,14 @@ export class LinkedInAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedTimeSeriesPoint[]> {
-    const url = buildUrl(`${BASE_URL}/adAnalytics`, {
+    const id = campaignId.trim();
+    const url = buildUrl(`${linkedInRestBase()}/adAnalytics`, {
       q: "analytics",
       pivot: "CAMPAIGN",
-      campaigns: `List(urn:li:sponsoredCampaign:${campaignId})`,
+      campaigns: `List(urn:li:sponsoredCampaign:${id})`,
       dateRange: buildLinkedInDateParam(dateRange),
-      fields: "impressions,clicks,costInLocalCurrency,landingPageClicks,likes,shares,dateRange",
+      fields:
+        "impressions,clicks,costInLocalCurrency,landingPageClicks,likes,shares,approximateMemberReach,dateRange",
       timeGranularity: "DAILY",
     });
     const data = await getJson<{ elements?: LinkedInRow[] }>(url, this.authHeaders(token));
@@ -141,7 +172,9 @@ export class LinkedInAdapter implements IReportingAdapter {
         impressions: safeNum(m.impressions),
         clicks: safeNum(m.clicks),
         spend: safeNum(m.costInLocalCurrency),
-        reach: safeNum(m.reach ?? m.approximateUniqueImpressions),
+        reach: safeNum(
+          m.reach ?? m.approximateUniqueImpressions ?? m.approximateMemberReach
+        ),
       };
     });
   }
@@ -152,15 +185,19 @@ export class LinkedInAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedDemographic[]> {
+    if (process.env.LINKEDIN_USE_MOCK === "true") {
+      return [];
+    }
+    const id = campaignId.trim();
     const pivots = ["MEMBER_AGE", "MEMBER_GENDER"] as const;
     const results: NormalizedDemographic[] = [];
 
     for (const pivot of pivots) {
       const isAgePivot = pivot === "MEMBER_AGE";
-      const url = buildUrl(`${BASE_URL}/adAnalytics`, {
+      const url = buildUrl(`${linkedInRestBase()}/adAnalytics`, {
         q: "analytics",
         pivot,
-        campaigns: `List(urn:li:sponsoredCampaign:${campaignId})`,
+        campaigns: `List(urn:li:sponsoredCampaign:${id})`,
         fields: "impressions,clicks,costInLocalCurrency",
         timeGranularity: "ALL",
         dateRange: buildLinkedInDateParam(dateRange),
