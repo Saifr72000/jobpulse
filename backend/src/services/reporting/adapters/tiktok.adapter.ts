@@ -148,13 +148,13 @@ export class TikTokAdapter implements IReportingAdapter {
     dateRange: DateRange,
     token: string
   ): Promise<NormalizedDemographic[]> {
-    const demoDimensions: Array<{ dim: string; label: string }> = [
-      { dim: "gender", label: "gender" },
-      { dim: "age", label: "age" },
+    const demoDimensions: Array<{ dim: string }> = [
+      { dim: "gender" },
+      { dim: "age" },
     ];
     const result: NormalizedDemographic[] = [];
 
-    for (const { dim, label: dimension } of demoDimensions) {
+    for (const { dim } of demoDimensions) {
       const rows = await this.fetchReport(
         adAccountId,
         ["campaign_id", dim],
@@ -167,10 +167,10 @@ export class TikTokAdapter implements IReportingAdapter {
         (r) => r.dimensions?.campaign_id === campaignId
       )) {
         const m = row.metrics ?? {};
+        const label = row.dimensions?.[dim] ?? "unknown";
         result.push({
           platform: this.platform,
-          dimension,
-          label: row.dimensions?.[dim] ?? "unknown",
+          ...(dim === "age" ? { age: label } : { gender: label }),
           impressions: safeNum(m.show_cnt),
           clicks: safeNum(m.click_cnt),
           spend: safeNum(m.cost),

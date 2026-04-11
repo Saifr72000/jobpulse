@@ -7,7 +7,7 @@ import type {
 } from "./adapter.interface.js";
 
 const BASE_URL = "https://api.linkedin.com/rest";
-const API_VERSION = "202405";
+const API_VERSION = "202509";
 
 interface LinkedInMetric {
   impressions?: number;
@@ -15,6 +15,9 @@ interface LinkedInMetric {
   costInLocalCurrency?: string;
   reach?: number;
   leads?: number;
+  landingPageClicks?: number;
+  likes?: number;
+  shares?: number;
   approximateUniqueImpressions?: number;
 }
 
@@ -42,17 +45,10 @@ function toDateStr(d: { year: number; month: number; day: number }): string {
   return `${d.year}-${String(d.month).padStart(2, "0")}-${String(d.day).padStart(2, "0")}`;
 }
 
-function buildLinkedInDateParam(dateRange: DateRange): Record<string, string | number> {
+function buildLinkedInDateParam(dateRange: DateRange): string {
   const [sy, sm, sd] = dateRange.since.split("-").map(Number) as [number, number, number];
   const [ey, em, ed] = dateRange.until.split("-").map(Number) as [number, number, number];
-  return {
-    "dateRange.start.year": sy,
-    "dateRange.start.month": sm,
-    "dateRange.start.day": sd,
-    "dateRange.end.year": ey,
-    "dateRange.end.month": em,
-    "dateRange.end.day": ed,
-  };
+  return `(start:(year:${sy},month:${sm},day:${sd}),end:(year:${ey},month:${em},day:${ed}))`;
 }
 
 function buildUrl(base: string, params: Record<string, string | number>): string {
@@ -89,9 +85,9 @@ export class LinkedInAdapter implements IReportingAdapter {
       q: "analytics",
       pivot: "CAMPAIGN",
       campaigns: `List(urn:li:sponsoredCampaign:${campaignId})`,
-      fields: "impressions,clicks,costInLocalCurrency,reach,leads",
+      dateRange: buildLinkedInDateParam(dateRange),
+      fields: "impressions,clicks,costInLocalCurrency,landingPageClicks,likes,shares",
       timeGranularity: "ALL",
-      ...buildLinkedInDateParam(dateRange),
     });
     const data = await getJson<{ elements?: LinkedInRow[] }>(url, this.authHeaders(token));
 
@@ -106,7 +102,7 @@ export class LinkedInAdapter implements IReportingAdapter {
           clicks: acc.clicks + safeNum(m.clicks),
           spend: acc.spend + safeNum(m.costInLocalCurrency),
           reach: acc.reach + safeNum(m.reach ?? m.approximateUniqueImpressions),
-          conversions: acc.conversions + safeNum(m.leads),
+          conversions: acc.conversions + safeNum(m.landingPageClicks ?? m.leads),
         };
       },
       { impressions: 0, clicks: 0, spend: 0, reach: 0, conversions: 0 }
@@ -129,9 +125,9 @@ export class LinkedInAdapter implements IReportingAdapter {
       q: "analytics",
       pivot: "CAMPAIGN",
       campaigns: `List(urn:li:sponsoredCampaign:${campaignId})`,
-      fields: "impressions,clicks,costInLocalCurrency,reach",
+      dateRange: buildLinkedInDateParam(dateRange),
+      fields: "impressions,clicks,costInLocalCurrency,landingPageClicks,likes,shares,dateRange",
       timeGranularity: "DAILY",
-      ...buildLinkedInDateParam(dateRange),
     });
     const data = await getJson<{ elements?: LinkedInRow[] }>(url, this.authHeaders(token));
 
@@ -160,14 +156,14 @@ export class LinkedInAdapter implements IReportingAdapter {
     const results: NormalizedDemographic[] = [];
 
     for (const pivot of pivots) {
-      const dimension = pivot === "MEMBER_AGE" ? "age" : "gender";
+      const isAgePivot = pivot === "MEMBER_AGE";
       const url = buildUrl(`${BASE_URL}/adAnalytics`, {
         q: "analytics",
         pivot,
         campaigns: `List(urn:li:sponsoredCampaign:${campaignId})`,
         fields: "impressions,clicks,costInLocalCurrency",
         timeGranularity: "ALL",
-        ...buildLinkedInDateParam(dateRange),
+        dateRange: buildLinkedInDateParam(dateRange),
       });
       const data = await getJson<{ elements?: LinkedInRow[] }>(url, this.authHeaders(token));
 
@@ -178,8 +174,7 @@ export class LinkedInAdapter implements IReportingAdapter {
           row.pivotValues?.[0]?.replace(/^urn:li:[a-zA-Z]+:/, "") ?? "unknown";
         results.push({
           platform: this.platform,
-          dimension,
-          label,
+          ...(isAgePivot ? { age: label } : { gender: label }),
           impressions: safeNum(m.impressions),
           clicks: safeNum(m.clicks),
           spend: safeNum(m.costInLocalCurrency),

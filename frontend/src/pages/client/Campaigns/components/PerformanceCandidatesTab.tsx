@@ -21,22 +21,15 @@ function KpiCard({ label, value, isLoading }: KpiCardProps) {
     <div className="kpi-card">
       <span className="kpi-label">{label}</span>
       <span className="kpi-value">
-        {isLoading ? <Skeleton width={80} height={28} borderRadius={6} /> : value}
+        {isLoading ? (
+          <Skeleton width={80} height={28} borderRadius={6} />
+        ) : (
+          value
+        )}
       </span>
     </div>
   );
 }
-
-/* const PERFORMANCE_KPIS: { label: string }[] = [
-  { label: "Total views" },
-  { label: "Reach" },
-  { label: "Clicks" },
-  { label: "Frequency" },
-  { label: "Unique clicks" },
-  { label: "Unique CTR" },
-  { label: "Impressions" },
-  { label: "Spend" },
-]; */
 
 function aggregateSummary(rows: ReportingSummary[]) {
   return rows.reduce(
@@ -77,11 +70,11 @@ interface PerformanceCandidatesTabProps {
   reporting: UseReportingResult;
 }
 
-const CANDIDATE_KPIS: { label: string }[] = [
+/* const CANDIDATE_KPIS: { label: string }[] = [
   { label: "Total candidates" },
   { label: "Contacted candidates" },
   { label: "Rejected candidates" },
-];
+]; */
 
 export function PerformanceCandidatesTab({
   order,
@@ -145,92 +138,92 @@ export function PerformanceCandidatesTab({
 
   return (
     <SkeletonTheme baseColor="#ebebeb" highlightColor="#f5f5f5">
-    <div className="performance-tab">
-      {/* Performance section */}
-      <div className="perf-section">
-        <div className="perf-section-header">
-          <h4>Performance</h4>
-          <div className="filter-channel">
-            <div className="filter-channel__select-wrapper">
-              <select
-                className="filter-channel__select"
-                value={selectedChannel}
-                onChange={(e) => onChannelChange(e.target.value)}
-              >
-                {channels.map((ch) => (
-                  <option key={ch} value={ch}>
-                    {ch}
-                  </option>
-                ))}
-              </select>
+      <div className="performance-tab">
+        {/* Performance section */}
+        <div className="perf-section">
+          <div className="perf-section-header">
+            <h4>Performance</h4>
+            <div className="filter-channel">
+              <div className="filter-channel__select-wrapper">
+                <select
+                  className="filter-channel__select"
+                  value={selectedChannel}
+                  onChange={(e) => onChannelChange(e.target.value)}
+                >
+                  {channels.map((ch) => (
+                    <option key={ch} value={ch}>
+                      {ch}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="filter-channel__date-wrapper">
+                <span className="filter-channel__date-label">From</span>
+                <input
+                  type="date"
+                  className="filter-channel__date"
+                  value={fromDate}
+                  onChange={(e) => onFromDateChange(e.target.value)}
+                />
+              </div>
+              <div className="filter-channel__date-wrapper">
+                <span className="filter-channel__date-label">To</span>
+                <input
+                  type="date"
+                  className="filter-channel__date"
+                  value={toDate}
+                  onChange={(e) => onToDateChange(e.target.value)}
+                />
+              </div>
+              <Button size="sm" onClick={handleApply} loading={loading}>
+                Apply
+              </Button>
             </div>
-            <div className="filter-channel__date-wrapper">
-              <span className="filter-channel__date-label">From</span>
-              <input
-                type="date"
-                className="filter-channel__date"
-                value={fromDate}
-                onChange={(e) => onFromDateChange(e.target.value)}
+          </div>
+
+          {dateError && <p className="perf-error">{dateError}</p>}
+
+          <div className="kpi-grid">
+            {performanceKpis.map((kpi) => (
+              <KpiCard
+                key={kpi.label}
+                label={kpi.label}
+                value={kpi.value}
+                isLoading={loading}
               />
-            </div>
-            <div className="filter-channel__date-wrapper">
-              <span className="filter-channel__date-label">To</span>
-              <input
-                type="date"
-                className="filter-channel__date"
-                value={toDate}
-                onChange={(e) => onToDateChange(e.target.value)}
-              />
-            </div>
-            <Button size="sm" onClick={handleApply} loading={loading}>
-              Apply
-            </Button>
+            ))}
+          </div>
+
+          {error && <p className="perf-error">Failed to load data: {error}</p>}
+
+          <div className="charts-row">
+            <DemographicsChart data={activeDemographics} isLoading={loading} />
+            <TimeseriesChart data={activeTimeSeries} isLoading={loading} />
           </div>
         </div>
 
-        {dateError && <p className="perf-error">{dateError}</p>}
+        {/* Candidates section */}
+        {/*  <div className="perf-section">
+          <h4>Candidates</h4>
 
-        <div className="kpi-grid">
-          {performanceKpis.map((kpi) => (
-            <KpiCard
-              key={kpi.label}
-              label={kpi.label}
-              value={kpi.value}
-              isLoading={loading}
-            />
-          ))}
-        </div>
-
-        {error && <p className="perf-error">Failed to load data: {error}</p>}
-
-        <div className="charts-row">
-          <DemographicsChart data={activeDemographics} isLoading={loading} />
-          <TimeseriesChart data={activeTimeSeries} isLoading={loading} />
-        </div>
-      </div>
-
-      {/* Candidates section */}
-      <div className="perf-section">
-        <h4>Candidates</h4>
-
-        <div className="candidate-grid">
-          {CANDIDATE_KPIS.map((kpi) => (
-            <KpiCard key={kpi.label} label={kpi.label} value={0} />
-          ))}
-        </div>
-
-        <div className="empty-state-panel card">
-          <div className="empty-icon-box">
-            <UsersIcon width={30} height={30} />
+          <div className="candidate-grid">
+            {CANDIDATE_KPIS.map((kpi) => (
+              <KpiCard key={kpi.label} label={kpi.label} value={0} />
+            ))}
           </div>
-          <p className="empty-title">No candidates yet</p>
-          <p className="empty-body">
-            Candidates will appear here once your campaign starts receiving
-            applications.
-          </p>
-        </div>
+
+          <div className="empty-state-panel card">
+            <div className="empty-icon-box">
+              <UsersIcon width={30} height={30} />
+            </div>
+            <p className="empty-title">No candidates yet</p>
+            <p className="empty-body">
+              Candidates will appear here once your campaign starts receiving
+              applications.
+            </p>
+          </div>
+        </div> */}
       </div>
-    </div>
     </SkeletonTheme>
   );
 }
