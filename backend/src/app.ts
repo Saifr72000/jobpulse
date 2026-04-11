@@ -23,6 +23,7 @@ import commentRoutes from "./routes/comment.routes.js";
 import reportingRoutes from "./routes/reporting.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
 import snapchatMockRoutes from "./routes/snapchatMock.routes.js";
+import linkedinMockRoutes from "./routes/linkedinMock.routes.js";
 
 const app = express();
 
@@ -84,6 +85,8 @@ app.use("/api/reporting", reportingRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 // Snapchat-shaped mock stats (DB-backed); point SNAPCHAT_API_BASE here when SNAPCHAT_USE_MOCK=true
 app.use("/api/mock/snapchat", snapchatMockRoutes);
+// LinkedIn-shaped mock adAnalytics (DB-backed); point LINKEDIN_API_BASE to http://localhost:<PORT>/rest when LINKEDIN_USE_MOCK=true
+app.use("/rest", linkedinMockRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {

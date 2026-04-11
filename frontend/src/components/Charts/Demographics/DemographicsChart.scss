@@ -15,6 +15,10 @@
   border-radius: $radius-card;
   box-shadow: $shadow-card;
   padding: $spacing-xl;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 
   &__header {
     margin-bottom: $spacing-lg;
@@ -22,5 +26,36 @@
     h4 {
       margin-bottom: $spacing-xs;
     }
+  }
+
+  /* Same plot height as TimeseriesChart ResponsiveContainer (280px) */
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $spacing-md;
+    box-sizing: border-box;
+    min-height: 280px;
+    height: 280px;
+    text-align: center;
+    padding: 0 $spacing-sm;
+  }
+
+  &__empty-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-input;
+    background: $color-primary-light;
+    color: $violet;
+    flex-shrink: 0;
+  }
+
+  &__empty-text {
+    max-width: 280px;
+    margin: 0;
   }
 }

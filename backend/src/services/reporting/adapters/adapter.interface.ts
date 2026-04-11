@@ -12,10 +12,10 @@ export interface NormalizedSummary {
   ctr: number;
   cpc: number;
   conversions: number;
-  // Platform-specific extras (not all platforms provide these)
-  frequency?: number;
-  uniqueClicks?: number;
-  uniqueCtr?: number;
+  /** `null` = not available for this platform (do not show as 0). */
+  frequency?: number | null;
+  uniqueClicks?: number | null;
+  uniqueCtr?: number | null;
   cpm?: number;
   objective?: string;
 }

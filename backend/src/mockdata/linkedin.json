@@ -1,0 +1,198 @@
+{
+  "paging": {
+    "start": 0,
+    "count": 10,
+    "links": []
+  },
+  "elements": [
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 2,
+          "day": 25,
+          "year": 2026
+        },
+        "end": {
+          "month": 2,
+          "day": 25,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 1,
+      "clicks": 1,
+      "costInLocalCurrency": "558.5800000000002878003",
+      "approximateMemberReach": 178,
+      "impressions": 178,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 2,
+          "day": 26,
+          "year": 2026
+        },
+        "end": {
+          "month": 2,
+          "day": 26,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 1,
+      "clicks": 1,
+      "costInLocalCurrency": "472.6700000000001189997",
+      "approximateMemberReach": 169,
+      "impressions": 186,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 2,
+          "day": 27,
+          "year": 2026
+        },
+        "end": {
+          "month": 2,
+          "day": 27,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 0,
+      "clicks": 0,
+      "costInLocalCurrency": "413.6800000000000472",
+      "approximateMemberReach": 154,
+      "impressions": 154,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 2,
+          "day": 28,
+          "year": 2026
+        },
+        "end": {
+          "month": 2,
+          "day": 28,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 0,
+      "clicks": 0,
+      "costInLocalCurrency": "332.7899999999999017001",
+      "approximateMemberReach": 99,
+      "impressions": 99,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 3,
+          "day": 1,
+          "year": 2026
+        },
+        "end": {
+          "month": 3,
+          "day": 1,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 3,
+      "clicks": 3,
+      "costInLocalCurrency": "531.50999999999994",
+      "approximateMemberReach": 187,
+      "impressions": 199,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 3,
+          "day": 2,
+          "year": 2026
+        },
+        "end": {
+          "month": 3,
+          "day": 2,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 0,
+      "clicks": 0,
+      "costInLocalCurrency": "285.72999999999996",
+      "approximateMemberReach": 210,
+      "impressions": 213,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 3,
+          "day": 3,
+          "year": 2026
+        },
+        "end": {
+          "month": 3,
+          "day": 3,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 0,
+      "clicks": 0,
+      "costInLocalCurrency": "380.03999999999998",
+      "approximateMemberReach": 107,
+      "impressions": 107,
+      "likes": 0
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 3,
+          "day": 4,
+          "year": 2026
+        },
+        "end": {
+          "month": 3,
+          "day": 4,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 7,
+      "clicks": 7,
+      "costInLocalCurrency": "618.6800000000002059996",
+      "approximateMemberReach": 1581,
+      "impressions": 1598,
+      "likes": 1
+    },
+    {
+      "shares": 0,
+      "dateRange": {
+        "start": {
+          "month": 3,
+          "day": 5,
+          "year": 2026
+        },
+        "end": {
+          "month": 3,
+          "day": 5,
+          "year": 2026
+        }
+      },
+      "landingPageClicks": 0,
+      "clicks": 0,
+      "costInLocalCurrency": "341.26",
+      "approximateMemberReach": 78,
+      "impressions": 78,
+      "likes": 0
+    }
+  ]
+}
