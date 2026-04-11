@@ -22,6 +22,7 @@ import creativeRoutes from "./routes/creative.routes.js";
 import commentRoutes from "./routes/comment.routes.js";
 import reportingRoutes from "./routes/reporting.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import snapchatMockRoutes from "./routes/snapchatMock.routes.js";
 
 const app = express();
 
@@ -81,6 +82,8 @@ app.use("/api/creatives", creativeRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/reporting", reportingRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+// Snapchat-shaped mock stats (DB-backed); point SNAPCHAT_API_BASE here when SNAPCHAT_USE_MOCK=true
+app.use("/api/mock/snapchat", snapchatMockRoutes);
 
 // Health check
 app.get("/", (req: Request, res: Response) => {

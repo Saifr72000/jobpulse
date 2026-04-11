@@ -45,60 +45,17 @@ async function getOrderCampaigns(orderId: string) {
 }
 
 async function getToken(platform: string): Promise<string> {
+  if (platform === "snapchat" && process.env.SNAPCHAT_USE_MOCK === "true") {
+    return process.env.SNAPCHAT_MOCK_BEARER ?? "mock";
+  }
   const doc = await PlatformToken.findOne({ platform }).lean();
   if (!doc) throw new Error(`No token found for platform: ${platform}`);
   return doc.accessToken;
 }
 
-// ─── Cache helpers — disabled for now, always fetches live data ─────────────
-//
-// async function getCachedSnapshot<T>(
-//   orderId: string,
-//   platform: string,
-//   campaignId: string,
-//   type: "summary" | "timeseries" | "demographics",
-//   dateRange: DateRange
-// ): Promise<T | null> {
-//   const snap = await ReportSnapshot.findOne({
-//     orderId: new mongoose.Types.ObjectId(orderId),
-//     platform,
-//     externalCampaignId: campaignId,
-//     type,
-//     "dateRange.since": dateRange.since,
-//     "dateRange.until": dateRange.until,
-//   }).lean();
-//   return snap ? (snap.data as T) : null;
-// }
-//
-// async function saveSnapshot(
-//   orderId: string,
-//   platform: string,
-//   campaignId: string,
-//   type: "summary" | "timeseries" | "demographics",
-//   dateRange: DateRange,
-//   data: unknown
-// ): Promise<void> {
-//   const now = new Date();
-//   const expiresAt = new Date(now.getTime() + CACHE_TTL_MS);
-//   await ReportSnapshot.findOneAndUpdate(
-//     {
-//       orderId: new mongoose.Types.ObjectId(orderId),
-//       platform,
-//       externalCampaignId: campaignId,
-//       type,
-//       "dateRange.since": dateRange.since,
-//       "dateRange.until": dateRange.until,
-//     },
-//     { data, fetchedAt: now, expiresAt },
-//     { upsert: true }
-//   );
-// }
-
-// ─── Public API ─────────────────────────────────────────────────────────────
-
 export async function getSummary(
   orderId: string,
-  dateRange: DateRange
+  dateRange: DateRange,
 ): Promise<SummaryResult> {
   const campaigns = await getOrderCampaigns(orderId);
   const results: NormalizedSummary[] = [];
@@ -107,20 +64,22 @@ export async function getSummary(
     const adapter = ADAPTERS[campaign.platform];
     if (!adapter) continue;
 
-    // const cached = await getCachedSnapshot<NormalizedSummary>(orderId, campaign.platform, campaign.externalCampaignId, "summary", dateRange);
-    // if (cached) { results.push(cached); continue; }
-
-    const token = await getToken(campaign.platform);
-    const summary = await adapter.fetchSummary(
-      campaign.externalCampaignId,
-      campaign.adAccountId ?? "",
-      dateRange,
-      token
-    );
-
-    // await saveSnapshot(orderId, campaign.platform, campaign.externalCampaignId, "summary", dateRange, summary);
-
-    results.push(summary);
+    try {
+      const token = await getToken(campaign.platform);
+      const summary = await adapter.fetchSummary(
+        campaign.externalCampaignId,
+        campaign.adAccountId ?? "",
+        dateRange,
+        token,
+      );
+      results.push(summary);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(
+        `[reporting] getSummary skipped platform=${campaign.platform} campaign=${campaign.externalCampaignId}:`,
+        msg,
+      );
+    }
   }
 
   const totals = results.reduce(
@@ -131,7 +90,7 @@ export async function getSummary(
       reach: acc.reach + s.reach,
       conversions: acc.conversions + s.conversions,
     }),
-    { impressions: 0, clicks: 0, spend: 0, reach: 0, conversions: 0 }
+    { impressions: 0, clicks: 0, spend: 0, reach: 0, conversions: 0 },
   );
 
   return {
@@ -139,9 +98,7 @@ export async function getSummary(
     totals: {
       ...totals,
       ctr:
-        totals.impressions > 0
-          ? (totals.clicks / totals.impressions) * 100
-          : 0,
+        totals.impressions > 0 ? (totals.clicks / totals.impressions) * 100 : 0,
       cpc: totals.clicks > 0 ? totals.spend / totals.clicks : 0,
     },
   };
@@ -149,7 +106,7 @@ export async function getSummary(
 
 export async function getTimeSeries(
   orderId: string,
-  dateRange: DateRange
+  dateRange: DateRange,
 ): Promise<NormalizedTimeSeriesPoint[]> {
   const campaigns = await getOrderCampaigns(orderId);
   const allPoints: NormalizedTimeSeriesPoint[] = [];
@@ -158,20 +115,22 @@ export async function getTimeSeries(
     const adapter = ADAPTERS[campaign.platform];
     if (!adapter) continue;
 
-    // const cached = await getCachedSnapshot<NormalizedTimeSeriesPoint[]>(orderId, campaign.platform, campaign.externalCampaignId, "timeseries", dateRange);
-    // if (cached) { allPoints.push(...cached); continue; }
-
-    const token = await getToken(campaign.platform);
-    const points = await adapter.fetchTimeSeries(
-      campaign.externalCampaignId,
-      campaign.adAccountId ?? "",
-      dateRange,
-      token
-    );
-
-    // await saveSnapshot(orderId, campaign.platform, campaign.externalCampaignId, "timeseries", dateRange, points);
-
-    allPoints.push(...points);
+    try {
+      const token = await getToken(campaign.platform);
+      const points = await adapter.fetchTimeSeries(
+        campaign.externalCampaignId,
+        campaign.adAccountId ?? "",
+        dateRange,
+        token,
+      );
+      allPoints.push(...points);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(
+        `[reporting] getTimeSeries skipped platform=${campaign.platform} campaign=${campaign.externalCampaignId}:`,
+        msg,
+      );
+    }
   }
 
   return allPoints;
@@ -179,7 +138,7 @@ export async function getTimeSeries(
 
 export async function getDemographics(
   orderId: string,
-  dateRange: DateRange
+  dateRange: DateRange,
 ): Promise<NormalizedDemographic[]> {
   const campaigns = await getOrderCampaigns(orderId);
   const allDemographics: NormalizedDemographic[] = [];
@@ -188,20 +147,22 @@ export async function getDemographics(
     const adapter = ADAPTERS[campaign.platform];
     if (!adapter) continue;
 
-    // const cached = await getCachedSnapshot<NormalizedDemographic[]>(orderId, campaign.platform, campaign.externalCampaignId, "demographics", dateRange);
-    // if (cached) { allDemographics.push(...cached); continue; }
-
-    const token = await getToken(campaign.platform);
-    const demographics = await adapter.fetchDemographics(
-      campaign.externalCampaignId,
-      campaign.adAccountId ?? "",
-      dateRange,
-      token
-    );
-
-    // await saveSnapshot(orderId, campaign.platform, campaign.externalCampaignId, "demographics", dateRange, demographics);
-
-    allDemographics.push(...demographics);
+    try {
+      const token = await getToken(campaign.platform);
+      const demographics = await adapter.fetchDemographics(
+        campaign.externalCampaignId,
+        campaign.adAccountId ?? "",
+        dateRange,
+        token,
+      );
+      allDemographics.push(...demographics);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(
+        `[reporting] getDemographics skipped platform=${campaign.platform} campaign=${campaign.externalCampaignId}:`,
+        msg,
+      );
+    }
   }
 
   return allDemographics;
