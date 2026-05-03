@@ -114,11 +114,11 @@ describe("Companies API", () => {
 
       const response = await request(app)
         .put(`/api/companies/${company._id}`)
-        .send({ name: "New Name", phone: "98765432" });
+        .send({ name: "New Name", address: "98765432 Test Street" });
 
       expect(response.status).toBe(200);
       expect(response.body.company.name).toBe("New Name");
-      expect(response.body.company.phone).toBe("98765432");
+      expect(response.body.company.address).toBe("98765432 Test Street");
     });
 
     it("should return 404 when updating non-existent company", async () => {

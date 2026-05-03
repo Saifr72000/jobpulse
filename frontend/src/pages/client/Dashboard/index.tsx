@@ -7,9 +7,9 @@ import ChannelPerformanceChart from "../../../components/Charts/ChannelPerforman
 import TotalViewsChart from "../../../components/Charts/TotalViews/TotalViewsChart";
 import "./Dashboard.scss";
 import { useDashboard } from "../../../hooks/useDashboard";
-import BarChartIcon from "../../../assets/icons/bar-chart.svg?react";
 import UsersIcon from "../../../assets/icons/users.svg?react";
-import CardIcon from "../../../assets/icons/card.svg?react";
+import CoinIcon from "../../../assets/icons/coin.svg?react";
+import MegaphoneIcon from "../../../assets/icons/megaphone.svg?react";
 
 function fmt(n: number): string {
   return n.toLocaleString("nb-NO");
@@ -35,7 +35,7 @@ export default function Dashboard() {
 
         <div className="dashboard__stat-cards">
           <StatsCard
-            icon={BarChartIcon}
+            icon={MegaphoneIcon}
             label="Active campaigns"
             value={data ? String(data.activeCampaigns) : "0"}
             isLoading={loading}
@@ -47,7 +47,7 @@ export default function Dashboard() {
             isLoading={loading}
           />
           <StatsCard
-            icon={CardIcon}
+            icon={CoinIcon}
             label="Ad spend"
             value={data ? `${fmt(data.totals.spend)} NOK` : "0 NOK"}
             isLoading={loading}

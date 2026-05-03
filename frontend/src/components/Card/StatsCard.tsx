@@ -36,13 +36,13 @@ export default function StatsCard({
             value
           )}
         </span>
-        <button
+        {/*  <button
           className="stats-card__btn"
           onClick={onClick}
           aria-label={`View ${label}`}
         >
           <Icon svg={ArrowUpRightIcon} size={20} />
-        </button>
+        </button> */}
       </div>
     </div>
   );
