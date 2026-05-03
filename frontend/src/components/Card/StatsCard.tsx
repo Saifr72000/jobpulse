@@ -2,7 +2,7 @@ import type { FunctionComponent, SVGProps } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import Icon from "../Icon/Icon";
-import ArrowUpRightIcon from "../../assets/icons/arrow-up-right.svg?react";
+/* import ArrowUpRightIcon from "../../assets/icons/arrow-up-right.svg?react"; */
 import "./StatsCard.scss";
 
 type SvgComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
@@ -20,7 +20,7 @@ export default function StatsCard({
   label,
   value,
   isLoading = false,
-  onClick,
+  /* onClick, */
 }: StatsCardProps) {
   return (
     <div className="stats-card">
