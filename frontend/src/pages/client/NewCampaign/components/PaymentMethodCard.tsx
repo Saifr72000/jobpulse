@@ -23,6 +23,7 @@ export function PaymentMethodCard({
   return (
     <div
       className={`payment-card${selected ? " payment-card--selected" : ""}`}
+      data-payment-method={method}
       onClick={onClick}
     >
       <div className="payment-card__icon">{icon}</div>
