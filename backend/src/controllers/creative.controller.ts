@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import * as creativeService from "../services/creative.service.js";
 import type { CreativeStatus } from "../models/creative.model.js";
+import { stringParam } from "../utils/expressParams.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -46,7 +47,11 @@ export const getCreativesByOrder = async (
   next: NextFunction
 ) => {
   try {
-    const { orderId } = req.params;
+    const orderId = stringParam(req.params.orderId);
+    if (!orderId) {
+      res.status(400).json({ error: "orderId is required" });
+      return;
+    }
     const creatives = await creativeService.getCreativesByOrder(orderId);
     res.status(200).json(creatives);
   } catch (error) {
@@ -60,7 +65,11 @@ export const updateCreativeStatus = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const id = stringParam(req.params.id);
+    if (!id) {
+      res.status(400).json({ error: "id is required" });
+      return;
+    }
     const { status } = req.body as { status: CreativeStatus };
 
     const creative = await creativeService.updateCreativeStatus(id, status);
@@ -81,7 +90,11 @@ export const deleteCreative = async (
   next: NextFunction
 ) => {
   try {
-    const { id } = req.params;
+    const id = stringParam(req.params.id);
+    if (!id) {
+      res.status(400).json({ error: "id is required" });
+      return;
+    }
     const creative = await creativeService.deleteCreative(id);
     if (!creative) {
       res.status(404).json({ error: "Creative not found" });

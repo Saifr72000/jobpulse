@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import * as commentService from "../services/comment.service.js";
 import type { CommentRole } from "../models/comment.model.js";
+import { stringParam } from "../utils/expressParams.js";
 
 interface AuthenticatedRequest extends Request {
   user?: {
@@ -21,7 +22,11 @@ export const createComment = async (
       return;
     }
 
-    const { orderId } = req.params;
+    const orderId = stringParam(req.params.orderId);
+    if (!orderId) {
+      res.status(400).json({ error: "orderId is required" });
+      return;
+    }
     const { message, role } = req.body as { message: string; role: CommentRole };
 
     const comment = await commentService.createComment(userId, {
@@ -46,7 +51,11 @@ export const getCommentsByOrder = async (
   next: NextFunction
 ) => {
   try {
-    const { orderId } = req.params;
+    const orderId = stringParam(req.params.orderId);
+    if (!orderId) {
+      res.status(400).json({ error: "orderId is required" });
+      return;
+    }
     const page = parseInt(req.query.page as string, 10) || 1;
     const limit = parseInt(req.query.limit as string, 10) || 50;
 
