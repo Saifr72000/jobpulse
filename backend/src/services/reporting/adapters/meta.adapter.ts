@@ -83,9 +83,17 @@ export class MetaAdapter implements IReportingAdapter {
     if (!row) {
       return {
         platform: this.platform,
-        impressions: 0, clicks: 0, spend: 0, reach: 0,
-        ctr: 0, cpc: 0, conversions: 0,
-        frequency: 0, uniqueClicks: 0, uniqueCtr: 0, cpm: 0,
+        impressions: 0,
+        clicks: 0,
+        spend: 0,
+        reach: 0,
+        ctr: 0,
+        cpc: 0,
+        conversions: 0,
+        frequency: null,
+        uniqueClicks: null,
+        uniqueCtr: null,
+        cpm: 0,
       };
     }
 

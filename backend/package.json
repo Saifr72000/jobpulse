@@ -9,6 +9,7 @@
     "dev": "nodemon --exec tsx ./src/index.ts",
     "seed:products": "tsx ./src/scripts/seedProducts.ts",
     "seed:snapchat-mock": "tsx ./src/scripts/seedSnapchatMock.ts",
+    "seed:linkedin-mock": "tsx ./src/scripts/seedLinkedinMock.ts",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --runInBand",
     "test:integration": "NODE_OPTIONS='--experimental-vm-modules' jest --testPathPattern=integration --runInBand",
     "test:unit": "NODE_OPTIONS='--experimental-vm-modules' jest --testPathPattern=unit",

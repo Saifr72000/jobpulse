@@ -2,7 +2,7 @@ import request from "supertest";
 import app from "../../src/app.js";
 import { createAuthenticatedUser, unauthenticatedRequest } from "../helpers/auth.helper.js";
 
-// Minimal valid campaign order payload
+// Minimal valid campaign order payload (matches createOrderValidator + API body)
 const validCampaignOrder = {
   orderType: "custom",
   channels: ["linkedin", "facebook"],
@@ -14,7 +14,14 @@ const validCampaignOrder = {
   targetAudience: "Software engineers with 3+ years experience in Oslo",
   additionalNotes: "Focus on backend roles",
   paymentMethod: "invoice",
+  subtotal: 4000,
+  vatRate: 0.25,
+  vatAmount: 1000,
   totalAmount: 5000,
+  lineItems: [
+    { type: "channel", name: "LinkedIn", price: 2500 },
+    { type: "channel", name: "Facebook", price: 1500 },
+  ],
 };
 
 // Valid package order payload
@@ -29,7 +36,16 @@ const validPackageOrder = {
   },
   targetAudience: "Marketing professionals in Bergen",
   paymentMethod: "card-payment",
+  subtotal: 9600,
+  vatRate: 0.25,
+  vatAmount: 2400,
   totalAmount: 12000,
+  lineItems: [
+    { type: "package", name: "Basic package", price: 7000 },
+    { type: "channel", name: "LinkedIn", price: 1000 },
+    { type: "channel", name: "Facebook", price: 1000 },
+    { type: "channel", name: "Google", price: 600 },
+  ],
 };
 
 describe("Orders API", () => {

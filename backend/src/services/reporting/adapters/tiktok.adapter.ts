@@ -110,7 +110,15 @@ export class TikTokAdapter implements IReportingAdapter {
       totals.impressions > 0 ? (totals.clicks / totals.impressions) * 100 : 0;
     const cpc = totals.clicks > 0 ? totals.spend / totals.clicks : 0;
 
-    return { platform: this.platform, ...totals, ctr, cpc };
+    return {
+      platform: this.platform,
+      ...totals,
+      ctr,
+      cpc,
+      frequency: null,
+      uniqueClicks: null,
+      uniqueCtr: null,
+    };
   }
 
   async fetchTimeSeries(

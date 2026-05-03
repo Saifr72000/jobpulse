@@ -9,9 +9,10 @@ export interface ReportingSummary {
   ctr: number;
   cpc: number;
   conversions: number;
-  frequency?: number;
-  uniqueClicks?: number;
-  uniqueCtr?: number;
+  /** `null` = not available for this platform (show N/A, not 0). */
+  frequency?: number | null;
+  uniqueClicks?: number | null;
+  uniqueCtr?: number | null;
   cpm?: number;
   objective?: string;
 }

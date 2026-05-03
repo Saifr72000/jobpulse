@@ -5,7 +5,6 @@ import type { IOrder } from "../../../../api/orders";
 import type { ReportingSummary } from "../../../../api/reporting";
 import type { UseReportingResult } from "../../../../hooks/useReporting";
 import Button from "../../../../components/Button/Button";
-import UsersIcon from "../../../../assets/icons/users.svg?react";
 import DemographicsChart from "../../../../components/Charts/Demographics/DemographicsChart";
 import TimeseriesChart from "../../../../components/Charts/TimeSeries/TimeseriesChart";
 import "./PerformanceCandidatesTab.scss";
@@ -14,13 +13,16 @@ interface KpiCardProps {
   label: string;
   value: string | number;
   isLoading?: boolean;
+  isNotApplicable?: boolean;
 }
 
-function KpiCard({ label, value, isLoading }: KpiCardProps) {
+function KpiCard({ label, value, isLoading, isNotApplicable }: KpiCardProps) {
   return (
     <div className="kpi-card">
       <span className="kpi-label">{label}</span>
-      <span className="kpi-value">
+      <span
+        className={`kpi-value${isNotApplicable ? " kpi-value--na" : ""}`}
+      >
         {isLoading ? (
           <Skeleton width={80} height={28} borderRadius={6} />
         ) : (
@@ -31,31 +33,96 @@ function KpiCard({ label, value, isLoading }: KpiCardProps) {
   );
 }
 
-function aggregateSummary(rows: ReportingSummary[]) {
-  return rows.reduce(
-    (acc, row) => ({
-      impressions: acc.impressions + row.impressions,
-      clicks: acc.clicks + row.clicks,
-      reach: acc.reach + row.reach,
-      spend: acc.spend + row.spend,
-      frequency: (acc.frequency ?? 0) + (row.frequency ?? 0),
-      uniqueClicks: (acc.uniqueClicks ?? 0) + (row.uniqueClicks ?? 0),
-      uniqueCtr: (acc.uniqueCtr ?? 0) + (row.uniqueCtr ?? 0),
-    }),
-    {
+type NullableMetric = number | null;
+
+interface AggregatedKpis {
+  impressions: number;
+  clicks: number;
+  reach: number;
+  spend: number;
+  frequency: NullableMetric;
+  uniqueClicks: NullableMetric;
+  uniqueCtr: NullableMetric;
+}
+
+function aggregateSummary(rows: ReportingSummary[]): AggregatedKpis {
+  if (rows.length === 0) {
+    return {
       impressions: 0,
       clicks: 0,
       reach: 0,
       spend: 0,
-      frequency: 0,
-      uniqueClicks: 0,
-      uniqueCtr: 0,
-    },
+      frequency: null,
+      uniqueClicks: null,
+      uniqueCtr: null,
+    };
+  }
+
+  const impressions = rows.reduce((a, r) => a + r.impressions, 0);
+  const clicks = rows.reduce((a, r) => a + r.clicks, 0);
+  const reach = rows.reduce((a, r) => a + r.reach, 0);
+  const spend = rows.reduce((a, r) => a + r.spend, 0);
+
+  let frequency: NullableMetric = null;
+  if (rows.length === 1) {
+    const r = rows[0];
+    if (r.frequency !== null && r.frequency !== undefined) {
+      frequency = r.frequency;
+    } else if (r.reach > 0) {
+      frequency = r.impressions / r.reach;
+    }
+  } else if (reach > 0) {
+    frequency = impressions / reach;
+  }
+
+  /* Sum unique clicks only from platforms that report a number; skip null (e.g. LinkedIn). N/A only when no platform reports this metric. */
+  const uniqueClicksSum = rows.reduce((acc, r) => {
+    if (typeof r.uniqueClicks === "number") return acc + r.uniqueClicks;
+    return acc;
+  }, 0);
+  const anyPlatformReportsUniqueClicks = rows.some(
+    (r) => typeof r.uniqueClicks === "number"
   );
+  const uniqueClicks: NullableMetric = anyPlatformReportsUniqueClicks
+    ? uniqueClicksSum
+    : null;
+
+  let uniqueCtr: NullableMetric = null;
+  if (rows.length === 1) {
+    const r = rows[0];
+    if (typeof r.uniqueCtr === "number") {
+      uniqueCtr = r.uniqueCtr;
+    } else if (typeof r.uniqueClicks === "number" && r.reach > 0) {
+      uniqueCtr = (r.uniqueClicks / r.reach) * 100;
+    }
+  } else if (uniqueClicks !== null && reach > 0) {
+    uniqueCtr = (uniqueClicks / reach) * 100;
+  }
+
+  return {
+    impressions,
+    clicks,
+    reach,
+    spend,
+    frequency,
+    uniqueClicks,
+    uniqueCtr,
+  };
 }
 
 function fmt(n: number, decimals = 0): string {
   return n.toLocaleString("nb-NO", { maximumFractionDigits: decimals });
+}
+
+function fmtMetric(
+  v: NullableMetric,
+  decimals: number,
+  suffix = ""
+): { text: string; isNA: boolean } {
+  if (v === null || v === undefined) {
+    return { text: "N/A", isNA: true };
+  }
+  return { text: `${fmt(v, decimals)}${suffix}`, isNA: false };
 }
 
 interface PerformanceCandidatesTabProps {
@@ -126,14 +193,18 @@ export function PerformanceCandidatesTab({
 
   const kpis = useMemo(() => aggregateSummary(activeSummary), [activeSummary]);
 
+  const freqFmt = fmtMetric(kpis.frequency, 2);
+  const ucFmt = fmtMetric(kpis.uniqueClicks, 0);
+  const uctrFmt = fmtMetric(kpis.uniqueCtr, 2, "%");
+
   const performanceKpis = [
-    { label: "Impressions", value: fmt(kpis.impressions) },
-    { label: "Reach", value: fmt(kpis.reach) },
-    { label: "Clicks", value: fmt(kpis.clicks) },
-    { label: "Frequency", value: fmt(kpis.frequency ?? 0, 2) },
-    { label: "Unique clicks", value: fmt(kpis.uniqueClicks ?? 0) },
-    { label: "Unique CTR", value: `${fmt(kpis.uniqueCtr ?? 0, 2)}%` },
-    { label: "Spend", value: `${fmt(kpis.spend, 2)} kr` },
+    { label: "Impressions", value: fmt(kpis.impressions), isNA: false },
+    { label: "Reach", value: fmt(kpis.reach), isNA: false },
+    { label: "Clicks", value: fmt(kpis.clicks), isNA: false },
+    { label: "Frequency", value: freqFmt.text, isNA: freqFmt.isNA },
+    { label: "Unique clicks", value: ucFmt.text, isNA: ucFmt.isNA },
+    { label: "Unique CTR", value: uctrFmt.text, isNA: uctrFmt.isNA },
+    { label: "Spend", value: `${fmt(kpis.spend, 2)} kr`, isNA: false },
   ];
 
   return (
@@ -190,6 +261,7 @@ export function PerformanceCandidatesTab({
                 label={kpi.label}
                 value={kpi.value}
                 isLoading={loading}
+                isNotApplicable={kpi.isNA}
               />
             ))}
           </div>

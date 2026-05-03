@@ -14,7 +14,7 @@ interface AuthenticatedRequest extends Request {
 export const createOrder = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user?.userId;
@@ -34,7 +34,11 @@ export const createOrder = async (
       targetAudience,
       additionalNotes,
       paymentMethod,
+      subtotal,
+      vatRate,
+      vatAmount,
       totalAmount,
+      lineItems,
     } = req.body;
 
     const order = await orderService.createOrder(userId, {
@@ -47,7 +51,11 @@ export const createOrder = async (
       targetAudience,
       additionalNotes,
       paymentMethod,
+      subtotal,
+      vatRate,
+      vatAmount,
       totalAmount,
+      lineItems,
     });
 
     res.status(201).json({
@@ -85,11 +93,11 @@ export const createOrder = async (
 export const getOrderById = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.params;
-    const order = await orderService.getOrderById(id);
+    const order = await orderService.getOrderById(id as string);
 
     if (!order) {
       res.status(404).json({ error: "Order not found" });
@@ -105,7 +113,7 @@ export const getOrderById = async (
 export const getMyOrders = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const userId = req.user?.userId;
@@ -128,11 +136,11 @@ export const getMyOrders = async (
 export const getOrdersByCompany = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { companyId } = req.params;
-    const orders = await orderService.getOrdersByCompany(companyId);
+    const orders = await orderService.getOrdersByCompany(companyId as string);
     res.status(200).json(orders);
   } catch (error) {
     next(error);
@@ -142,13 +150,13 @@ export const getOrdersByCompany = async (
 export const updateOrderStatus = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.params;
     const { status } = req.body as { status: OrderStatus };
 
-    const order = await orderService.updateOrderStatus(id, status);
+    const order = await orderService.updateOrderStatus(id as string, status);
 
     if (!order) {
       res.status(404).json({ error: "Order not found" });
@@ -167,11 +175,11 @@ export const updateOrderStatus = async (
 export const deleteOrder = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { id } = req.params;
-    const order = await orderService.deleteOrder(id);
+    const order = await orderService.deleteOrder(id as string);
 
     if (!order) {
       res.status(404).json({ error: "Order not found" });
@@ -187,7 +195,7 @@ export const deleteOrder = async (
 export const updateOrderCampaigns = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const { id } = req.params;
@@ -203,7 +211,7 @@ export const updateOrderCampaigns = async (
     const order = await Order.findByIdAndUpdate(
       id,
       { platformCampaigns },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).lean();
 
     if (!order) {
@@ -220,7 +228,7 @@ export const updateOrderCampaigns = async (
 export const getAllOrders = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const orders = await orderService.getAllOrders();
