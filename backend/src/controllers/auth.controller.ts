@@ -7,6 +7,7 @@ import { User } from "../models/user.model.js";
 import { loginUser } from "../services/auth.service.js";
 import { generateAccessToken, verifyRefreshToken } from "../utils/jwt.util.js";
 import { setPasswordWithToken } from "../services/user.service.js";
+import { authCookieBase, authCookieOptions } from "../utils/authCookies.js";
 
 interface LoginRequestBody {
   email: string;
@@ -62,12 +63,11 @@ export const refreshTokenController = async (
 
     const newAccessToken = generateAccessToken(user._id.toString());
 
-    res.cookie("access_token", newAccessToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 15 * 60 * 1000, // 15 minutes
-    });
+    res.cookie(
+      "access_token",
+      newAccessToken,
+      authCookieOptions(15 * 60 * 1000),
+    );
 
     res.status(200).json({ message: "Access token refreshed" });
   } catch (error) {
@@ -78,8 +78,8 @@ export const refreshTokenController = async (
 export const logoutController = async (req: Request, res: Response) => {
   console.log("Logout controller called from FF");
   try {
-    res.clearCookie("access_token");
-    res.clearCookie("refresh_token");
+    res.clearCookie("access_token", authCookieBase());
+    res.clearCookie("refresh_token", authCookieBase());
 
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
