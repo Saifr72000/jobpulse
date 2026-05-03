@@ -37,7 +37,11 @@ app.use("/api/webhooks", webhookRoutes);
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3002"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:3002",
+      "https://jobpulse-smoky.vercel.app",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
