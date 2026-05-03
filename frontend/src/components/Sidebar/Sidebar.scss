@@ -18,7 +18,9 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   top: 17px;
   align-self: flex-start;
   overflow: hidden;
-  transition: width $sidebar-transition, min-width $sidebar-transition;
+  transition:
+    width $sidebar-transition,
+    min-width $sidebar-transition;
 
   &.collapsed {
     width: $sidebar-collapsed-width;
@@ -66,7 +68,10 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   max-width: 200px;
   opacity: 1;
-  transition: opacity $sidebar-transition, max-width $sidebar-transition, margin $sidebar-transition;
+  transition:
+    opacity $sidebar-transition,
+    max-width $sidebar-transition,
+    margin $sidebar-transition;
 }
 
 .sidebar-toggle {
@@ -80,7 +85,9 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: $spacing-sm;
   border-radius: $radius-pill;
   color: $color-text;
-  transition: background 0.15s, margin $sidebar-transition;
+  transition:
+    background 0.15s,
+    margin $sidebar-transition;
 
   &:hover {
     background: $color-bg;
@@ -101,7 +108,6 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-direction: column;
   gap: $spacing-xs;
   padding-top: $spacing-md;
-  border-top: 1px solid $color-bg;
 }
 
 .sidebar-nav-item {
@@ -115,7 +121,12 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: $text-base;
   font-weight: $font-normal;
   font-family: $font-primary;
-  transition: background 0.15s, padding $sidebar-transition, gap $sidebar-transition, width $sidebar-transition, margin $sidebar-transition;
+  transition:
+    background 0.15s,
+    padding $sidebar-transition,
+    gap $sidebar-transition,
+    width $sidebar-transition,
+    margin $sidebar-transition;
 
   &:hover:not(.active) {
     background: $color-bg;
@@ -144,5 +155,7 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   max-width: 200px;
   opacity: 1;
-  transition: opacity $sidebar-transition, max-width $sidebar-transition;
+  transition:
+    opacity $sidebar-transition,
+    max-width $sidebar-transition;
 }
