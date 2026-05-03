@@ -5,6 +5,7 @@ import {
   generateAccessToken,
   generateRefreshToken,
 } from "../utils/jwt.util.js";
+import { authCookieOptions } from "../utils/authCookies.js";
 
 export const loginUser = async (
   email: string,
@@ -25,21 +26,13 @@ export const loginUser = async (
   user.refreshToken = refreshToken;
   await user.save();
 
-  // Set access token in HTTP-only, secure cookies
-  res.cookie("access_token", accessToken, {
-    httpOnly: true, // Prevents JavaScript access (protects against XSS)
-    secure: process.env.NODE_ENV === "production", // Only HTTPS in production
-    sameSite: "strict", // Protects against CSRF
-    maxAge: 15 * 60 * 1000, // 15 minutes expiration
-  });
+  res.cookie("access_token", accessToken, authCookieOptions(15 * 60 * 1000));
 
-  // Set refresh token in HTTP-only cookie
-  res.cookie("refresh_token", refreshToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Only HTTPS in production
-    sameSite: "strict",
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
-  });
+  res.cookie(
+    "refresh_token",
+    refreshToken,
+    authCookieOptions(7 * 24 * 60 * 60 * 1000),
+  );
 
   return {
     message: "Login successful",
