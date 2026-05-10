@@ -1,7 +1,14 @@
 import axios from "axios";
 
+const { VITE_API_URL } = import.meta.env;
+if (typeof VITE_API_URL !== "string" || !VITE_API_URL.trim()) {
+  throw new Error(
+    "VITE_API_URL is required. For local dev, copy frontend/.env.example to frontend/.env. On Vercel, set VITE_API_URL in project env settings.",
+  );
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:3002/api",
+  baseURL: VITE_API_URL,
   withCredentials: true,
 });
 
