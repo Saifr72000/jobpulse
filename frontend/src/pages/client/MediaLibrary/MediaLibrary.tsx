@@ -8,7 +8,7 @@ import { Loader } from "../../../components/Loader/Loader";
 
 import MediaIcon from "../../../assets/icons/media.svg?react";
 import VideoIcon from "../../../assets/icons/video.svg?react";
-import BriefcaseIcon from "../../../assets/icons/briefcase.svg?react";
+import BrandingIcon from "../../../assets/icons/branding.svg?react";
 import ArchiveIcon from "../../../assets/icons/archive.svg?react";
 import ArrowUpRightIcon from "../../../assets/icons/arrow-up-right.svg?react";
 import "./MediaLibrary.scss";
@@ -24,8 +24,26 @@ function getFolderIcon(name: string): SvgComponent {
   )
     return MediaIcon;
   if (lower.includes("video") || lower.includes("film")) return VideoIcon;
-  if (lower.includes("brand") || lower.includes("logo")) return BriefcaseIcon;
+  if (lower.includes("brand") || lower.includes("logo")) return BrandingIcon;
   return ArchiveIcon;
+}
+
+function getFolderSubtext(name: string): string {
+  const lower = name.toLowerCase();
+  if (
+    lower.includes("picture") ||
+    lower.includes("image") ||
+    lower.includes("photo")
+  ) {
+    return "Photos and images for your campaigns";
+  }
+  if (lower.includes("video") || lower.includes("film")) {
+    return "Video content for ads and campaigns";
+  }
+  if (lower.includes("brand") || lower.includes("logo")) {
+    return "Logo, brand assets and guidelines";
+  }
+  return "Files for your campaigns";
 }
 
 export default function MediaLibrary() {
@@ -90,7 +108,12 @@ export default function MediaLibrary() {
                 <div className="media-category-card__icon-wrap">
                   <Icon svg={getFolderIcon(folder.name)} size={24} />
                 </div>
-                <h4>{folder.name}</h4>
+                <div className="media-category-card__copy">
+                  <h4>{folder.name}</h4>
+                  <p className="media-category-card__sub text-ash">
+                    {getFolderSubtext(folder.name)}
+                  </p>
+                </div>
               </div>
               <button
                 className="media-category-card__arrow"

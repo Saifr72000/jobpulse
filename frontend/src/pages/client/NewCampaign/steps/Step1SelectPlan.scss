@@ -5,6 +5,7 @@
 .step1 {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  align-items: start;
   gap: $spacing-lg;
 
   &__package-list {
@@ -34,5 +35,44 @@
 
   .subheading {
     margin-bottom: $spacing-md;
+  }
+
+  &--inactive {
+    background: transparent;
+    box-shadow: none;
+  }
+
+  &__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: $spacing-md;
+    cursor: pointer;
+  }
+
+  &__radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #5f5f5e;
+    flex-shrink: 0;
+    position: relative;
+    margin-top: 4px;
+
+    &--selected {
+      border-color: $coal;
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: $coal;
+      }
+    }
   }
 }

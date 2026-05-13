@@ -48,19 +48,6 @@
     margin: 2px 0 0;
   }
 
-  &__balance-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    background: transparent;
-    border: 1px solid $ash;
-    border-radius: $radius-pill;
-    padding: 8px $spacing-md;
-    font-size: 15px;
-    color: $ash;
-    margin-top: 8px;
-  }
-
   &__radio {
     width: 20px;
     height: 20px;

@@ -7,7 +7,6 @@ interface PaymentMethodCardProps {
   icon: React.ReactNode;
   label: string;
   description: string;
-  extra?: React.ReactNode;
   onClick: () => void;
 }
 
@@ -17,7 +16,6 @@ export function PaymentMethodCard({
   icon,
   label,
   description,
-  extra,
   onClick,
 }: PaymentMethodCardProps) {
   return (
@@ -30,7 +28,6 @@ export function PaymentMethodCard({
       <div className="payment-card__content">
         <p className="">{label}</p>
         {description && <p className="payment-card__desc">{description}</p>}
-        {extra}
       </div>
       <span
         className={`payment-card__radio${selected ? " payment-card__radio--selected" : ""}`}

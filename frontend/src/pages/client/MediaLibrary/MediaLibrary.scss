@@ -35,6 +35,28 @@
     gap: $spacing-sm;
   }
 
+  &__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__copy h4 {
+    margin: 0;
+    font-size: $text-lg;
+    font-weight: $font-semibold;
+    color: $coal;
+    line-height: $leading-tight;
+  }
+
+  &__sub {
+    margin: 0;
+    font-size: $text-sm;
+    font-weight: $font-normal;
+    line-height: $leading-normal;
+  }
+
   &__icon-wrap {
     width: 48px;
     height: 48px;
