@@ -9,10 +9,11 @@ import {
   createFolderValidator,
   renameFolderValidator,
   folderIdParamValidator,
+  folderCompanyIdParamValidator,
 } from "../validators/folder.validator.js";
-import { param } from "express-validator";
 import { requestValidator } from "../middlewares/requestValidator.middleware.js";
 import { authenticateUser } from "../middlewares/auth.middleware.js";
+import { requireSameCompany } from "../middlewares/authorization.middleware.js";
 
 const router = Router();
 
@@ -23,9 +24,10 @@ router.post("/", authenticateUser, createFolderValidator, requestValidator, crea
 router.get(
   "/company/:companyId",
   authenticateUser,
-  [param("companyId").isMongoId().withMessage("Invalid company ID")],
+  requireSameCompany,
+  folderCompanyIdParamValidator,
   requestValidator,
-  getFoldersByCompany
+  getFoldersByCompany,
 );
 
 // Rename a folder

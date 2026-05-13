@@ -9,6 +9,7 @@ import {
 } from "../validators/comment.validator.js";
 import { requestValidator } from "../middlewares/requestValidator.middleware.js";
 import { authenticateUser } from "../middlewares/auth.middleware.js";
+import { requireOrderAccess } from "../middlewares/authorization.middleware.js";
 
 const router = Router();
 
@@ -16,18 +17,20 @@ const router = Router();
 router.get(
   "/order/:orderId",
   authenticateUser,
+  requireOrderAccess("orderId"),
   getCommentsValidator,
   requestValidator,
-  getCommentsByOrder
+  getCommentsByOrder,
 );
 
 // Post a new comment on an order (auth required)
 router.post(
   "/order/:orderId",
   authenticateUser,
+  requireOrderAccess("orderId"),
   createCommentValidator,
   requestValidator,
-  createComment
+  createComment,
 );
 
 export default router;

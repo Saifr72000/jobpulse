@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
+import { useAuth } from "../../../context";
 import { MediaCard, type MediaFile } from "../../../components/MediaCard/MediaCard";
 import { MediaLightbox } from "../../../components/MediaLightbox/MediaLightbox";
 import { Loader } from "../../../components/Loader/Loader";
@@ -27,6 +28,7 @@ const ACCEPTED_TYPES = {
 export default function MediaCategoryPage() {
   const { folderId } = useParams<{ folderId: string }>();
   const location = useLocation();
+  const { user } = useAuth();
   const folderName = (location.state as { folderName?: string })?.folderName ?? "Media";
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -132,7 +134,7 @@ export default function MediaCategoryPage() {
               <MediaCard
                 key={file.id}
                 file={file}
-                onDelete={remove}
+                onDelete={user?.role === "admin" ? remove : undefined}
                 onPreview={setPreviewFile}
               />
             ))}

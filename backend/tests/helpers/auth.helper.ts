@@ -46,6 +46,29 @@ export const createAuthenticatedUser = async (
 };
 
 /**
+ * Create a platform admin user and return an authenticated agent.
+ */
+export const createAuthenticatedAdmin = async (): Promise<AuthenticatedUser> => {
+  const company = await createTestCompany({ name: "Admin Test Org" });
+  const user = await createTestUser(company._id, {
+    email: `platform-admin-${Date.now()}@test.com`,
+    role: "admin",
+  });
+
+  const agent = request.agent(app);
+  const loginResponse = await agent.post("/api/auth/login").send({
+    email: user.email,
+    password: user.password,
+  });
+
+  if (loginResponse.status !== 200) {
+    throw new Error(`Admin login failed: ${JSON.stringify(loginResponse.body)}`);
+  }
+
+  return { user, company, agent };
+};
+
+/**
  * Create an unauthenticated request helper (for testing 401 responses)
  */
 export const unauthenticatedRequest = () => request(app);

@@ -18,6 +18,7 @@ export interface TestUser {
   email: string;
   password: string; // Plain text for login
   company: mongoose.Types.ObjectId;
+  role?: "admin";
 }
 
 export interface TestProduct {
@@ -79,6 +80,7 @@ export const createTestUser = async (
     email: user.email,
     password: plainPassword, // Return plain text for login tests
     company: user.company,
+    role: user.role === "admin" ? "admin" : undefined,
   };
 };
 

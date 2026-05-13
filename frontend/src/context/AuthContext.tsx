@@ -13,6 +13,7 @@ interface User {
   email: string;
   firstName: string;
   lastName: string;
+  role?: "admin";
   company?: {
     id: string;
     name: string;

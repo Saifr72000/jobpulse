@@ -41,6 +41,7 @@ export const loginUser = async (
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      ...(user.role === "admin" ? { role: "admin" as const } : {}),
     },
   };
 };

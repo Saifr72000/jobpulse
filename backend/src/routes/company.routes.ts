@@ -16,33 +16,64 @@ import {
 } from "../validators/company.validator.js";
 import { requestValidator } from "../middlewares/requestValidator.middleware.js";
 import { authenticateUser } from "../middlewares/auth.middleware.js";
-import { requireSameCompany } from "../middlewares/authorization.middleware.js";
+import {
+  requireSameCompany,
+  requireSameCompanyStrict,
+} from "../middlewares/authorization.middleware.js";
+import { requireAdmin } from "../middlewares/requireAdmin.middleware.js";
 
 const router = Router();
 
-// Create company
-router.post("/", createCompanyValidator, requestValidator, createCompany);
+// Create company (platform admin only)
+router.post(
+  "/",
+  authenticateUser,
+  requireAdmin,
+  createCompanyValidator,
+  requestValidator,
+  createCompany,
+);
 
-// Get all companies
-router.get("/", getAllCompanies);
+// List all companies (platform admin only)
+router.get("/", authenticateUser, requireAdmin, getAllCompanies);
 
-// Get company by ID
-router.get("/:id", getCompanyById);
+// Get / update / delete company by ID — same company or admin
+router.get("/:id", authenticateUser, requireSameCompany, getCompanyById);
+router.put(
+  "/:id",
+  authenticateUser,
+  requireSameCompany,
+  updateCompanyValidator,
+  requestValidator,
+  updateCompany,
+);
+router.delete("/:id", authenticateUser, requireSameCompany, deleteCompany);
 
-// Update company
-router.put("/:id", updateCompanyValidator, requestValidator, updateCompany);
+// Company-users routes — org admin of that company only (no cross-company access by platform admin)
+router.get(
+  "/:companyId/users",
+  authenticateUser,
+  requireAdmin,
+  requireSameCompanyStrict,
+  getCompanyUsers,
+);
 
-// Delete company
-router.delete("/:id", deleteCompany);
+router.post(
+  "/:companyId/users",
+  authenticateUser,
+  requireAdmin,
+  requireSameCompanyStrict,
+  addUserToCompanyValidator,
+  requestValidator,
+  addCompanyUser,
+);
 
-// Company-users routes
-// Get all users in a company
-router.get("/:companyId/users", authenticateUser, requireSameCompany, getCompanyUsers);
-
-// Add user to company
-router.post("/:companyId/users", authenticateUser, requireSameCompany, addUserToCompanyValidator, requestValidator, addCompanyUser);
-
-// Remove user from company
-router.delete("/:companyId/users/:userId", authenticateUser, requireSameCompany, removeCompanyUser);
+router.delete(
+  "/:companyId/users/:userId",
+  authenticateUser,
+  requireAdmin,
+  requireSameCompanyStrict,
+  removeCompanyUser,
+);
 
 export default router;

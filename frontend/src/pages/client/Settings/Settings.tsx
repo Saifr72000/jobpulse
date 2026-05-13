@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../../context";
 import type { FunctionComponent, SVGProps } from "react";
 import { ProfileTab } from "./tabs/ProfileTab";
 import { UsersTab } from "./tabs/UsersTab";
@@ -22,7 +23,17 @@ const TABS: { id: Tab; label: string; icon: SvgComponent }[] = [
 ];
 
 export default function Settings() {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>("settings");
+  const isCompanyAdmin = user?.role === "admin";
+
+  useEffect(() => {
+    if (activeTab === "users" && !isCompanyAdmin) {
+      setActiveTab("settings");
+    }
+  }, [activeTab, isCompanyAdmin]);
+
+  const visibleTabs = TABS.filter((tab) => tab.id !== "users" || isCompanyAdmin);
 
   return (
     <div className="settings">
@@ -34,7 +45,7 @@ export default function Settings() {
       </div>
 
       <nav className="tab-bar" role="tablist">
-        {TABS.map((tab) => (
+        {visibleTabs.map((tab) => (
           <button
             key={tab.id}
             type="button"

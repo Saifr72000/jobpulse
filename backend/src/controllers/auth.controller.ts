@@ -117,6 +117,7 @@ export const getMeController = async (req: Request, res: Response) => {
           }
         : null,
       isVerified: user.isVerified,
+      ...((user as { role?: string }).role === "admin" ? { role: "admin" as const } : {}),
     });
   } catch (error) {
     res.status(500).json({ message: "Failed to get user" });

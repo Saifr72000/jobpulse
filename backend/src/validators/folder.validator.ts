@@ -23,3 +23,8 @@ export const renameFolderValidator: RequestHandler[] = [
 export const folderIdParamValidator: RequestHandler[] = [
   param("id").isMongoId().withMessage("Invalid folder ID"),
 ];
+
+/** For `GET /folders/company/:companyId` */
+export const folderCompanyIdParamValidator: RequestHandler[] = [
+  param("companyId").isMongoId().withMessage("Invalid company ID"),
+];

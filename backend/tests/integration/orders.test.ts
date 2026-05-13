@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "../../src/app.js";
-import { createAuthenticatedUser, unauthenticatedRequest } from "../helpers/auth.helper.js";
+import { createAuthenticatedUser, createAuthenticatedAdmin, unauthenticatedRequest } from "../helpers/auth.helper.js";
 
 // Minimal valid campaign order payload (matches createOrderValidator + API body)
 const validCampaignOrder = {
@@ -291,7 +291,7 @@ describe("Orders API", () => {
       const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
       const orderId = createResponse.body._id;
 
-      const response = await request(app).get(`/api/orders/${orderId}`);
+      const response = await agent.get(`/api/orders/${orderId}`);
 
       expect(response.status).toBe(200);
       expect(response.body._id).toBe(orderId);
@@ -300,9 +300,10 @@ describe("Orders API", () => {
     });
 
     it("should return 404 for non-existent order", async () => {
+      const { agent } = await createAuthenticatedUser();
       const fakeId = "507f1f77bcf86cd799439011";
 
-      const response = await request(app).get(`/api/orders/${fakeId}`);
+      const response = await agent.get(`/api/orders/${fakeId}`);
 
       expect(response.status).toBe(404);
     });
@@ -315,7 +316,7 @@ describe("Orders API", () => {
       const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
       const orderId = createResponse.body._id;
 
-      const response = await request(app)
+      const response = await agent
         .patch(`/api/orders/${orderId}/status`)
         .send({ status: "in-progress" });
 
@@ -329,7 +330,7 @@ describe("Orders API", () => {
       const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
       const orderId = createResponse.body._id;
 
-      const response = await request(app)
+      const response = await agent
         .patch(`/api/orders/${orderId}/status`)
         .send({ status: "invalid_status" });
 
@@ -344,28 +345,34 @@ describe("Orders API", () => {
       const createResponse = await agent.post("/api/orders").send(validCampaignOrder);
       const orderId = createResponse.body._id;
 
-      const response = await request(app).delete(`/api/orders/${orderId}`);
+      const response = await agent.delete(`/api/orders/${orderId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Order deleted successfully");
 
       // Verify deletion
-      const getResponse = await request(app).get(`/api/orders/${orderId}`);
+      const getResponse = await agent.get(`/api/orders/${orderId}`);
       expect(getResponse.status).toBe(404);
     });
   });
 
   describe("GET /api/orders", () => {
-    it("should return all orders", async () => {
-      const { agent } = await createAuthenticatedUser();
+    it("should return all orders for platform admin", async () => {
+      const { agent } = await createAuthenticatedAdmin();
 
-      await agent.post("/api/orders").send(validCampaignOrder);
-
-      const response = await request(app).get("/api/orders");
+      const response = await agent.get("/api/orders");
 
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
-      expect(response.body.length).toBeGreaterThanOrEqual(1);
+    });
+
+    it("should reject non-admin listing all orders", async () => {
+      const { agent } = await createAuthenticatedUser();
+      await agent.post("/api/orders").send(validCampaignOrder);
+
+      const response = await agent.get("/api/orders");
+
+      expect(response.status).toBe(403);
     });
   });
 });

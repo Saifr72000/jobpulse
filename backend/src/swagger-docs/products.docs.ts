@@ -11,6 +11,8 @@
  *   post:
  *     summary: Create a new product
  *     tags: [Products]
+ *     security:
+ *       - cookieAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -31,11 +33,15 @@
  *                   $ref: '#/components/schemas/Product'
  *       400:
  *         description: Validation error
+ *       401:
+ *         description: Not authenticated
  *       500:
  *         description: Server error
  *   get:
  *     summary: Get all products
  *     tags: [Products]
+ *     security:
+ *       - cookieAuth: []
  *     responses:
  *       200:
  *         description: List of products
@@ -45,6 +51,8 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Not authenticated
  *       500:
  *         description: Server error
  */
@@ -55,6 +63,8 @@
  *   get:
  *     summary: Get products filtered by type
  *     tags: [Products]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: type
@@ -71,6 +81,8 @@
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Not authenticated
  *       500:
  *         description: Server error
  */
@@ -81,6 +93,8 @@
  *   get:
  *     summary: Get a product by ID
  *     tags: [Products]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -94,6 +108,8 @@
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Product'
+ *       401:
+ *         description: Not authenticated
  *       404:
  *         description: Product not found
  *       500:
@@ -101,6 +117,8 @@
  *   put:
  *     summary: Update a product
  *     tags: [Products]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -116,6 +134,8 @@
  *     responses:
  *       200:
  *         description: Product updated successfully
+ *       401:
+ *         description: Not authenticated
  *       404:
  *         description: Product not found
  *       500:
@@ -123,6 +143,8 @@
  *   delete:
  *     summary: Delete a product
  *     tags: [Products]
+ *     security:
+ *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -132,6 +154,8 @@
  *     responses:
  *       200:
  *         description: Product deleted successfully
+ *       401:
+ *         description: Not authenticated
  *       404:
  *         description: Product not found
  *       500:

@@ -1,5 +1,8 @@
 import mongoose, {Document, Schema} from "mongoose";
 
+/** Only platform admins store `role: "admin"`; other users omit this field. */
+export type UserRole = "admin";
+
 export interface IUser extends Document {
   _id: mongoose.Types.ObjectId;
   firstName: string;
@@ -10,6 +13,7 @@ export interface IUser extends Document {
   otpExpires: Date;
   isVerified: boolean;
   company: mongoose.Types.ObjectId;
+  role?: UserRole;
   refreshToken?: string;
   inviteToken?: string;
   inviteTokenExpires?: Date;
@@ -51,6 +55,11 @@ const userSchema = new Schema<IUser>({
             ref: "Company",
             required: true,
         },
+      role: {
+        type: String,
+        enum: ["admin"],
+        required: false,
+      },
       inviteToken: {
         type: String,
       },

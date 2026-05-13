@@ -19,6 +19,12 @@ import {
 import { param, body } from "express-validator";
 import { requestValidator } from "../middlewares/requestValidator.middleware.js";
 import { authenticateUser } from "../middlewares/auth.middleware.js";
+import {
+  requireOrderAccess,
+  requireSameCompany,
+  requireMediaCompanyOwnership,
+} from "../middlewares/authorization.middleware.js";
+import { requireAdmin } from "../middlewares/requireAdmin.middleware.js";
 
 const router = Router();
 
@@ -45,10 +51,24 @@ router.get(
 );
 
 // Get media by company (paginated)
-router.get("/company/:companyId", authenticateUser, companyIdValidator, requestValidator, getMediaByCompany);
+router.get(
+  "/company/:companyId",
+  authenticateUser,
+  requireSameCompany,
+  companyIdValidator,
+  requestValidator,
+  getMediaByCompany,
+);
 
 // Get media by order (paginated)
-router.get("/order/:orderId", authenticateUser, orderIdParamValidator, requestValidator, getMediaByOrder);
+router.get(
+  "/order/:orderId",
+  authenticateUser,
+  requireOrderAccess("orderId"),
+  orderIdParamValidator,
+  requestValidator,
+  getMediaByOrder,
+);
 
 // Assign / move to a folder (pass folderId: null to move to root)
 router.patch(
@@ -59,13 +79,30 @@ router.patch(
     body("folderId").optional({ nullable: true }).isMongoId().withMessage("Invalid folder ID"),
   ],
   requestValidator,
+  requireAdmin,
+  requireMediaCompanyOwnership("id"),
   assignMediaFolder
 );
 
 // Delete media
-router.delete("/:id", authenticateUser, mediaIdValidator, requestValidator, deleteMedia);
+router.delete(
+  "/:id",
+  authenticateUser,
+  mediaIdValidator,
+  requestValidator,
+  requireAdmin,
+  requireMediaCompanyOwnership("id"),
+  deleteMedia
+);
 
 // Get single media item
-router.get("/:id", authenticateUser, mediaIdValidator, requestValidator, getMediaById);
+router.get(
+  "/:id",
+  authenticateUser,
+  mediaIdValidator,
+  requestValidator,
+  requireMediaCompanyOwnership("id"),
+  getMediaById
+);
 
 export default router;

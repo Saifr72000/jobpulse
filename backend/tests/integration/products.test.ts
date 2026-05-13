@@ -1,9 +1,22 @@
-import { describe, it, expect } from "@jest/globals";
+import { describe, it, expect, beforeAll } from "@jest/globals";
 import request from "supertest";
 import app from "../../src/app.js";
 import { createTestProduct, createTestProducts } from "../helpers/testData.helper.js";
+import { createAuthenticatedUser } from "../helpers/auth.helper.js";
 
 describe("Products API", () => {
+  let agent: ReturnType<typeof request.agent>;
+
+  beforeAll(async () => {
+    const auth = await createAuthenticatedUser();
+    agent = auth.agent;
+  });
+
+  it("should reject unauthenticated GET /api/products", async () => {
+    const response = await request(app).get("/api/products");
+    expect(response.status).toBe(401);
+  });
+
   describe("POST /api/products", () => {
     it("should create a new product", async () => {
       const productData = {
@@ -14,9 +27,7 @@ describe("Products API", () => {
         logo: "https://example.com/linkedin-logo.png",
       };
 
-      const response = await request(app)
-        .post("/api/products")
-        .send(productData);
+      const response = await agent.post("/api/products").send(productData);
 
       expect(response.status).toBe(201);
       expect(response.body.message).toBe("Product created successfully");
@@ -34,9 +45,7 @@ describe("Products API", () => {
         description: "Up to 3 channels with analytics",
       };
 
-      const response = await request(app)
-        .post("/api/products")
-        .send(productData);
+      const response = await agent.post("/api/products").send(productData);
 
       expect(response.status).toBe(201);
       expect(response.body.product.type).toBe("package");
@@ -50,34 +59,28 @@ describe("Products API", () => {
         description: "Collect applications directly in the ad",
       };
 
-      const response = await request(app)
-        .post("/api/products")
-        .send(productData);
+      const response = await agent.post("/api/products").send(productData);
 
       expect(response.status).toBe(201);
       expect(response.body.product.type).toBe("addon");
     });
 
     it("should fail when title is missing", async () => {
-      const response = await request(app)
-        .post("/api/products")
-        .send({ price: 29.99, type: "service" });
+      const response = await agent.post("/api/products").send({ price: 29.99, type: "service" });
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
     });
 
     it("should fail when type is missing", async () => {
-      const response = await request(app)
-        .post("/api/products")
-        .send({ title: "Test Product", price: 29.99 });
+      const response = await agent.post("/api/products").send({ title: "Test Product", price: 29.99 });
 
       expect(response.status).toBe(400);
       expect(response.body.errors).toBeDefined();
     });
 
     it("should fail when type is invalid", async () => {
-      const response = await request(app)
+      const response = await agent
         .post("/api/products")
         .send({ title: "Test Product", price: 29.99, type: "invalid" });
 
@@ -86,7 +89,7 @@ describe("Products API", () => {
     });
 
     it("should fail when price is negative", async () => {
-      const response = await request(app)
+      const response = await agent
         .post("/api/products")
         .send({ title: "Bad Product", price: -10, type: "service" });
 
@@ -97,7 +100,7 @@ describe("Products API", () => {
 
   describe("GET /api/products", () => {
     it("should return empty array when no products exist", async () => {
-      const response = await request(app).get("/api/products");
+      const response = await agent.get("/api/products");
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual([]);
@@ -107,7 +110,7 @@ describe("Products API", () => {
       // Create test products
       await createTestProducts(3);
 
-      const response = await request(app).get("/api/products");
+      const response = await agent.get("/api/products");
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(3);
@@ -122,7 +125,7 @@ describe("Products API", () => {
       await createTestProduct({ title: "Package 1", type: "package" });
       await createTestProduct({ title: "Service 2", type: "service" });
 
-      const response = await request(app).get("/api/products?type=service");
+      const response = await agent.get("/api/products?type=service");
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -137,7 +140,7 @@ describe("Products API", () => {
       await createTestProduct({ title: "Package 1", type: "package" });
       await createTestProduct({ title: "Package 2", type: "package" });
 
-      const response = await request(app).get("/api/products/type/package");
+      const response = await agent.get("/api/products/type/package");
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -148,7 +151,7 @@ describe("Products API", () => {
       await createTestProduct({ title: "Service 1", type: "service" });
       await createTestProduct({ title: "Package 1", type: "package" });
 
-      const response = await request(app).get("/api/products/type/service");
+      const response = await agent.get("/api/products/type/service");
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(1);
@@ -160,7 +163,7 @@ describe("Products API", () => {
       await createTestProduct({ title: "Addon 1", type: "addon" as "package" | "service" | "addon" });
       await createTestProduct({ title: "Addon 2", type: "addon" as "package" | "service" | "addon" });
 
-      const response = await request(app).get("/api/products/type/addon");
+      const response = await agent.get("/api/products/type/addon");
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveLength(2);
@@ -168,7 +171,7 @@ describe("Products API", () => {
     });
 
     it("should return 400 for invalid type", async () => {
-      const response = await request(app).get("/api/products/type/invalid");
+      const response = await agent.get("/api/products/type/invalid");
 
       expect(response.status).toBe(400);
       expect(response.body.error).toContain("Invalid product type");
@@ -179,7 +182,7 @@ describe("Products API", () => {
     it("should return a product by ID", async () => {
       const product = await createTestProduct({ title: "Specific Product" });
 
-      const response = await request(app).get(`/api/products/${product._id}`);
+      const response = await agent.get(`/api/products/${product._id}`);
 
       expect(response.status).toBe(200);
       expect(response.body.title).toBe("Specific Product");
@@ -188,7 +191,7 @@ describe("Products API", () => {
     it("should return 404 for non-existent product", async () => {
       const fakeId = "507f1f77bcf86cd799439011";
 
-      const response = await request(app).get(`/api/products/${fakeId}`);
+      const response = await agent.get(`/api/products/${fakeId}`);
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("Product not found");
@@ -199,7 +202,7 @@ describe("Products API", () => {
     it("should update a product", async () => {
       const product = await createTestProduct({ title: "Old Name", price: 10 });
 
-      const response = await request(app)
+      const response = await agent
         .put(`/api/products/${product._id}`)
         .send({ title: "New Name", price: 20 });
 
@@ -211,7 +214,7 @@ describe("Products API", () => {
     it("should return 404 when updating non-existent product", async () => {
       const fakeId = "507f1f77bcf86cd799439011";
 
-      const response = await request(app)
+      const response = await agent
         .put(`/api/products/${fakeId}`)
         .send({ title: "Updated" });
 
@@ -223,20 +226,20 @@ describe("Products API", () => {
     it("should delete a product", async () => {
       const product = await createTestProduct();
 
-      const response = await request(app).delete(`/api/products/${product._id}`);
+      const response = await agent.delete(`/api/products/${product._id}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe("Product deleted successfully");
 
       // Verify it's actually deleted
-      const getResponse = await request(app).get(`/api/products/${product._id}`);
+      const getResponse = await agent.get(`/api/products/${product._id}`);
       expect(getResponse.status).toBe(404);
     });
 
     it("should return 404 when deleting non-existent product", async () => {
       const fakeId = "507f1f77bcf86cd799439011";
 
-      const response = await request(app).delete(`/api/products/${fakeId}`);
+      const response = await agent.delete(`/api/products/${fakeId}`);
 
       expect(response.status).toBe(404);
     });
