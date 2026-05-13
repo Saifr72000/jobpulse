@@ -27,8 +27,9 @@ export const authenticateUser = async (
     (req as any).user = decoded; // Attach user info to request object (so req.user can be used in subsequent middleware or route handlers)
 
     next(); // Move to next middleware or route
-  } catch (error) {
-    res.status(403).json({ message: "Invalid token" });
-    return; // Ensure function exits
+  } catch {
+    // 401 (not 403) so clients can treat this like "needs refresh" for expired JWTs.
+    res.status(401).json({ message: "Invalid or expired token" });
+    return;
   }
 };
