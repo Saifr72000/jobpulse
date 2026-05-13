@@ -12,6 +12,8 @@
 
   &--pending {
     background: $pending;
+    color: $coal;
+    border-color: $coal;
   }
 
   &--in-progress {
@@ -34,5 +36,7 @@
 
   &--awaiting-payment {
     background: $pending;
+    color: $coal;
+    border-color: $coal;
   }
 }

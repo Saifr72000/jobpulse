@@ -95,11 +95,17 @@
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: $mist;
+    background: $midnight;
+    color: $white;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+
+    .body-2 {
+      margin-top: 0;
+      color: $white;
+    }
   }
 }
 
@@ -123,11 +129,21 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: $mist;
+    background: $midnight;
+    color: $white;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+
+    span {
+      color: $white;
+    }
+
+    .body-3 {
+      margin-top: 0;
+      color: $white;
+    }
   }
 
   &__info {
@@ -308,7 +324,7 @@
   transition: border-color 0.15s;
 
   &--active {
-    border-color: $midnight;
+    border-color: $plum;
   }
 
   &__radio {
@@ -322,8 +338,8 @@
       background 0.15s;
 
     .payment-option--active & {
-      border-color: $midnight;
-      background: $midnight;
+      border-color: $plum;
+      background: $plum;
       box-shadow: inset 0 0 0 3px $white;
     }
   }
@@ -353,7 +369,7 @@
 // ─── Shared Buttons ────────────────────────────────────────────
 
 .btn-primary {
-  background: $midnight;
+  background: $plum;
   color: $white;
   border: none;
   border-radius: $radius-pill;
