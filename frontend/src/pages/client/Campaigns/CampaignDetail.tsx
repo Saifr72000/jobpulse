@@ -100,13 +100,19 @@ export default function CampaignDetail() {
           <h2>{order.campaignName}</h2>
           <StatusBadge status={order.status} />
         </div>
-        <p className="campaign-date">
-          {new Date(order.createdAt).toLocaleDateString("nb-NO", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </p>
+        {activeTab === "review" ? (
+          <p className="campaign-detail__review-subtitle">
+            Review and approve before your campaign will be published
+          </p>
+        ) : (
+          <p className="campaign-date">
+            {new Date(order.createdAt).toLocaleDateString("nb-NO", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </p>
+        )}
       </div>
 
       {/* Tab bar */}
@@ -146,7 +152,9 @@ export default function CampaignDetail() {
       {/* Active tab content */}
       <div className="campaign-detail__tab-content">
         {activeTab === "details" && <CampaignDetailsTab order={order} />}
-        {activeTab === "review" && <ReviewApproveTab order={order} />}
+        {activeTab === "review" && (
+          <ReviewApproveTab order={order} onOrderUpdated={setOrder} />
+        )}
         {activeTab === "performance" && (
           <PerformanceCandidatesTab
             order={order}

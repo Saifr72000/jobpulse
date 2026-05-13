@@ -1,9 +1,39 @@
 @use "../../../../styles/variables" as *;
 @use "../../../../styles/typography" as *;
 
+.review-approve-tab {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-lg;
+}
+
+.review-awaiting-payment-alert {
+  box-sizing: border-box;
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-input;
+  border: 1px solid rgba($red, 0.45);
+  background: rgba($rejected, 0.35);
+  color: $coal;
+
+  strong {
+    display: block;
+    font-size: $text-base;
+    margin-bottom: $spacing-xs;
+  }
+
+  p {
+    margin: 0;
+    font-size: $text-sm;
+    line-height: 1.5;
+    color: $ash;
+  }
+}
+
 .review-layout {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: $spacing-xl;
   align-items: flex-start;
 }
@@ -14,11 +44,6 @@
   flex-direction: column;
   gap: $spacing-md;
   min-width: 0;
-
-  &__header {
-    display: flex;
-    justify-content: flex-end;
-  }
 }
 
 .creative-placeholder {
@@ -32,91 +57,83 @@
   font-size: $text-base;
 }
 
-.version-btns {
-  display: flex;
-  flex-direction: row;
-  gap: $spacing-xs;
-}
-
-.version-btn {
-  padding: $spacing-xs $spacing-md;
-  border-radius: $radius-pill;
-  border: 1px solid $ash;
-  background: transparent;
-  color: $color-text;
-  font-size: $text-sm;
-  font-weight: $font-medium;
-  cursor: pointer;
-
-  &.active {
-    background: $midnight;
-    border-color: $midnight;
-    color: $white;
-  }
-
-  &:not(.active):hover {
-    background: $frost;
-  }
-}
-
 .dots {
   display: flex;
   flex-direction: row;
-  gap: $spacing-xs;
+  gap: $spacing-sm;
   justify-content: center;
+  align-items: center;
 }
 
 .dot {
   width: 8px;
   height: 8px;
+  padding: 0;
+  border: none;
   border-radius: 50%;
   background: $ash;
-  opacity: 0.4;
+  opacity: 0.35;
+  cursor: pointer;
 
   &.active {
-    background: $violet;
+    background: $coal;
     opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $violet;
+    outline-offset: 2px;
   }
 }
 
 .feedback-panel {
-  width: 340px;
+  width: min(400px, 100%);
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: $spacing-md;
 }
 
-.status-pill {
-  display: inline-flex;
-  align-items: center;
-  padding: $spacing-xs $spacing-md;
-  background: $pending;
+.feedback-panel__title {
+  margin: 0;
+  font-size: $text-lg;
+  font-weight: $font-semibold;
   color: $coal;
-  border-radius: $radius-pill;
+}
+
+.review-status-banner {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  width: 100%;
+  box-sizing: border-box;
+  padding: $spacing-md;
+  background: $frost;
+  border: 1px solid $coal;
+  border-radius: $radius-input;
+  color: $coal;
   font-size: $text-sm;
   font-weight: $font-medium;
-  align-self: flex-start;
-}
+  line-height: 1.4;
 
-.feedback-section {
-  display: flex;
-  flex-direction: column;
-  gap: $spacing-sm;
-}
+  svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
 
-.feedback-label {
-  font-size: $text-sm;
-  font-weight: $font-semibold;
-  color: $color-text;
-  margin: 0;
+  &--warning {
+    background: rgba($pending, 0.45);
+    border-color: $coal;
+    color: $coal;
+  }
 }
 
 .feedback-textarea {
   width: 100%;
   box-sizing: border-box;
   border-radius: $radius-input;
-  border: 1px solid $ash;
+  border: 1px solid $coal;
   padding: $spacing-md;
   resize: vertical;
   min-height: 120px;
@@ -136,38 +153,50 @@
 }
 
 .btn-send {
-  display: block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
   width: 100%;
   padding: $spacing-sm $spacing-md;
-  background: transparent;
-  border: 1px solid $ash;
+  background: $white;
+  border: 1px solid $coal;
   border-radius: $radius-pill;
-  color: $color-text;
+  color: $coal;
   font-size: $text-sm;
   font-weight: $font-medium;
   cursor: pointer;
-  text-align: center;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: $frost;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
 .btn-approve {
-  display: block;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   width: 100%;
-  padding: $spacing-sm $spacing-md;
-  background: $midnight;
+  min-height: 42px;
+  padding: 10px 24px;
+  box-sizing: border-box;
+  background: $plum;
   border: none;
-  border-radius: $radius-pill;
+  border-radius: 40px;
   color: $white;
   font-size: $text-sm;
   font-weight: $font-semibold;
   cursor: pointer;
-  text-align: center;
 
-  &:hover {
-    opacity: 0.9;
+  &:hover:not(:disabled) {
+    opacity: 0.92;
   }
 
   &:disabled {
@@ -175,27 +204,14 @@
     cursor: not-allowed;
   }
 }
-
-.btn-send {
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
-.status-pill--approved {
-  background: $active;
-  color: $white;
-}
-
 
 .comment-thread {
   display: flex;
   flex-direction: column;
-  gap: $spacing-sm;
-  max-height: 240px;
+  gap: $spacing-md;
+  max-height: 320px;
   overflow-y: auto;
-  padding: $spacing-sm 0;
+  padding: $spacing-xs 0;
 
   &__empty {
     font-size: $text-sm;
@@ -207,56 +223,97 @@
 
 .comment {
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: $spacing-sm $spacing-md;
-  border-radius: $radius-card;
-  background: $frost;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: $spacing-sm;
+  max-width: 100%;
 
   &--admin {
-    background: $midnight;
-    align-self: flex-start;
-    max-width: 90%;
-
-    .comment__author,
-    .comment__message {
-      color: $white;
-    }
-
-    .comment__role {
-      color: rgba(255, 255, 255, 0.6);
-    }
+    flex-direction: row;
   }
 
   &--client {
-    background: $frost;
-    align-self: flex-end;
-    max-width: 90%;
+    flex-direction: row-reverse;
+    margin-left: auto;
   }
 
-  &__author {
-    font-size: $text-xs;
-    font-weight: $font-semibold;
-    color: $color-text;
-    margin: 0;
+  &__avatar {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: $spacing-xs;
+    justify-content: center;
+    font-size: $text-xs;
+    font-weight: $font-semibold;
   }
 
-  &__role {
+  &__body {
+    min-width: 0;
+    max-width: min(280px, 85vw);
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: $spacing-sm;
+    margin: 0 0 4px;
     font-size: $text-xs;
+  }
+
+  &__name {
+    font-weight: $font-semibold;
+    color: $coal;
+  }
+
+  &__time {
     font-weight: $font-normal;
     color: $color-text-muted;
-    text-transform: capitalize;
   }
 
   &__message {
     font-size: $text-sm;
-    color: $color-text;
     margin: 0;
     white-space: pre-wrap;
     word-break: break-word;
+    line-height: 1.45;
+  }
+
+  &--admin {
+    .comment__avatar {
+      background: $midnight;
+      color: $white;
+    }
+
+    .comment__body {
+      padding: $spacing-sm $spacing-md;
+      border-radius: $radius-card;
+      background: $frost;
+    }
+
+    .comment__message {
+      color: $coal;
+    }
+  }
+
+  &--client {
+    .comment__avatar {
+      background: $mist;
+      color: $midnight;
+    }
+
+    .comment__body {
+      padding: $spacing-sm $spacing-md;
+      border-radius: $radius-card;
+      background: $white;
+      border: 1px solid $mist;
+    }
+
+    .comment__message {
+      color: $coal;
+    }
   }
 }
 
