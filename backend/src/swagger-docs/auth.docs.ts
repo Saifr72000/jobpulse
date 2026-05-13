@@ -19,7 +19,7 @@
  *             $ref: '#/components/schemas/LoginInput'
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: Login successful; sets httpOnly cookies `access_token` and `refresh_token`
  *         content:
  *           application/json:
  *             schema:
@@ -27,7 +27,6 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Login successful
  *                 user:
  *                   type: object
  *                   properties:
@@ -41,7 +40,7 @@
  *                       type: string
  *         headers:
  *           Set-Cookie:
- *             description: Access and refresh tokens set as HTTP-only cookies
+ *             description: Access and refresh tokens as HTTP-only cookies
  *             schema:
  *               type: string
  *       401:
@@ -52,11 +51,53 @@
 
 /**
  * @swagger
+ * /api/auth/me:
+ *   get:
+ *     summary: Get current authenticated user
+ *     tags: [Auth]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Not authenticated
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/auth/set-password:
+ *   post:
+ *     summary: Set password using invitation token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SetPasswordInput'
+ *     responses:
+ *       200:
+ *         description: Password set successfully
+ *       400:
+ *         description: Validation error or invalid token
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
  * /api/auth/refresh-token:
  *   post:
  *     summary: Refresh access token
  *     tags: [Auth]
- *     description: Uses the refresh_token cookie to generate a new access_token
+ *     description: Uses the `refresh_token` cookie to issue a new `access_token` cookie
  *     responses:
  *       200:
  *         description: Token refreshed successfully
@@ -67,9 +108,11 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Token refreshed
+ *                   example: Access token refreshed
  *       401:
- *         description: Invalid or expired refresh token
+ *         description: Refresh token missing
+ *       403:
+ *         description: Invalid or unknown refresh token
  *       500:
  *         description: Server error
  */
@@ -80,7 +123,7 @@
  *   post:
  *     summary: Logout user
  *     tags: [Auth]
- *     description: Clears authentication cookies and invalidates refresh token
+ *     description: Clears auth cookies and invalidates refresh token server-side when applicable
  *     responses:
  *       200:
  *         description: Logout successful
@@ -91,7 +134,32 @@
  *               properties:
  *                 message:
  *                   type: string
- *                   example: Logout successful
  *       500:
  *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/auth/oauth/meta:
+ *   get:
+ *     summary: Start Meta (Facebook) OAuth flow
+ *     tags: [Auth]
+ *     description: Redirects the browser to Meta authorization. Used to obtain tokens for marketing APIs.
+ *     responses:
+ *       302:
+ *         description: Redirect to Meta
+ */
+
+/**
+ * @swagger
+ * /api/auth/oauth/meta/callback:
+ *   get:
+ *     summary: Meta OAuth callback
+ *     tags: [Auth]
+ *     description: Handles redirect from Meta after user consent; exchanges code for tokens.
+ *     responses:
+ *       302:
+ *         description: Redirect back to app (success or error)
+ *       400:
+ *         description: Missing or invalid OAuth parameters
  */

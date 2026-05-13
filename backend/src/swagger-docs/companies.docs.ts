@@ -35,11 +35,6 @@
  *         description: Company already exists
  *       500:
  *         description: Server error
- */
-
-/**
- * @swagger
- * /api/companies:
  *   get:
  *     summary: Get all companies
  *     tags: [Companies]
@@ -80,11 +75,6 @@
  *         description: Company not found
  *       500:
  *         description: Server error
- */
-
-/**
- * @swagger
- * /api/companies/{id}:
  *   put:
  *     summary: Update company by ID
  *     tags: [Companies]
@@ -94,7 +84,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Company ID
  *     requestBody:
  *       required: true
  *       content:
@@ -117,26 +106,12 @@
  *     responses:
  *       200:
  *         description: Company updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 company:
- *                   $ref: '#/components/schemas/Company'
  *       400:
  *         description: Validation error
  *       404:
  *         description: Company not found
  *       500:
  *         description: Server error
- */
-
-/**
- * @swagger
- * /api/companies/{id}:
  *   delete:
  *     summary: Delete company by ID
  *     tags: [Companies]
@@ -146,12 +121,102 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Company ID
  *     responses:
  *       200:
  *         description: Company deleted successfully
  *       404:
  *         description: Company not found
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/companies/{companyId}/users:
+ *   get:
+ *     summary: List users belonging to a company
+ *     tags: [Companies]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Company users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Not authenticated
+ *       403:
+ *         description: User not in this company
+ *       500:
+ *         description: Server error
+ *   post:
+ *     summary: Invite or add a user to the company
+ *     tags: [Companies]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AddCompanyUserInput'
+ *     responses:
+ *       201:
+ *         description: User added / invitation sent
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Not authenticated
+ *       403:
+ *         description: User not in this company
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/companies/{companyId}/users/{userId}:
+ *   delete:
+ *     summary: Remove a user from the company
+ *     tags: [Companies]
+ *     security:
+ *       - cookieAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: User removed
+ *       401:
+ *         description: Not authenticated
+ *       403:
+ *         description: User not in this company
+ *       404:
+ *         description: User not found
  *       500:
  *         description: Server error
  */

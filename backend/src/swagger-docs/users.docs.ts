@@ -19,7 +19,7 @@
  *             $ref: '#/components/schemas/UserInput'
  *     responses:
  *       201:
- *         description: User created successfully
+ *         description: User created; OTP / verification email flow may follow
  *         content:
  *           application/json:
  *             schema:
@@ -31,6 +31,56 @@
  *                   $ref: '#/components/schemas/User'
  *       400:
  *         description: Validation error or user already exists
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/me:
+ *   put:
+ *     summary: Update the logged-in user's profile (first and last name)
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateCurrentUserInput'
+ *     responses:
+ *       200:
+ *         description: Profile updated
+ *       400:
+ *         description: Validation error
+ *       401:
+ *         description: Not authenticated
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/users/me/password:
+ *   put:
+ *     summary: Change password for the logged-in user
+ *     tags: [Users]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ChangePasswordInput'
+ *     responses:
+ *       200:
+ *         description: Password changed
+ *       400:
+ *         description: Validation error or wrong current password
+ *       401:
+ *         description: Not authenticated
  *       500:
  *         description: Server error
  */
@@ -61,21 +111,16 @@
  *         description: Unauthorized
  *       404:
  *         description: User not found
- */
-
-/**
- * @swagger
- * /api/users/{id}:
  *   put:
  *     summary: Update user by ID
  *     tags: [Users]
+ *     description: Admin-style update; route does not require cookie auth in code—restrict at network/gateway in production if needed.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: string
- *         description: User ID
  *     requestBody:
  *       required: true
  *       content:
