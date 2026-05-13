@@ -5,8 +5,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
+/** Do not attach refresh-retry to these (avoid loops / pre-auth). `/auth/me` is not listed so expired access can refresh. */
 const AUTH_SKIP_URLS = [
-  "/auth/me",
   "/auth/refresh-token",
   "/auth/login",
   "/auth/logout",
@@ -41,7 +41,11 @@ api.interceptors.response.use(
           "[Axios Interceptor] Token refresh failed:",
           refreshError,
         );
-        window.location.href = "/login";
+        // Session bootstrap: stay on page and let callers treat as logged out.
+        if (!requestUrl.includes("/auth/me")) {
+          window.location.href = "/login";
+        }
+        return Promise.reject(refreshError);
       }
     }
 
