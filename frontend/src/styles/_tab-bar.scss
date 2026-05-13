@@ -1,0 +1,40 @@
+@use "variables" as *;
+@use "typography" as *;
+
+// Shared pill tab bar (campaign detail, settings, etc.)
+.tab-bar {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  background: $white;
+  border-radius: $radius-pill;
+  padding: $spacing-xs;
+  gap: $spacing-xs;
+  width: fit-content;
+  align-self: flex-start;
+}
+
+.tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $radius-pill;
+  border: 1px solid transparent;
+  background: transparent;
+  color: $coal;
+  font-size: $text-sm;
+  font-weight: $font-normal;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 0.15s;
+
+  &.active {
+    background: $white;
+    border-color: $coal;
+  }
+
+  &:not(.active):hover {
+    background: $frost;
+  }
+}
