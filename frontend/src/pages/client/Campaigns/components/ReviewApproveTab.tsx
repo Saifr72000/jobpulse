@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import type { IOrder } from "../../../../api/orders";
+import { patchOrderStatus, type IOrder } from "../../../../api/orders";
 import {
   getCreativesByOrder,
   approveCreative,
@@ -10,14 +10,37 @@ import {
   postComment,
   type IComment,
 } from "../../../../api/comments";
+import Icon from "../../../../components/Icon/Icon";
 import { CreativePreview } from "./CreativePreview";
+import ClockIcon from "../../../../assets/icons/clock.svg?react";
+import SendIcon from "../../../../assets/icons/send.svg?react";
+import CheckWhiteIcon from "../../../../assets/icons/check-white.svg?react";
 import "./ReviewApproveTab.scss";
 
 interface ReviewApproveTabProps {
   order: IOrder;
+  onOrderUpdated?: (order: IOrder) => void;
 }
 
-export function ReviewApproveTab({ order }: ReviewApproveTabProps) {
+function authorInitials(firstName: string, lastName: string) {
+  const a = firstName?.charAt(0) ?? "";
+  const b = lastName?.charAt(0) ?? "";
+  return `${a}${b}`.toUpperCase() || "?";
+}
+
+function formatCommentTime(iso: string) {
+  return new Date(iso).toLocaleString("nb-NO", {
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export function ReviewApproveTab({
+  order,
+  onOrderUpdated,
+}: ReviewApproveTabProps) {
   const [creatives, setCreatives] = useState<ICreative[]>([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [comments, setComments] = useState<IComment[]>([]);
@@ -45,7 +68,6 @@ export function ReviewApproveTab({ order }: ReviewApproveTabProps) {
       .finally(() => setLoadingComments(false));
   }, [order._id]);
 
-  // Scroll comment thread to bottom when new comments arrive
   useEffect(() => {
     if (threadRef.current) {
       threadRef.current.scrollTop = threadRef.current.scrollHeight;
@@ -54,8 +76,12 @@ export function ReviewApproveTab({ order }: ReviewApproveTabProps) {
 
   const activeCreative: ICreative | undefined = creatives[activeIndex];
   const isCompleted = order.status === "completed";
+  const awaitingPayment = order.status === "awaiting-payment";
+  /** Live campaign: no client approval UI */
+  const isCampaignActive = order.status === "active";
 
   const handleSendFeedback = async () => {
+    if (awaitingPayment) return;
     const trimmed = feedback.trim();
     if (!trimmed || submitting) return;
     setSubmitting(true);
@@ -69,125 +95,158 @@ export function ReviewApproveTab({ order }: ReviewApproveTabProps) {
   };
 
   const handleApprove = async () => {
-    if (!activeCreative || approving) return;
+    if (awaitingPayment || isCampaignActive) return;
+    if (approving) return;
     setApproving(true);
     try {
-      const updated = await approveCreative(activeCreative._id);
-      setCreatives((prev) =>
-        prev.map((c) => (c._id === updated._id ? updated : c))
-      );
+      if (activeCreative?.status === "pending") {
+        const updated = await approveCreative(activeCreative._id);
+        setCreatives((prev) =>
+          prev.map((c) => (c._id === updated._id ? updated : c)),
+        );
+        return;
+      }
+      if (order.status === "pending" && onOrderUpdated) {
+        const updatedOrder = await patchOrderStatus(order._id, "in-progress");
+        onOrderUpdated(updatedOrder);
+      }
+    } catch (err) {
+      console.error(err);
     } finally {
       setApproving(false);
     }
   };
 
-  const statusLabel = activeCreative?.status === "approved" ? "Approved" : "Waiting for your review";
-  const statusClass = activeCreative?.status === "approved" ? "status-pill status-pill--approved" : "status-pill";
+  const clientApproved =
+    activeCreative?.status === "approved" ||
+    (order.status !== "pending" && order.status !== "awaiting-payment");
+
+  const waitingCopy = awaitingPayment
+    ? "Payment is required before you can approve this campaign or send feedback."
+    : clientApproved
+      ? "Campaign approved."
+      : "Waiting for your review. Approve or request changes on new version";
 
   return (
-    <div className="review-layout">
-      {/* Left: Creative preview */}
-      <div className="creative-area">
-        {creatives.length > 0 && (
-          <div className="creative-area__header">
-            <div className="version-btns">
-              {creatives.map((c, i) => (
-                <button
-                  key={c._id}
-                  type="button"
-                  className={`version-btn${i === activeIndex ? " active" : ""}`}
-                  onClick={() => setActiveIndex(i)}
-                >
-                  V{i + 1}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+    <div className="review-approve-tab">
+      {awaitingPayment && (
+        <div className="review-awaiting-payment-alert" role="alert">
+          <strong>Awaiting payment</strong>
+          <p>
+            This campaign is on hold until payment is completed. Finish checkout
+            (or use the payment method you chose when ordering) before reviewing
+            or approving.
+          </p>
+        </div>
+      )}
 
+      <div className="review-layout">
+      <div className="creative-area">
         {loadingCreatives ? (
-          <div className="creative-placeholder"><span>Loading...</span></div>
-        ) : activeCreative ? (
-          <CreativePreview creative={activeCreative} />
-        ) : (
           <div className="creative-placeholder">
-            <span>No creative uploaded yet — check back soon</span>
+            <span>Loading...</span>
           </div>
+        ) : (
+          <CreativePreview
+            creative={activeCreative ?? null}
+            order={order}
+            showMeta={false}
+          />
         )}
 
         {creatives.length > 1 && (
-          <div className="dots">
+          <div className="dots" role="tablist" aria-label="Creative versions">
             {creatives.map((c, i) => (
-              <span
+              <button
                 key={c._id}
+                type="button"
+                role="tab"
+                aria-selected={i === activeIndex}
                 className={`dot${i === activeIndex ? " active" : ""}`}
+                onClick={() => setActiveIndex(i)}
               />
             ))}
           </div>
         )}
       </div>
 
-      {/* Right: Feedback panel */}
       <div className="feedback-panel card">
-        <div className={statusClass}>{statusLabel}</div>
+        <h2 className="feedback-panel__title">Feedback</h2>
 
-        {/* Comment thread */}
-        {(loadingComments || comments.length > 0) && (
-          <div className="comment-thread" ref={threadRef}>
-            {loadingComments ? (
-              <p className="comment-thread__empty">Loading comments...</p>
-            ) : (
-              comments.map((c) => (
-                <div
-                  key={c._id}
-                  className={`comment comment--${c.role}`}
-                >
-                  <p className="comment__author">
-                    {c.author.firstName} {c.author.lastName}
-                    <span className="comment__role">{c.role}</span>
-                  </p>
-                  <p className="comment__message">{c.message}</p>
-                </div>
-              ))
-            )}
+        {!isCompleted && !isCampaignActive && (
+          <div
+            className={`review-status-banner${awaitingPayment ? " review-status-banner--warning" : ""}`}
+            role="status"
+          >
+            <Icon svg={ClockIcon} size={20} />
+            <span>{waitingCopy}</span>
           </div>
         )}
 
+        <div className="comment-thread" ref={threadRef}>
+          {loadingComments ? (
+            <p className="comment-thread__empty">Loading comments...</p>
+          ) : comments.length === 0 ? (
+            <p className="comment-thread__empty">No messages yet.</p>
+          ) : (
+            comments.map((c) => (
+              <div key={c._id} className={`comment comment--${c.role}`}>
+                <div className="comment__avatar" aria-hidden>
+                  {authorInitials(c.author.firstName, c.author.lastName)}
+                </div>
+                <div className="comment__body">
+                  <p className="comment__meta">
+                    <span className="comment__name">
+                      {c.author.firstName} {c.author.lastName}
+                    </span>
+                    <span className="comment__time">
+                      {formatCommentTime(c.createdAt)}
+                    </span>
+                  </p>
+                  <p className="comment__message">{c.message}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
         {!isCompleted && (
           <>
-            <div className="feedback-section">
-              <p className="feedback-label">Your feedback</p>
-              <textarea
-                className="feedback-textarea"
-                placeholder="Write your feedback on the campaign..."
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                disabled={submitting}
-              />
-            </div>
+            <textarea
+              className="feedback-textarea"
+              placeholder="Write your feedback on the campaign..."
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              disabled={submitting || awaitingPayment}
+              rows={4}
+            />
 
             <button
               type="button"
               className="btn-send"
               onClick={handleSendFeedback}
-              disabled={submitting || !feedback.trim()}
+              disabled={submitting || !feedback.trim() || awaitingPayment}
             >
+              <Icon svg={SendIcon} size={18} />
               {submitting ? "Sending..." : "Send feedback"}
             </button>
 
-            {activeCreative && activeCreative.status !== "approved" && (
-              <button
-                type="button"
-                className="btn-approve"
-                onClick={handleApprove}
-                disabled={approving}
-              >
-                {approving ? "Approving..." : "Approve campaign"}
-              </button>
-            )}
+            {!isCampaignActive && (
+              <>
+                <button
+                  type="button"
+                  className="btn-approve"
+                  onClick={handleApprove}
+                  disabled={approving || awaitingPayment}
+                >
+                  <Icon svg={CheckWhiteIcon} size={18} />
+                  {approving ? "Approving..." : "Approve campaign"}
+                </button>
 
-            {activeCreative?.status === "approved" && (
-              <div className="approved-notice">Campaign approved</div>
+                {clientApproved && (
+                  <div className="approved-notice">Campaign approved</div>
+                )}
+              </>
             )}
           </>
         )}
@@ -195,6 +254,7 @@ export function ReviewApproveTab({ order }: ReviewApproveTabProps) {
         {isCompleted && (
           <p className="completed-notice">This campaign has been completed.</p>
         )}
+      </div>
       </div>
     </div>
   );

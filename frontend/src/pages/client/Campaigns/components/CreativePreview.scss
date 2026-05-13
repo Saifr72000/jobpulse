@@ -7,69 +7,111 @@
   background: $frost;
   display: flex;
   flex-direction: column;
+}
 
-  // Image variant: fills the area naturally, no fixed aspect ratio imposed
-  &__image {
-    width: 100%;
-    display: block;
-    object-fit: contain;
-    border-radius: $radius-card $radius-card 0 0;
+.creative-preview--hero {
+  box-shadow: $shadow-card;
+}
+
+.creative-preview__hero {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: $radius-card;
+  overflow: hidden;
+  /* Match typical studio backdrop so any sub-pixel gap is not black */
+  background: #f5f5f5;
+}
+
+/* Fills 16:9 frame: min-dims + scale crop common letterboxing in source assets */
+.creative-preview__hero-img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  transform: translate(-50%, -50%);
+}
+
+/* Default stock asset often includes side padding in the file; zoom past it */
+.creative-preview__hero-img--default-crop {
+  transform: translate(-50%, -50%) scale(1.14);
+}
+
+.creative-preview__brand {
+  position: absolute;
+  top: $spacing-md;
+  left: $spacing-md;
+  z-index: 1;
+  font-size: $text-sm;
+  font-weight: $font-semibold;
+  color: $coal;
+  background: rgba(255, 255, 255, 0.88);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-pill;
+  max-width: min(240px, 55%);
+  line-height: 1.2;
+}
+
+.creative-preview__overlay-card {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  width: min(420px, 88%);
+  background: $white;
+  border-radius: $radius-card;
+  padding: $spacing-lg $spacing-xl;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  z-index: 1;
+}
+
+.creative-preview__overlay-headline {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: $font-semibold;
+  color: $coal;
+  margin: 0 0 $spacing-xs;
+  line-height: 1.25;
+}
+
+.creative-preview__overlay-subline {
+  font-size: $text-base;
+  color: $ash;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.creative-preview__overlay-link {
+  display: inline-block;
+  margin-top: $spacing-sm;
+  font-size: $text-sm;
+  font-weight: $font-medium;
+  color: $violet;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
   }
+}
 
-  // Iframe variant (YouTube / Vimeo): 16:9 embed
-  &__iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: none;
-    display: block;
-  }
+.creative-preview__iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  display: block;
+}
 
-  // External / no-url card variant: centered text + optional link
-  &__card {
-    aspect-ratio: 16 / 9;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: $spacing-sm;
-    padding: $spacing-lg;
-    text-align: center;
-  }
-
-  &__headline {
-    font-size: $text-lg;
-    font-weight: $font-semibold;
-    color: $color-text;
-    margin: 0;
-  }
-
-  &__subline {
-    font-size: $text-base;
-    color: $color-text-muted;
-    margin: 0;
-  }
-
-  &__link {
-    display: inline-flex;
-    align-items: center;
-    gap: $spacing-xs;
-    font-size: $text-sm;
-    font-weight: $font-medium;
-    color: $violet;
-    text-decoration: none;
-    margin-top: $spacing-xs;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  // Shown below all variants
-  &__meta {
-    font-size: $text-xs;
-    color: $color-text-muted;
-    padding: $spacing-sm $spacing-md;
-    border-top: 1px solid $mist;
-    margin: 0;
-  }
+.creative-preview__meta {
+  font-size: $text-xs;
+  color: $color-text-muted;
+  padding: $spacing-sm $spacing-md;
+  border-top: 1px solid $mist;
+  margin: 0;
 }
