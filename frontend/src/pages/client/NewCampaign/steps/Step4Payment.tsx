@@ -2,7 +2,6 @@ import Icon from "../../../../components/Icon/Icon";
 import { useNewCampaign } from "../../../../context/NewCampaignContext";
 import { PaymentMethodCard } from "../components/PaymentMethodCard";
 import { OrderSummary } from "../components/OrderSummary";
-import GiftIcon from "../../../../assets/icons/gift.svg?react";
 import CardIcon from "../../../../assets/icons/card.svg?react";
 import InvoiceIcon from "../../../../assets/icons/invoice.svg?react";
 import { ash } from "../../../../styles/colors.ts";
@@ -14,24 +13,12 @@ interface PaymentMethodOption {
   label: string;
   description: string;
   icon: React.ReactNode;
-  extra?: React.ReactNode;
 }
 
 export function Step4Payment() {
   const { form, updateForm, channels, packages, addons } = useNewCampaign();
 
   const paymentMethodsConfig: PaymentMethodOption[] = [
-    {
-      id: "value-card",
-      label: "Value card",
-      description: "Pay by using your prepaid value card balance",
-      icon: <Icon svg={GiftIcon} size={20} color={ash} />,
-      extra: (
-        <span className="payment-card__balance-pill">
-          Current balance on value card: <strong>42 500 kr</strong>
-        </span>
-      ),
-    },
     {
       id: "card-payment",
       label: "Card payment",
@@ -59,7 +46,6 @@ export function Step4Payment() {
               icon={pm.icon}
               label={pm.label}
               description={pm.description}
-              extra={pm.extra}
               onClick={() => updateForm({ paymentMethod: pm.id })}
             />
           ))}

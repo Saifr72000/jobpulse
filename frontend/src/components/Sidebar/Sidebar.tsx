@@ -6,12 +6,12 @@ import type { FunctionComponent, SVGProps } from "react";
 import DashboardIcon from "../../assets/icons/home.svg?react";
 import NewOrderIcon from "../../assets/icons/cart.svg?react";
 import MyOrdersIcon from "../../assets/icons/box.svg?react";
-import CampaignsIcon from "../../assets/icons/bar-chart.svg?react";
+import MediaLibraryIcon from "../../assets/icons/media.svg?react";
 import SettingsIcon from "../../assets/icons/cog.svg?react";
 import LogoutIcon from "../../assets/icons/logout.svg?react";
 import LayoutLeftIcon from "../../assets/icons/layout-left.svg?react";
 import LayoutRightIcon from "../../assets/icons/layout-right.svg?react";
-import jobPulseLogo from "../../assets/logos/jobpulse_logo.png";
+import JobPulseMark from "../../assets/jobpulse-logo.svg?react";
 
 type SvgComponent = FunctionComponent<SVGProps<SVGSVGElement>>;
 
@@ -25,7 +25,7 @@ const navItems: NavItem[] = [
   { Icon: DashboardIcon, label: "Dashboard", page: "dashboard" },
   { Icon: NewOrderIcon, label: "New campaign", page: "new-campaign" },
   { Icon: MyOrdersIcon, label: "Campaigns", page: "campaigns" },
-  { Icon: CampaignsIcon, label: "Media library", page: "media-library" },
+  { Icon: MediaLibraryIcon, label: "Media library", page: "media-library" },
 ];
 
 const bottomItems: NavItem[] = [
@@ -44,7 +44,10 @@ export function Sidebar({ activePage, onNavigate }: SidebarProps) {
   return (
     <nav className={`sidebar${isCollapsed ? " collapsed" : ""}`}>
       <div className="sidebar-header">
-        <img src={jobPulseLogo} alt="JobPulse" className="sidebar-logo" />
+        <div className="sidebar-brand">
+          <Icon svg={JobPulseMark} size={30} className="sidebar-brand__mark" />
+          <span className="sidebar-brand__name">JobPulse</span>
+        </div>
         <button
           className="sidebar-toggle"
           onClick={() => setIsCollapsed((prev) => !prev)}

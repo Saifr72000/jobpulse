@@ -33,13 +33,38 @@
  *         description: Validation error
  *       500:
  *         description: Server error
- *
  *   get:
- *     summary: Get all products (in stock)
+ *     summary: Get all products
  *     tags: [Products]
  *     responses:
  *       200:
  *         description: List of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       500:
+ *         description: Server error
+ */
+
+/**
+ * @swagger
+ * /api/products/type/{type}:
+ *   get:
+ *     summary: Get products filtered by type
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: type
+ *         required: true
+ *         schema:
+ *           type: string
+ *           enum: [package, service, addon]
+ *     responses:
+ *       200:
+ *         description: Products of the given type
  *         content:
  *           application/json:
  *             schema:
@@ -62,7 +87,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Product ID
  *     responses:
  *       200:
  *         description: Product details
@@ -74,7 +98,6 @@
  *         description: Product not found
  *       500:
  *         description: Server error
- *
  *   put:
  *     summary: Update a product
  *     tags: [Products]
@@ -84,7 +107,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Product ID
  *     requestBody:
  *       required: true
  *       content:
@@ -94,20 +116,10 @@
  *     responses:
  *       200:
  *         description: Product updated successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                 product:
- *                   $ref: '#/components/schemas/Product'
  *       404:
  *         description: Product not found
  *       500:
  *         description: Server error
- *
  *   delete:
  *     summary: Delete a product
  *     tags: [Products]
@@ -117,7 +129,6 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: Product ID
  *     responses:
  *       200:
  *         description: Product deleted successfully

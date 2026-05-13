@@ -1,7 +1,7 @@
 export type Step = 1 | 2 | 3 | 4;
 export type PlanType = "custom" | "package" | null;
 export type PackageId = "basic" | "medium" | "deluxe" | null;
-export type PaymentMethod = "value-card" | "card-payment" | "invoice";
+export type PaymentMethod = "card-payment" | "invoice";
 
 export type ImageOption = "upload" | "media-library" | "team-suggest" | "";
 export type LeadAdDesc = "team-create" | "own" | "";

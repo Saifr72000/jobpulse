@@ -30,7 +30,7 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       justify-content: center;
     }
 
-    .sidebar-logo {
+    .sidebar-brand {
       opacity: 0;
       max-width: 0;
       padding: 0;
@@ -61,9 +61,12 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
 }
 
-.sidebar-logo {
-  height: 32px;
-  width: auto;
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
   padding: 0 4px;
   overflow: hidden;
   max-width: 200px;
@@ -72,6 +75,19 @@ $sidebar-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     opacity $sidebar-transition,
     max-width $sidebar-transition,
     margin $sidebar-transition;
+}
+
+.sidebar-brand__mark {
+  flex-shrink: 0;
+}
+
+.sidebar-brand__name {
+  font-family: $font-primary;
+  font-size: $text-lg;
+  font-weight: $font-semibold;
+  color: $coal;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
 }
 
 .sidebar-toggle {
