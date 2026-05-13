@@ -40,7 +40,7 @@ const INITIAL_FORM: FormState = {
   linkedinScreeningText: "",
   targetAudience: "",
   additionalNotes: "",
-  paymentMethod: "value-card",
+  paymentMethod: "card-payment",
 };
 
 interface NewCampaignContextValue {
