@@ -33,11 +33,14 @@ export default function Settings() {
         </p>
       </div>
 
-      <nav className="settings__tabs">
+      <nav className="tab-bar" role="tablist">
         {TABS.map((tab) => (
           <button
             key={tab.id}
-            className={`settings__tab${activeTab === tab.id ? " settings__tab--active" : ""}`}
+            type="button"
+            role="tab"
+            aria-selected={activeTab === tab.id}
+            className={`tab-btn${activeTab === tab.id ? " active" : ""}`}
             onClick={() => setActiveTab(tab.id)}
           >
             <Icon svg={tab.icon} size={16} />

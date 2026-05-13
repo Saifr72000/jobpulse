@@ -1,5 +1,6 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/typography" as *;
+@use "../../../styles/tab-bar" as *;
 
 // ─── Page Layout ──────────────────────────────────────────────
 
@@ -7,36 +8,6 @@
   display: flex;
   flex-direction: column;
   gap: $spacing-lg;
-
-  &__tabs {
-    display: flex;
-    gap: $spacing-xs;
-    background: $color-surface;
-    padding: $spacing-xs;
-    border-radius: $radius-pill;
-    width: fit-content;
-  }
-
-  &__tab {
-    display: flex;
-    align-items: center;
-    gap: $spacing-xs;
-    padding: $spacing-sm $spacing-md;
-    border-radius: $radius-pill;
-    border: none;
-    background: transparent;
-    color: $color-text;
-    cursor: pointer;
-    transition:
-      background 0.15s,
-      color 0.15s;
-    white-space: nowrap;
-
-    &--active {
-      background: $midnight;
-      color: $white;
-    }
-  }
 
   &__content {
     display: flex;
