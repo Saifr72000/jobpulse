@@ -1,4 +1,4 @@
-// ─── Palette ──────────────────────────────────────────────
+// ─── Palette ────────────────────────────────────────────
 $midnight: #24184d;
 $plum: #34117e;
 $violet: #7151e6;
@@ -15,7 +15,7 @@ $active: #055d04;
 $pending: #fbf396;
 $rejected: #ffbbbb;
 
-// ─── Semantic: Colors ─────────────────────────────────────
+// ─── Semantic: Colors ───────────────────────────────────
 $color-bg: $frost;
 $color-surface: $pearl;
 $color-white: $white;
@@ -28,38 +28,38 @@ $color-primary-dark: $midnight;
 $color-primary-mid: $lavender;
 $color-primary-light: $mist;
 
-// ─── Status colors ────────────────────────────────────────
+// ─── Status colors ──────────────────────────────────────
 $color-success: $violet;
 $color-warning: $red;
 $color-error: $red;
 
-// ─── Shadows ──────────────────────────────────────────────
+// ─── Shadows ────────────────────────────────────────────
 $shadow-card: 0 0 15px rgba(0, 0, 0, 0.05);
 
-// ─── Border radius ────────────────────────────────────────
+// ─── Border radius ───────────────────────────────────────
 $radius-card: 20px;
 $radius-pill: 40px;
 $radius-input: 20px;
 
-// ─── Spacing ──────────────────────────────────────────────
+// ─── Spacing ────────────────────────────────────────────
 $spacing-xs: 4px; // gap between nav items, small badge gaps
 $spacing-sm: 8px; // tight gaps, small internal spacing
 $spacing-md: 16px; // input padding, medium gaps
 $spacing-lg: 24px; // card padding (p-6), section gaps — most used
 $spacing-xl: 32px; // chart card padding (p-8)
 
-// ─── Icon sizes ───────────────────────────────────────────
+// ─── Icon sizes ──────────────────────────────────────────
 $icon-box-lg: 75px; // large empty-state icon box
 
-// ─── Layout ───────────────────────────────────────────────
+// ─── Layout ──────────────────────────────────────────────
 $sidebar-width: 260px;
 $content-max-width: 1728px; // app stops growing beyond this
 $layout-padding: 17px 24px; // topbar + sidebar padding
 
-// ─── Fonts ────────────────────────────────────────────────
+// ─── Fonts ───────────────────────────────────────────────
 $font-primary: Inter, sans-serif;
 
-// ─── Transitions ──────────────────────────────────────────
+// ─── Transitions ─────────────────────────────────────────
 /* $transition-fast:
 $transition-base:
  */
